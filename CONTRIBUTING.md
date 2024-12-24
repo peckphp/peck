@@ -45,3 +45,33 @@ Unit tests:
 ```bash
 composer test:unit
 ```
+
+## 🐳 Docker setup
+If you have **Docker** installed, you can quickly set up your environment for Pest using our Docker configuration. Follow these steps:
+
+1.	**Build the Docker Image:**
+```bash
+docker compose build
+```
+
+2.	**Install Dependencies:**
+```bash
+docker compose run --rm composer install
+```
+
+3.	**Run Tests and Analysis Tools:**
+```bash
+docker compose run --rm composer test
+```
+
+4. **Run Peck:**
+```bash
+docker compose run --rm php ./bin/peck
+```
+
+### 🔄 Specify PHP Version (Optional)
+If you want to check things work against a **specific version of PHP**, you may include the `PHP` build argument when building the image:
+```bash
+docker compose build --build-arg PHP=8.4
+```
+**Note:** By default, the lowest PHP version supported by Pest will be used.
