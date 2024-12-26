@@ -3,28 +3,37 @@
 
 declare(strict_types=1);
 
+use Peck\Kernel;
 use Symfony\Component\Console\Application;
 
-$vendorPath = dirname(__DIR__, 4).'/vendor/autoload.php';
-$localPath = dirname(__DIR__).'/vendor/autoload.php';
+$possibleAutoloadPaths = [
+    // Local dev repository
+    __DIR__ . '/../vendor/autoload.php',
+    // Composer global installation
+    __DIR__ . '/../../../autoload.php',
+];
 
-if (file_exists($vendorPath)) {
-    include_once $vendorPath;
-    $autoloadPath = $vendorPath;
-} else {
-    include_once $localPath;
-    $autoloadPath = $localPath;
+$autoloadPath = null;
+foreach ($possibleAutoloadPaths as $path) {
+    if (file_exists($path)) {
+        $autoloadPath = $path;
+        break;
+    }
 }
 
-$application = new Application(
-    'Peck',
-    '0.0.1',
-);
+if ($autoloadPath === null) {
+    fwrite(STDERR, 'Cannot find autoload.php. Please run composer install.' . PHP_EOL);
+    exit(1);
+}
 
-$application->add(
-    new \Peck\Console\Commands\DefaultCommand(),
-);
+require $autoloadPath;
 
-$application->setDefaultCommand('default');
+$application = new Application('Peck - Spell Checker');
+$kernel = Kernel::default();
+
+// Register all commands from the kernel
+foreach ($kernel->getCommands() as $command) {
+    $application->add($command);
+}
 
 $application->run();
