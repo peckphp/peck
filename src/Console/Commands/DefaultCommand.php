@@ -82,7 +82,7 @@ class DefaultCommand extends Command
     {
         renderUsing($output);
 
-        render(<<<HTML
+        render(<<<'HTML'
             <div class="mx-2 mb-1">
                 <div class="space-x-1">
                     <span class="bg-green text-white px-1 font-bold">PASS</span>
