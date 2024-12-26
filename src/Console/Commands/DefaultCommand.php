@@ -34,11 +34,17 @@ class DefaultCommand extends Command
             'directory' => $directory = self::inferProjectPath(),
         ]);
 
+        if (count($issues) == 0) {
+            $this->renderPass($output);
+
+            return Command::SUCCESS;
+        }
+
         foreach ($issues as $issue) {
             $this->renderIssue($output, $issue, $directory);
         }
 
-        return $issues !== [] ? Command::FAILURE : Command::SUCCESS;
+        return Command::FAILURE;
     }
 
     /**
@@ -67,6 +73,20 @@ class DefaultCommand extends Command
                 <div class="space-x-1 text-gray-700">
                     <span>Did you mean:</span>
                     <span class="font-bold">{$suggestions}</span>
+                </div>
+            </div>
+        HTML);
+    }
+
+    protected function renderPass(OutputInterface $output): void
+    {
+        renderUsing($output);
+
+        render(<<<HTML
+            <div class="mx-2 mb-1">
+                <div class="space-x-1">
+                    <span class="bg-green text-white px-1 font-bold">PASS</span>
+                    <span>No misspelling detected</span>
                 </div>
             </div>
         HTML);
