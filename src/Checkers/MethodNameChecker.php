@@ -92,18 +92,16 @@ readonly class MethodNameChecker implements Checker
 
     /**
      * Prepares the method name for spellchecking.
-     * e.g. ‘getHTTPClient‘ -> 'get http client'
+     * e.g. 'camelCase' -> 'camel case'
+     * e.g. 'snake_case' -> 'snake case'
      * e.g. '__construct' -> 'construct'
      */
     private function prepareMethodName(string $methodName): string
     {
-        return strtolower(
-            (string) \preg_replace(
-                '/(?<!^)[A-Z]/',
-                ' $0',
-                (string) \preg_replace('/[^a-zA-Z0-9]/', '', $methodName)
-            )
-        );
+        $formatted = preg_replace('/([a-z0-9])([A-Z])/', '$1 $2', $methodName);
+        $formatted = str_replace('_', ' ', $formatted);
+
+        return strtolower(trim($formatted));
     }
 
     /**
