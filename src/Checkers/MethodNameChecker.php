@@ -99,7 +99,7 @@ readonly class MethodNameChecker implements Checker
     private function prepareMethodName(string $methodName): string
     {
         $formatted = preg_replace('/([a-z0-9])([A-Z])/', '$1 $2', $methodName);
-        $formatted = str_replace('_', ' ', $formatted);
+        $formatted = str_replace('_', ' ', (string) $formatted);
 
         return strtolower(trim($formatted));
     }
