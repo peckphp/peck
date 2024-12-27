@@ -12,12 +12,19 @@ use PhpSpellcheck\Spellchecker\Aspell;
 
 final readonly class InMemorySpellchecker implements Spellchecker
 {
+     /**
+     * Creates a new instance of Spellchecker.
+     */
     public function __construct(
         private Aspell $aspell,
         private WhitelistManager $whitelistManager,
     ) {
+        //
     }
-
+    
+    /**
+     * Creates the default instance of Spellchecker.
+     */
     public static function default(): self
     {
         return new self(
@@ -25,7 +32,12 @@ final readonly class InMemorySpellchecker implements Spellchecker
             new WhitelistManager(getcwd())
         );
     }
-
+    
+    /**
+     * Checks of issues in the given text.
+     *
+     * @return array<int, Misspelling>
+     */
     public function check(string $text): array
     {
         $misspellings = $this->aspell->check($text);
