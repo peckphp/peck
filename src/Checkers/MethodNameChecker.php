@@ -58,6 +58,8 @@ readonly class MethodNameChecker implements Checker
             }
         }
 
+        usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
+
         return $issues;
     }
 
