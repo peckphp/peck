@@ -37,8 +37,7 @@ it('detects issues in the given directory', function (): void {
             'typo\'s',
             'types',
             'type\'s',
-        ])
-        ->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php')
+        ])->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php')
         ->and($issues[1]->line)->toBe(0)
         ->and($issues[1]->misspelling->word)->toBe('ignroed')
         ->and($issues[1]->misspelling->suggestions)->toBe([
@@ -46,8 +45,7 @@ it('detects issues in the given directory', function (): void {
             'ignores',
             'ignore',
             'inroad',
-        ])
-        ->and($issues[2]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
+        ])->and($issues[2]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
         ->and($issues[2]->line)->toBe(0)
         ->and($issues[2]->misspelling->word)->toBe('tppyo')
         ->and($issues[2]->misspelling->suggestions)->toBe([
@@ -55,8 +53,7 @@ it('detects issues in the given directory', function (): void {
             'Tokyo',
             'typos',
             'topi',
-        ])
-        ->and($issues[3]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php')
+        ])->and($issues[3]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php')
         ->and($issues[3]->line)->toBe(0)
         ->and($issues[3]->misspelling->word)->toBe('shoud')
         ->and($issues[3]->misspelling->suggestions)->toBe([
@@ -93,8 +90,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
             'typo\'s',
             'types',
             'type\'s',
-        ])
-        ->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
+        ])->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
         ->and($issues[1]->line)->toBe(0)
         ->and($issues[1]->misspelling->word)->toBe('tppyo')
         ->and($issues[1]->misspelling->suggestions)->toBe([
