@@ -5,7 +5,7 @@ use Peck\Config;
 it('should have a default configuration', function (): void {
     $config = Config::instance();
 
-    expect($config->whitelistedWords)->toBe(['config'])
+    expect($config->whitelistedWords)->toBe(['config', 'php'])
         ->and($config->whitelistedDirectories)->toBe([]);
 });
 

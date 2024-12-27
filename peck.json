@@ -1,7 +1,8 @@
 {
     "ignore": {
         "words": [
-            "config"
+            "config",
+            "php"
         ],
         "directories": []
     }

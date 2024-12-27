@@ -1,3 +1,7 @@
 <?php
 
 //
+function anotherFunctionWithSpelllingMistake(): void
+{
+    //
+}
