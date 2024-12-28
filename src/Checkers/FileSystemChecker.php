@@ -60,6 +60,8 @@ readonly class FileSystemChecker implements Checker
             ];
         }
 
-        return $issues;
+        usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
+
+        return array_values($issues);
     }
 }
