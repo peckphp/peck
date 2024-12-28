@@ -36,8 +36,13 @@ final class Config
         }
 
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+        $configFile = "{$basePath}/peck.json";
 
-        $contents = (string) file_get_contents($basePath.'/peck.json');
+        if ( !file_exists($configFile) ) {
+            $configFile = dirname(__DIR__) . '/peck.json';
+        }
+
+        $contents = (string) file_get_contents($configFile);
 
         /** @var array{
          *     ignore?: array{
