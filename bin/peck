@@ -25,6 +25,10 @@ $application->add(
     new \Peck\Console\Commands\DefaultCommand(),
 );
 
+$application->add(
+    new \Peck\Console\Commands\AddIgnoreWordCommand(),
+);
+
 $application->setDefaultCommand('default');
 
 $application->run();
