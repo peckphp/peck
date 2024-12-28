@@ -1,8 +1,7 @@
 {
     "ignore": {
         "words": [
-            "config",
-            "json"
+            "config"
         ],
         "directories": []
     }

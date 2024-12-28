@@ -66,7 +66,7 @@ it('detects issues in the given directory', function (): void {
 
 it('detects issues in the given directory, but ignores the whitelisted words', function (): void {
     $config = new Config(
-        whitelistedWords: ['Ignroed'],
+        whitelistedWords: ['Ignroed', 'json'],
     );
 
     $checker = new FileSystemChecker(
