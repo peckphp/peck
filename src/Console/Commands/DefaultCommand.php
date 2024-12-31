@@ -10,6 +10,7 @@ use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Termwind\render;
@@ -31,7 +32,7 @@ final class DefaultCommand extends Command
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
-            'directory' => $directory = $this->inferProjectPath(),
+            'directory' => $directory = $this->inferProjectPath($input),
         ]);
 
         $output->writeln('');
@@ -64,16 +65,26 @@ final class DefaultCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Checks for misspellings in the given directory.');
+
+        $this->addOption(
+            'dir',
+            'd',
+            InputOption::VALUE_OPTIONAL,
+            'The directory to check for misspellings.'
+        );
     }
 
     /**
      * Infer the project's base directory from the environment.
      */
-    private function inferProjectPath(): string
+    private function inferProjectPath(InputInterface $input): string
     {
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
 
+        $passedDirectories = $input->getOption('dir');
+
         return match (true) {
+            ! empty($passedDirectories) => $passedDirectories,
             isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
             default => match (true) {
                 is_dir($basePath.'/src') => ($basePath.'/src'),
