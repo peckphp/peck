@@ -204,14 +204,14 @@ final readonly class ClassChecker implements Checker
     /**
      * Get the line number of the error.
      */
-    private function getErrorLine(SplFileInfo $file, string $name): int
+    private function getErrorLine(SplFileInfo $file, string $misspellingWord): int
     {
         $contentsArray = explode(PHP_EOL, $file->getContents());
         $contentsArrayLines = array_map(fn ($lineNumber): int => $lineNumber + 1, array_keys($contentsArray));
 
         $lines = array_values(array_filter(
             array_map(
-                fn (string $line, int $lineNumber): ?int => str_contains($line, $name) ? $lineNumber : null,
+                fn (string $line, int $lineNumber): ?int => str_contains($line, $misspellingWord) ? $lineNumber : null,
                 $contentsArray,
                 $contentsArrayLines,
             ),
