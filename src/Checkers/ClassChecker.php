@@ -47,6 +47,7 @@ final readonly class ClassChecker implements Checker
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
+            ->name('*.php')
             ->getIterator();
 
         $issues = [];
