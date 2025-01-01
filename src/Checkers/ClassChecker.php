@@ -154,7 +154,7 @@ final readonly class ClassChecker implements Checker
     /**
      * Get the constant names and their values contained in the given class.
      *
-     * @param  ReflectionClass<object> $class
+     * @param  ReflectionClass<object>  $class
      * @return array<int, string>
      */
     private function getConstantNames(ReflectionClass $class): array
