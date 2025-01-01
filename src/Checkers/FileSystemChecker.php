@@ -37,7 +37,6 @@ final readonly class FileSystemChecker implements Checker
         $filesOrDirectories = Finder::create()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
-            ->ignoreVCS(true)
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
