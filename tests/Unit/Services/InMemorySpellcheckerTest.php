@@ -32,6 +32,11 @@ it('detects issues', function (): void {
 
 it('detects issues that always don\'t have cache', function (): void {
     $dir = __DIR__.'/../../.peck-test.cache';
+
+    if (! is_dir($dir)) {
+        mkdir($dir);
+    }
+
     $spellchecker = new InMemorySpellchecker(
         Config::instance(),
         Aspell::create(),
@@ -40,7 +45,9 @@ it('detects issues that always don\'t have cache', function (): void {
 
     $cacheKey = md5('viewerss');
 
-    unlink("$dir/{$cacheKey}");
+    if (is_link("$dir/{$cacheKey}")) {
+        unlink("$dir/{$cacheKey}");
+    }
 
     sleep(1); // Sometimes the cache is not deleted in time
 
