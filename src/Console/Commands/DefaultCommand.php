@@ -106,7 +106,7 @@ final class DefaultCommand extends Command
         renderUsing($output);
 
         $file = str_replace($currentDirectory, '.', $issue->file);
-        $lineInfo = ($issue->line !== 0) ? " on line <strong>{$issue->line}</strong>" : '';
+        $lineInfo = ($issue->line !== 0) ? ":{$issue->line}" : '';
 
         $suggestions = $this->extractSuggestionsString($issue);
 
