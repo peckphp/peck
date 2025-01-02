@@ -25,6 +25,16 @@ use function Termwind\renderUsing;
 final class DefaultCommand extends Command
 {
     /**
+     * Decides whether to use a passed directory, or figure out the directory to scan automatically
+     */
+    public function findPathToScan(InputInterface $input): string
+    {
+        $passedDirectory = $input->getOption('dir');
+
+        return ! empty($passedDirectories) ? $passedDirectory : $this->inferProjectPath($input);
+    }
+
+    /**
      * Executes the command.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -32,7 +42,7 @@ final class DefaultCommand extends Command
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
-            'directory' => $directory = $this->inferProjectPath($input),
+            'directory' => $directory = $this->findPathToScan($input),
         ]);
 
         $output->writeln('');
