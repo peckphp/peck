@@ -32,7 +32,7 @@ final class DefaultCommand extends Command
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
-            'directory' => $directory = $this->inferProjectPath($input),
+            'directory' => $directory = $this->findPathToScan($input),
         ]);
 
         $output->writeln('');
