@@ -11,8 +11,10 @@ use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function Laravel\Prompts\suggest;
 use function Termwind\render;
 use function Termwind\renderUsing;
 
@@ -24,6 +26,14 @@ use function Termwind\renderUsing;
 #[AsCommand(name: 'default')]
 final class DefaultCommand extends Command
 {
+    /**
+     * This is used to keep track of the paths that have been fixed so that
+     * we can adjust the paths of future issues
+     *
+     * @var array<int, array<string, string>>
+     */
+    public $fixedPaths = [];
+
     /**
      * Executes the command.
      */
@@ -53,7 +63,7 @@ final class DefaultCommand extends Command
         }
 
         foreach ($issues as $issue) {
-            $this->renderIssue($output, $issue, $directory);
+            $this->renderIssue($input, $output, $issue, $directory);
         }
 
         return Command::FAILURE;
@@ -64,7 +74,10 @@ final class DefaultCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setDescription('Checks for misspellings in the given directory.');
+        $this
+            ->setDescription('Checks for misspellings in the given directory.')
+            ->addOption('fix', 'f', InputOption::VALUE_NONE, 'Fix files by showing suggestions and allowing user to choose')
+            ->addOption('first-suggestion', 's', InputOption::VALUE_NONE, 'Automatically choose the first suggestion when fixing instead of prompting user');
     }
 
     /**
@@ -84,11 +97,11 @@ final class DefaultCommand extends Command
         };
     }
 
-    private function renderIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
+    private function renderIssue(InputInterface $input, OutputInterface $output, Issue $issue, string $currentDirectory): void
     {
         renderUsing($output);
 
-        $fullPath = $issue->file;
+        $fullPath = $this->adjustFixedPaths($issue->file);
         $relativePath = str_replace($currentDirectory, '.', $fullPath);
 
         $column = 0;
@@ -103,6 +116,9 @@ final class DefaultCommand extends Command
         if ($issue->line > 0) {
             // its a file, work with contents
             $lines = file($fullPath);
+            if ($lines === false) {
+                throw (new Exception("Could not read the file '{$fullPath}'"));
+            }
 
             $lineContent = $lines[$issue->line - 1] ?? '';
             if ($lineContent === '') {
@@ -154,6 +170,76 @@ final class DefaultCommand extends Command
             $suggestions = array_map('ucfirst', $suggestions);
         }
 
+        if ($input->getOption('fix') || $input->getOption('first-suggestion')) {
+
+            render(<<<HTML
+                <div class="mx-2">
+                    <div class="space-x-1">
+                        <span class="bg-red text-white px-1 font-bold">ISSUE</span>
+                        <span>Misspelling in <strong><a href="{$fullPath}{$lineInfo}">{$relativePath}{$lineInfo}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
+                        {$lineDetails}
+                    </div>
+                </div>
+            HTML);
+
+            if ($input->getOption('first-suggestion')) {
+                $selected_suggestion = $suggestions[0];
+            } else {
+                $selected_suggestion = suggest(
+                    label: "Change '{$issue->misspelling->word}' to",
+                    options: $suggestions,
+                    placeholder: implode(', ', $suggestions),
+                    hint: 'Tab for menu, leave empty to skip',
+                );
+            }
+
+            if (! $selected_suggestion) {
+                render(<<<'HTML'
+                    <div class="mx-2 mb-2">
+                        <div class="space-x-1">
+                            <span class="bg-yellow-500 text-black px-1 font-bold">SKIPPED</span>
+                        </div>
+                    </div>
+                    HTML);
+
+                return;
+            }
+
+            if ($issue->line > 0) {
+                $newLine = substr($lineContent, 0, $column).
+                    $selected_suggestion.
+                    substr($lineContent, $column + strlen($issue->misspelling->word));
+            } else {
+                $lineContent = $fullPath;
+                $newLine = substr($fullPath, 0, $column).
+                    $selected_suggestion.
+                    substr($fullPath, $column + strlen($issue->misspelling->word));
+            }
+
+            render(<<<HTML
+                <div class="mx-2 mb-2">
+                    <div class="space-x-1">
+                        <div>Changing to:</div>
+                        <code start-line="{$issue->line}">{$newLine}</code>
+                    </div>
+                </div>
+                HTML);
+
+            if ($issue->line > 0) {
+                $lines[$issue->line - 1] = $newLine;
+                file_put_contents($fullPath, implode('', $lines));
+
+                return;
+            }
+
+            rename($fullPath, $newLine);
+            if (is_dir($newLine)) {
+                $this->fixedPaths[] = ['from' => $fullPath, 'to' => $newLine];
+            }
+
+            return;
+        }
+
         $suggestions = implode(', ', $issue->misspelling->suggestions);
 
         render(<<<HTML
@@ -170,5 +256,14 @@ final class DefaultCommand extends Command
                 </div>
             </div>
         HTML);
+    }
+
+    private function adjustFixedPaths(string $path): string
+    {
+        foreach ($this->fixedPaths as $fixedPath) {
+            $path = str_replace($fixedPath['from'], $fixedPath['to'], $path);
+        }
+
+        return $path;
     }
 }

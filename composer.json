@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": "^8.3.0",
+        "laravel/prompts": "^0.3.2",
         "nunomaduro/termwind": "^2.3",
         "symfony/console": "^7.2.1",
         "symfony/finder": "^7.2",
