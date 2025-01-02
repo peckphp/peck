@@ -87,14 +87,11 @@ final class DefaultCommand extends Command
     /**
      * Infer the project's base directory from the environment.
      */
-    private function inferProjectPath(InputInterface $input): string
+    private function inferProjectPath(): string
     {
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
 
-        $passedDirectories = $input->getOption('dir');
-
         return match (true) {
-            ! empty($passedDirectories) => $passedDirectories,
             isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
             default => match (true) {
                 is_dir($basePath.'/src') => ($basePath.'/src'),
