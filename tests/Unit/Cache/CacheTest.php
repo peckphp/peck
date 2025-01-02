@@ -30,11 +30,13 @@ it('should set and get a value', function (): void {
 it('should be possible to use other cache directories', function (): void {
     $dir = __DIR__.'/../../.peck-test.cache';
 
-    foreach (array_diff(scandir($dir), ['.', '..']) as $file) {
-        unlink("{$dir}/{$file}");
-    }
+    if (is_dir($dir)) {
+        foreach (array_diff(scandir($dir), ['.', '..']) as $file) {
+            unlink("{$dir}/{$file}");
+        }
 
-    rmdir($dir);
+        rmdir($dir);
+    }
 
     $cache = new Cache($dir);
 
