@@ -6,5 +6,5 @@ namespace Tests\Fixtures\ClassesToTest\FolderThatShouldBeIgnored\DirectoryWithNo
 
 final class ClassWithNoSuggestions
 {
-    public int $izxuhfdjksfhvWithTypoError = 1;
+    public int $izxuhfdjkyrdycftuvgyibhusfhvWithTypoError = 1;
 }
