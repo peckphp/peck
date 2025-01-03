@@ -26,7 +26,7 @@ final class DefaultCommand extends Command
     /**
      * Infer the project's base directory from the environment.
      */
-    public static function inferProjectPath(): string
+    public function inferProjectPath(): string
     {
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
 
@@ -48,7 +48,7 @@ final class DefaultCommand extends Command
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
-            'directory' => $directory = self::inferProjectPath(),
+            'directory' => $directory = $this->inferProjectPath(),
         ]);
 
         $output->writeln('');

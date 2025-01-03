@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Peck\Plugins;
 
-use Peck\Console\Commands\DefaultCommand;
+use Composer\Autoload\ClassLoader;
 use RuntimeException;
 
 final readonly class Cache
@@ -22,7 +22,9 @@ final readonly class Cache
      */
     public static function default(): self
     {
-        return new self(DefaultCommand::inferProjectPath().'/../.peck.cache');
+        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+
+        return new self("{$basePath}/.peck.cache");
     }
 
     public function get(string $key): mixed
