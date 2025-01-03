@@ -37,6 +37,8 @@ final class Config
      */
     public static function resolveConfigFilePathUsing(Closure $closure): void
     {
+        self::flush();
+
         self::$resolveConfigFilePathUsing = $closure;
     }
 
@@ -59,12 +61,12 @@ final class Config
         }
 
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
-        $filePath = self::$resolveConfigFilePathUsing instanceof Closure
+        $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
             ? (self::$resolveConfigFilePathUsing)()
-            : ($basePath.'/peck.json');
+            : 'peck.json');
 
         $contents = file_exists($filePath)
-            ? (string) file_get_contents($basePath.'/peck.json')
+            ? (string) file_get_contents($filePath)
             : '{}';
 
         /** @var array{
