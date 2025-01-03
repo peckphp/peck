@@ -10,3 +10,5 @@
 /vendor/
 *.swp
 *.swo
+/.peck.cache
+/tests/.peck-test.cache
