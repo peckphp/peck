@@ -9,8 +9,8 @@ final readonly class Cache
     public function __construct(
         private string $cacheDirectory,
     ) {
-        if (! is_dir($this->cacheDirectory)) {
-            mkdir($this->cacheDirectory, 0777, true);
+        if (! is_dir($this->cacheDirectory) && ! mkdir($this->cacheDirectory, 0755, true)) {
+            throw new RuntimeException("Could not create cache directory: {$this->cacheDirectory}");
         }
     }
 

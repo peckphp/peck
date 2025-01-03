@@ -45,3 +45,7 @@ it('should be possible to use other cache directories', function (): void {
     expect($cache->get('key'))->toBe('value')
         ->and($cache->has('key'))->toBeTrue();
 });
+
+it('throws an exception when the cache directory cannot be created', function (): void {
+    new Cache('/root');
+})->throws(RuntimeException::class);
