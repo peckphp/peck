@@ -10,6 +10,7 @@ use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Termwind\render;
@@ -31,7 +32,7 @@ final class DefaultCommand extends Command
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
-            'directory' => $directory = $this->inferProjectPath(),
+            'directory' => $directory = $this->findPathToScan($input),
         ]);
 
         $output->writeln('');
@@ -64,6 +65,27 @@ final class DefaultCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Checks for misspellings in the given directory.');
+
+        $this->addOption(
+            'dir',
+            'd',
+            InputOption::VALUE_OPTIONAL,
+            'The directory to check for misspellings.'
+        );
+    }
+
+    /**
+     * Decides whether to use a passed directory, or figure out the directory to scan automatically
+     */
+    private function findPathToScan(InputInterface $input): string
+    {
+        $passedDirectory = $input->getOption('dir');
+
+        if ($passedDirectory !== isInstanceOf(\Stringable::class, true)) {
+            return $this->inferProjectPath();
+        }
+
+        return $passedDirectory->toString();
     }
 
     /**
