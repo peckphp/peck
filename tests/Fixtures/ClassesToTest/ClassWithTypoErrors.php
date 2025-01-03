@@ -42,11 +42,16 @@ final class ClassWithTypoErrors
 
     public function methodWithTypoErrorInParameters(string $parameterWithoutTypoError, string $parameterWithTypoErorr): string
     {
-        return $parameterWithoutTypoError.$parameterWithTypoErorr.'This is a method with a typo error in parameters';
+        $parameterWithoutTypoError = 'Nuno Maduro is a good teatcher';
+        $parameterWithTypoErorr = 'Nuno Maduro is an awsome teacher';
+
+        return 'This is a method with a typo error in parameters';
     }
 
     public function methodWithoutTypoErrorInParameters(string $parameterWithoutTypoError): string
     {
-        return $parameterWithoutTypoError.'This is a method without a typo error in parameters';
+        $parameterWithoutTypoError = 'Nuno Maduro is an awesome teacher';
+
+        return 'This is a method without a typo error in parameters';
     }
 }
