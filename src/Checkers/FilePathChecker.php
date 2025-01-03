@@ -14,10 +14,10 @@ use Symfony\Component\Finder\Finder;
 /**
  * @internal
  */
-final readonly class FileSystemChecker implements Checker
+final readonly class FilePathChecker implements Checker
 {
     /**
-     * Creates a new instance of FileSystemChecker.
+     * Creates a new instance of FilePathChecker.
      */
     public function __construct(
         private Config $config,
