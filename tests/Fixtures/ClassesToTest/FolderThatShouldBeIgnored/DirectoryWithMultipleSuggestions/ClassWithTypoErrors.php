@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures\ClassesToTest\FolderThatShouldBeIgnored;
+namespace Tests\Fixtures\ClassesToTest\FolderThatShouldBeIgnored\DirectoryWithMultipleSuggestions;
 
 final class ClassWithTypoErrors
 {

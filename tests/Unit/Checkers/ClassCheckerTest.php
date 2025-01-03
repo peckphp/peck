@@ -31,7 +31,7 @@ it('detects issues in the given directory', function (): void {
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
     ]);
 
-    expect($issues)->toHaveCount(7)
+    expect($issues)->toHaveCount(8)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
         ->and($issues[0]->misspelling->word)->toBe('erorr')
@@ -80,7 +80,7 @@ it('detects issues in the given directory', function (): void {
             'tat',
             'ST',
             'St',
-        ])->and($issues[6]->file)->toEndWith('tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/ClassWithTypoErrors.php')
+        ])->and($issues[6]->file)->toEndWith('tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/DirectoryWithMultipleSuggestions/ClassWithTypoErrors.php')
         ->and($issues[6]->line)->toBe(9)
         ->and($issues[6]->misspelling->word)->toBe('properyt')
         ->and($issues[6]->misspelling->suggestions)->toBe([
@@ -108,7 +108,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
     ]);
 
-    expect($issues)->toHaveCount(4)
+    expect($issues)->toHaveCount(5)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
         ->and($issues[0]->misspelling->word)->toBe('erorr')
