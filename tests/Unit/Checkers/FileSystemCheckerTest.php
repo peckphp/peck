@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Peck\Cache;
 use Peck\Checkers\FileSystemChecker;
 use Peck\Config;
+use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
 

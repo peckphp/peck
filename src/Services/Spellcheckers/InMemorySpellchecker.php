@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Peck\Services\Spellcheckers;
 
-use Peck\Cache;
 use Peck\Config;
 use Peck\Contracts\Services\Spellchecker;
+use Peck\Plugins\Cache;
 use Peck\ValueObjects\Misspelling;
 use PhpSpellcheck\MisspellingInterface;
 use PhpSpellcheck\Spellchecker\Aspell;

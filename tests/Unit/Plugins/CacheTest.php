@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Peck\Cache;
+use Peck\Plugins\Cache;
 
 use function Safe\rmdir;
 use function Safe\scandir;

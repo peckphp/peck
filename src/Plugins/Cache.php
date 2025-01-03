@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Peck;
+namespace Peck\Plugins;
 
 final readonly class Cache
 {
@@ -19,7 +19,7 @@ final readonly class Cache
      */
     public static function default(): self
     {
-        return new self(__DIR__.'/../.peck.cache');
+        return new self(__DIR__.'/../../.peck.cache');
     }
 
     public function get(string $key): mixed
