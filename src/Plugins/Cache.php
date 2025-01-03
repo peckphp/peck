@@ -45,7 +45,7 @@ final readonly class Cache
 
     public function has(string $key): bool
     {
-        return file_exists($this->getCacheFile($key));
+        return is_readable($this->getCacheFile($key));
     }
 
     private function getCacheFile(string $key): string
