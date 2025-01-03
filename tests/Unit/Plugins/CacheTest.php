@@ -47,7 +47,8 @@ it('should be possible to use other cache directories', function (): void {
 });
 
 it('throws an exception when the cache directory cannot be created', function (): void {
-    new Cache('/root');
+    // i need to use a directory that fail on macos and ubuntu too, when using root, on ubuntu, this test is failing
+    new Cache('/etc/peck/cache');
 })->throws(RuntimeException::class);
 
 it('should return null when cache file exists but is not readable', function (): void {
