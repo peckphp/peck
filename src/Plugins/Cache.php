@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Peck\Plugins;
 
+use Peck\Console\Commands\DefaultCommand;
+use RuntimeException;
+
 final readonly class Cache
 {
     public function __construct(
@@ -30,10 +33,11 @@ final readonly class Cache
             return null;
         }
 
-        /**
-         * @var string
-         */
         $serializedContents = file_get_contents($cacheFile);
+
+        if ($serializedContents === false) {
+            return null;
+        }
 
         return unserialize($serializedContents);
     }
@@ -48,10 +52,10 @@ final readonly class Cache
         return is_readable($this->getCacheFile($key));
     }
 
-    private function getCacheFile(string $key): string
+    public function getCacheFile(string $key): string
     {
         $separator = str_ends_with($this->cacheDirectory, '/') ? '' : DIRECTORY_SEPARATOR;
 
-        return $this->cacheDirectory.$separator.$key.'';
+        return $this->cacheDirectory.$separator.$key;
     }
 }

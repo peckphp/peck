@@ -49,3 +49,25 @@ it('should be possible to use other cache directories', function (): void {
 it('throws an exception when the cache directory cannot be created', function (): void {
     new Cache('/root');
 })->throws(RuntimeException::class);
+
+it('should return null when cache file exists but is not readable', function (): void {
+    $dir = __DIR__.'/../../.peck-test.cache';
+
+    if (is_dir($dir)) {
+        foreach (array_diff(scandir($dir), ['.', '..']) as $file) {
+            unlink("{$dir}/{$file}");
+        }
+
+        rmdir($dir);
+    }
+
+    $cache = new Cache($dir);
+
+    $key = uniqid();
+
+    $cache->set($key, 'value');
+
+    chmod($cache->getCacheFile($key), 0);
+
+    expect($cache->get($key))->toBeNull();
+});
