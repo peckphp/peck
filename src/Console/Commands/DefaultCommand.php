@@ -24,23 +24,6 @@ use function Termwind\renderUsing;
 final class DefaultCommand extends Command
 {
     /**
-     * Infer the project's base directory from the environment.
-     */
-    public function inferProjectPath(): string
-    {
-        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
-
-        return match (true) {
-            isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
-            default => match (true) {
-                is_dir($basePath.'/src') => ($basePath.'/src'),
-                is_dir($basePath.'/app') => ($basePath.'/app'),
-                default => $basePath,
-            },
-        };
-    }
-
-    /**
      * Executes the command.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -81,6 +64,23 @@ final class DefaultCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Checks for misspellings in the given directory.');
+    }
+
+    /**
+     * Infer the project's base directory from the environment.
+     */
+    private function inferProjectPath(): string
+    {
+        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+
+        return match (true) {
+            isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
+            default => match (true) {
+                is_dir($basePath.'/src') => ($basePath.'/src'),
+                is_dir($basePath.'/app') => ($basePath.'/app'),
+                default => $basePath,
+            },
+        };
     }
 
     private function renderIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
