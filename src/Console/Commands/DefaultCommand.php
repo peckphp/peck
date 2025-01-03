@@ -81,7 +81,7 @@ final class DefaultCommand extends Command
     {
         $passedDirectory = $input->getOption('dir');
 
-        return ! empty($passedDirectories) ? $passedDirectory : $this->inferProjectPath($input);
+        return empty($passedDirectories) ? $this->inferProjectPath() : $passedDirectory;
     }
 
     /**
