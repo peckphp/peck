@@ -131,19 +131,11 @@ final class DefaultCommand extends Command
     private function extractSuggestionsString(Issue $issue): string
     {
         $suggestions = $issue->misspelling->suggestions;
-        $suggestionCount = count($suggestions);
 
-        // I tried using a match statement here, but it didn't work as expected
-        if ($suggestionCount > 1) {
-            $lastSuggestion = array_pop($suggestions);
-            $otherSuggestions = implode(', ', $suggestions);
-            $reply = "{$otherSuggestions} or {$lastSuggestion}?";
-        } elseif ($suggestionCount === 1) {
-            $reply = "{$suggestions[0]}?";
-        } else {
-            $reply = 'Wow! Sorry - but there are no suggestions for this misspelling.';
-        }
-
-        return $reply;
+        return match (true) {
+            count($suggestions) > 1 => sprintf('%s or %s?',
+                implode(', ', array_slice($suggestions, 0, -1)), end($suggestions)),
+            count($suggestions) === 1 => sprintf('%s?', $suggestions[0]),
+            $suggestions === [] => 'Wow! Sorry - but there are no suggestions for this misspelling.', };
     }
 }
