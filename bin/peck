@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use Peck\Console\Commands\CheckCommand;
 use Symfony\Component\Console\Application;
 
 foreach ([
@@ -22,9 +23,9 @@ $application = new Application(
 );
 
 $application->add(
-    new \Peck\Console\Commands\DefaultCommand(),
+    new CheckCommand(),
 );
 
-$application->setDefaultCommand('default');
+$application->setDefaultCommand('check');
 
 $application->run();

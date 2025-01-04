@@ -34,6 +34,30 @@ To check your project for spelling mistakes, run:
 ./vendor/bin/peck
 ```
 
+## Configuration
+
+Peck can be configured using a `peck.json` file in the root of your project. Here's an example configuration:
+
+```json
+{
+    "ignore": {
+        "words": [
+            "config",
+            "namespace"
+        ],
+        "directories": [
+            "app/MyNamespace"
+        ]
+    }
+}
+```
+
+You can also specify the path to the configuration file using the `--config` option:
+
+```bash
+./vendor/bin/peck --config relative/path/to/peck.json
+```
+
 ---
 
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
