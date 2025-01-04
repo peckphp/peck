@@ -1,4 +1,3 @@
-
 <p align="center">
     <img src="https://raw.githubusercontent.com/peckphp/peck/main/docs/logo.png" alt="Peck example" height="300">
     <p align="center">
@@ -9,7 +8,8 @@
     </p>
 </p>
 
-------
+---
+
 **Peck** is a powerful CLI tool designed to identify wording or spelling mistakes in your codebase. Built for speed, simplicity, and seamless integration, Peck fits naturally into your workflow, much like tools such as Pint or Pest.
 
 Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)** via the [github.com/tigitz/php-spellchecker](https://github.com/tigitz/php-spellchecker) PHP wrapper, Peck inspects every corner of your codebase — including folder names, file names, method names, comments, and beyond — ensuring your work maintains a high standard of clarity and professionalism.
@@ -41,13 +41,8 @@ Peck can be configured using a `peck.json` file in the root of your project. Her
 ```json
 {
     "ignore": {
-        "words": [
-            "config",
-            "namespace"
-        ],
-        "directories": [
-            "app/MyNamespace"
-        ]
+        "words": ["config", "namespace"],
+        "directories": ["app/MyNamespace"]
     }
 }
 ```
@@ -55,7 +50,7 @@ Peck can be configured using a `peck.json` file in the root of your project. Her
 You can also specify the path to the configuration file using the `--config` option:
 
 ```bash
-./vendor/bin/peck --config relative/path/to/peck.json
+./vendor/bin/peck check --config relative/path/to/peck.json
 ```
 
 ---
