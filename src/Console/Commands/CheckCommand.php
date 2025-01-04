@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Peck\Console\Commands;
 
 use Composer\Autoload\ClassLoader;
+use Peck\Config;
 use Peck\Kernel;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,14 +23,17 @@ use function Termwind\renderUsing;
  *
  * @internal
  */
-#[AsCommand(name: 'default')]
-final class DefaultCommand extends Command
+#[AsCommand(name: 'check')]
+final class CheckCommand extends Command
 {
     /**
      * Executes the command.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $configurationPath = $input->getOption('config');
+        Config::resolveConfigFilePathUsing(fn (): mixed => $configurationPath);
+
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
@@ -64,14 +69,14 @@ final class DefaultCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setDescription('Checks for misspellings in the given directory.');
-
-        $this->addOption(
-            'dir',
-            'd',
-            InputOption::VALUE_OPTIONAL,
-            'The directory to check for misspellings.'
-        );
+        $this->setDescription('Checks for misspellings in the given directory.')
+            ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'The configuration file to use.', 'peck.json')
+            ->addOption(
+                'dir',
+                'd',
+                InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
+                'The directory to check for misspellings.'
+            );
     }
 
     /**

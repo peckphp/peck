@@ -7,6 +7,7 @@ namespace Peck\Checkers;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
+use Peck\Support\NameParser;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
@@ -47,6 +48,7 @@ final readonly class ClassChecker implements Checker
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
+            ->name('*.php')
             ->getIterator();
 
         $issues = [];
@@ -81,6 +83,7 @@ final readonly class ClassChecker implements Checker
         $namesToCheck = [
             ...$this->getMethodNames($reflectionClass),
             ...$this->getPropertyNames($reflectionClass),
+            ...$this->getConstantNames($reflectionClass),
         ];
 
         if ($docComment = $reflectionClass->getDocComment()) {
@@ -104,7 +107,7 @@ final readonly class ClassChecker implements Checker
                         $misspelling,
                         $file->getRealPath(),
                         $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check(strtolower((string) preg_replace('/(?<!^)[A-Z]/', ' $0', $name)))),
+                    ), $this->spellchecker->check(NameParser::parse($name))),
             ];
         }
 
@@ -148,6 +151,22 @@ final readonly class ClassChecker implements Checker
             fn (ReflectionParameter $parameter): string => $parameter->getName(),
             $method->getParameters(),
         );
+    }
+
+    /**
+     * Get the constant names and their values contained in the given class.
+     *
+     * @param  ReflectionClass<object>  $class
+     * @return array<int, string>
+     */
+    private function getConstantNames(ReflectionClass $class): array
+    {
+        $constants = $class->getConstants();
+
+        return array_values(array_filter([
+            ...array_keys($constants),
+            ...array_values($constants),
+        ], fn (mixed $values): bool => is_string($values)));
     }
 
     /**
@@ -204,14 +223,14 @@ final readonly class ClassChecker implements Checker
     /**
      * Get the line number of the error.
      */
-    private function getErrorLine(SplFileInfo $file, string $name): int
+    private function getErrorLine(SplFileInfo $file, string $misspellingWord): int
     {
         $contentsArray = explode(PHP_EOL, $file->getContents());
         $contentsArrayLines = array_map(fn ($lineNumber): int => $lineNumber + 1, array_keys($contentsArray));
 
         $lines = array_values(array_filter(
             array_map(
-                fn (string $line, int $lineNumber): ?int => str_contains($line, $name) ? $lineNumber : null,
+                fn (string $line, int $lineNumber): ?int => str_contains($line, $misspellingWord) ? $lineNumber : null,
                 $contentsArray,
                 $contentsArrayLines,
             ),

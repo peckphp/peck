@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use Peck\Console\Commands\DefaultCommand;
+use Peck\Console\Commands\CheckCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 it('outputs the expected string', function (): void {
     $application = new Application;
 
-    $application->add(new DefaultCommand);
+    $application->add(new CheckCommand);
 
     // Taken from the setDefaultCommand() method in bin/peck
-    $command = $application->find('default');
+    $command = $application->find('check');
 
     $commandTester = new CommandTester($command);
 
