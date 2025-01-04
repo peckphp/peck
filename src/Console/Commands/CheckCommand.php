@@ -37,6 +37,10 @@ final class CheckCommand extends Command
     {
         renderUsing($output);
 
+        if ($input->getOption('init')) {
+            return $this->initConfiguration();
+        }
+
         $configurationPath = $input->getOption('config');
         Config::resolveConfigFilePathUsing(fn (): mixed => $configurationPath);
 
@@ -78,6 +82,7 @@ final class CheckCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Checks for misspellings in the given directory.')
+            ->addOption('init', 'i', InputOption::VALUE_NONE, 'Initialize a new configuration file.')
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'The configuration file to use.', 'peck.json')
             ->addOption(
                 'path',
@@ -154,7 +159,48 @@ final class CheckCommand extends Command
                     <span class="font-bold">{$suggestions}</span>
                 </div>
             </div>
-        HTML);
+        HTML
+        );
+    }
+
+    /*
+     * Initialize the configuration file.
+     */
+    private function initConfiguration(): int
+    {
+        if (! Config::init()) {
+            render(<<<'HTML'
+                <div class="mx-2 mb-1">
+                    <div class="space-x-1">
+                        <span class="bg-blue text-white px-1 font-bold">INFO</span>
+                        <span>Configuration file already exists.</span>
+                    </div>
+                </div>
+                HTML,
+            );
+
+            return Command::FAILURE;
+        }
+
+        render(<<<'HTML'
+            <div class="mt-1">
+                <div class="mx-2 mb-1">
+                    <div class="space-x-1">
+                        <span class="bg-green text-white px-1 font-bold">SUCCESS</span>
+                        <span>Configuration file has been created.</span>
+                    </div>
+                </div>
+                <div class="mx-2 mb-1">
+                    <span>Now you can specify the words or directories to ignore in <strong>[peck.json]</strong>.</span>
+                </div>
+                <div class="mx-2 mb-1">
+                    <span>Then run <strong>[./vendor/bin/peck]</strong> to check your project for spelling mistakes.</span>
+                </div>
+            </div>
+            HTML
+        );
+
+        return Command::SUCCESS;
     }
 
     /**

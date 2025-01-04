@@ -14,11 +14,16 @@ it('should have a default configuration', function (): void {
         'namespace',
         'doc',
         'bool',
+        'init',
+        'json',
         'php',
         'api',
+        'formatter',
         'enum',
         'enums',
         'backend',
+        'init',
+        'php',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 
@@ -37,5 +42,46 @@ it('should behave correctly even if the peck.json file does not exist', function
     $config = Config::instance();
 
     expect($config->whitelistedWords)->toBe([])
+        ->and($config->whitelistedDirectories)->toBe([]);
+});
+
+it('should be able to create a peck.json config file', function (): void {
+    $configFilePath = __DIR__.'/../../peck.json';
+    $backup = $configFilePath.'.backup';
+    rename($configFilePath, $backup);
+
+    $created = Config::createInitialConfigFile();
+    $config = Config::instance();
+
+    expect($created)->toBeTrue()
+        ->and($config->whitelistedWords)->toBe(['php'])
+        ->and($config->whitelistedDirectories)->toBe([]);
+
+    rename($backup, $configFilePath);
+});
+
+it('should not recreate a file that already exists', function (): void {
+    $created = Config::createInitialConfigFile();
+    $config = Config::instance();
+
+    expect($created)->toBeFalse()
+        ->and($config->whitelistedWords)->toBe([
+            'config',
+            'aspell',
+            'args',
+            'namespace',
+            'doc',
+            'bool',
+            'init',
+            'json',
+            'php',
+            'api',
+            'formatter',
+            'enum',
+            'enums',
+            'backend',
+            'init',
+            'php',
+        ])
         ->and($config->whitelistedDirectories)->toBe([]);
 });

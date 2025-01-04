@@ -7,11 +7,16 @@
             "namespace",
             "doc",
             "bool",
+            "init",
+            "json",
             "php",
             "api",
+            "formatter",
             "enum",
             "enums",
-            "backend"
+            "backend",
+            "init",
+            "php"
         ],
         "directories": []
     }
