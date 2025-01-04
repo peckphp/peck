@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peck;
 
+use Closure;
 use Composer\Autoload\ClassLoader;
 
 final class Config
@@ -12,6 +13,11 @@ final class Config
      * The instance of the configuration.
      */
     private static ?self $instance = null;
+
+    /**
+     * The closure to resolve the config file path.
+     */
+    private static ?Closure $resolveConfigFilePathUsing = null;
 
     /**
      * Creates a new instance of Config.
@@ -27,6 +33,25 @@ final class Config
     }
 
     /**
+     * Resolves the configuration file path.
+     */
+    public static function resolveConfigFilePathUsing(Closure $closure): void
+    {
+        self::flush();
+
+        self::$resolveConfigFilePathUsing = $closure;
+    }
+
+    /**
+     * Flushes the configuration.
+     */
+    public static function flush(): void
+    {
+        self::$instance = null;
+        self::$resolveConfigFilePathUsing = null;
+    }
+
+    /**
      * Fetches the instance of the configuration.
      */
     public static function instance(): self
@@ -36,8 +61,13 @@ final class Config
         }
 
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+        $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
+            ? (self::$resolveConfigFilePathUsing)()
+            : 'peck.json');
 
-        $contents = (string) file_get_contents($basePath.'/peck.json');
+        $contents = file_exists($filePath)
+            ? (string) file_get_contents($filePath)
+            : '{}';
 
         /** @var array{
          *     ignore?: array{
