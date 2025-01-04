@@ -7,6 +7,7 @@ namespace Peck\Checkers;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
+use Peck\Services\NameParser;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
@@ -26,6 +27,7 @@ final readonly class ClassChecker implements Checker
      */
     public function __construct(
         private Config $config,
+        private NameParser $nameParser,
         private Spellchecker $spellchecker,
     ) {
         //
@@ -105,7 +107,7 @@ final readonly class ClassChecker implements Checker
                         $misspelling,
                         $file->getRealPath(),
                         $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check(strtolower((string) preg_replace('/(?<!^)[A-Z]/', ' $0', $name)))),
+                    ), $this->spellchecker->check($this->nameParser->parse($name))),
             ];
         }
 
