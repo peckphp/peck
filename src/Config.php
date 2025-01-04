@@ -62,8 +62,8 @@ final class Config
 
         $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
         $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
-            ? (self::$resolveConfigFilePathUsing)()
-            : 'peck.json');
+                ? (self::$resolveConfigFilePathUsing)()
+                : 'peck.json');
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
@@ -74,12 +74,39 @@ final class Config
          *         words?: array<int, string>,
          *         directories?: array<int, string>
          *     }
-         *  } $jsonAsArray */
+         *  } $jsonAsArray
+         */
         $jsonAsArray = json_decode($contents, true) ?: [];
 
         return self::$instance = new self(
             $jsonAsArray['ignore']['words'] ?? [],
             $jsonAsArray['ignore']['directories'] ?? [],
         );
+    }
+
+    /**
+     * Creates the initial configuration file in the root directory.
+     * Returns true if the file was created successfully.
+     * Returns false if the file already exists.
+     */
+    public static function createInitialConfigFile(): bool
+    {
+        $filePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]).'/peck.json';
+        if (file_exists($filePath)) {
+            return false;
+        }
+
+        $initialConfig = [
+            'ignore' => [
+                'words' => [
+                    'php',
+                ],
+                'directories' => [],
+            ],
+        ];
+
+        file_put_contents($filePath, json_encode($initialConfig, JSON_PRETTY_PRINT));
+
+        return true;
     }
 }
