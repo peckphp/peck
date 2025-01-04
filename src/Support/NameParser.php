@@ -22,8 +22,6 @@ final readonly class NameParser
         $input = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $input);
 
         // Lowercase the input
-        $input = strtolower($input);
-
-        return $input;
+        return strtolower($input);
     }
 }
