@@ -60,4 +60,15 @@ You can also specify the path to the configuration file using the `--config` opt
 
 ---
 
+## Command Options
+
+The behaviour of `peck` can be modified with the following options:
+
+### `--config`
+
+By default `peck` will check for a `peck.json` file in your project root. If one isn't available it will try to figure
+out the directory to check by itself.
+
+---
+
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
