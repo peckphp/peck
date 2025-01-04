@@ -10,5 +10,8 @@
             "php"
         ],
         "directories": []
-    }
+    },
+    "languages" : [
+        "en"
+    ]
 }
