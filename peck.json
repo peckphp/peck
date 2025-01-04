@@ -14,9 +14,7 @@
             "formatter",
             "enum",
             "enums",
-            "backend",
-            "init",
-            "php"
+            "backend"
         ],
         "directories": []
     }

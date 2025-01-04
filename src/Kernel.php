@@ -27,6 +27,7 @@ final readonly class Kernel
     public static function default(): self
     {
         $config = Config::instance();
+        $nameParser = new NameParser;
         $inMemoryChecker = InMemorySpellchecker::default();
 
         return new self(

@@ -28,6 +28,7 @@ final readonly class SourceCodeChecker implements Checker
      */
     public function __construct(
         private Config $config,
+        private NameParser $nameParser,
         private Spellchecker $spellchecker,
     ) {}
 
