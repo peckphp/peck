@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Peck\Checkers\ClassChecker;
 use Peck\Config;
-use Peck\Services\NameParser;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
 use Symfony\Component\Finder\SplFileInfo;
@@ -12,7 +11,6 @@ use Symfony\Component\Finder\SplFileInfo;
 it('does not detect issues in the given directory', function (): void {
     $checker = new ClassChecker(
         Config::instance(),
-        (new NameParser),
         InMemorySpellchecker::default(),
     );
 
@@ -26,7 +24,6 @@ it('does not detect issues in the given directory', function (): void {
 it('detects issues in the given directory', function (): void {
     $checker = new ClassChecker(
         Config::instance(),
-        (new NameParser),
         InMemorySpellchecker::default(),
     );
 
@@ -101,7 +98,6 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
 
     $checker = new ClassChecker(
         $config,
-        (new NameParser),
         new InMemorySpellchecker(
             $config,
             Aspell::create(),
@@ -153,7 +149,6 @@ it('detects issues in the given directory, but ignores the whitelisted directori
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        (new NameParser),
         InMemorySpellchecker::default(),
     );
 
@@ -218,7 +213,6 @@ it('handles well when it can not detect the line problem', function (): void {
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        (new NameParser),
         InMemorySpellchecker::default(),
     );
 
