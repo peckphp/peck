@@ -81,11 +81,11 @@ final class DefaultCommand extends Command
     {
         $passedDirectory = $input->getOption('dir');
 
-        if ($passedDirectory !== isInstanceOf(\Stringable::class, true)) {
+        if (! is_string($passedDirectory)) {
             return $this->inferProjectPath();
         }
 
-        return $passedDirectory->toString();
+        return $passedDirectory;
     }
 
     /**
