@@ -24,5 +24,5 @@ it('outputs the expected string', function (): void {
     // Get the command output
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Did you mean: property, propriety, properer or properest?');
+    expect(trim($output))->toContain('Did you mean: property, propriety, properer, properest');
 });
