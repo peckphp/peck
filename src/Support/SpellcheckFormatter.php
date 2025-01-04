@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Peck\Support;
 
-final readonly class NameParser
+final readonly class SpellcheckFormatter
 {
     /**
      * Transforms the given input (method or class names) into a
