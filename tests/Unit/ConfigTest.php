@@ -67,6 +67,7 @@ it('should not recreate a file that already exists', function (): void {
             'bool',
             'init',
             'php',
+            'api',
         ])
         ->and($config->whitelistedDirectories)->toBe([]);
 });
