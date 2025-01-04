@@ -68,7 +68,7 @@ Peck is an open-sourced software licensed under the **[MIT license](https://open
 
 The behaviour of `peck` can be modified with the following options:
 
-### `--dir`
+### `--path`
 
-The directory to check can be overwritten with the `--dir` option. If the directory is one you always need checking you
+The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
 can place it in your `peck.json` file. 

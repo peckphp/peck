@@ -72,10 +72,10 @@ final class CheckCommand extends Command
         $this->setDescription('Checks for misspellings in the given directory.')
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'The configuration file to use.', 'peck.json')
             ->addOption(
-                'dir',
-                'd',
+                'path',
+                'p',
                 InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
-                'The directory to check for misspellings.'
+                'The path to check for misspellings.'
             );
     }
 
@@ -84,7 +84,7 @@ final class CheckCommand extends Command
      */
     private function findPathToScan(InputInterface $input): string
     {
-        $passedDirectory = $input->getOption('dir');
+        $passedDirectory = $input->getOption('path');
 
         if (! is_string($passedDirectory)) {
             return $this->inferProjectPath();

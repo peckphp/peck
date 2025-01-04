@@ -18,7 +18,7 @@ it('outputs the expected string', function (): void {
 
     // We know this dir already contains an error in its only file
     $commandTester->execute([
-        '--dir' => 'tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored',
+        '--path' => 'tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored',
     ]);
 
     // Get the command output
