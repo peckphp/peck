@@ -11,6 +11,7 @@ return RectorConfig::configure()
         __DIR__.'/tests',
     ])
     ->withSkip([
+        __DIR__.'/tests/Fixtures',
         AddOverrideAttributeToOverriddenMethodsRector::class,
     ])
     ->withPreparedSets(

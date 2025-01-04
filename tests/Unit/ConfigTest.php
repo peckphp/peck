@@ -15,6 +15,7 @@ it('should have a default configuration', function (): void {
         'doc',
         'bool',
         'php',
+        'api',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 
