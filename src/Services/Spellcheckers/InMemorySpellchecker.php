@@ -40,7 +40,7 @@ final readonly class InMemorySpellchecker implements Spellchecker
      */
     public function check(string $text): array
     {
-        $misspellings = $this->filterWhitelistedWords(iterator_to_array($this->aspell->check($text, $this->config->languages)));
+        $misspellings = $this->filterWhitelistedWords(iterator_to_array($this->aspell->check($text, array_filter([$this->config->language]))));
 
         return array_map(fn (MisspellingInterface $misspelling): Misspelling => new Misspelling(
             $misspelling->getWord(),
