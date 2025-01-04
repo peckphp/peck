@@ -61,3 +61,14 @@ You can also specify the path to the configuration file using the `--config` opt
 ---
 
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
+
+---
+
+## Command Options
+
+The behaviour of `peck` can be modified with the following options:
+
+### `--dir`
+
+The directory to check can be overwritten with the `--dir` option. If the directory is one you always need checking you
+can place it in your `peck.json` file. 
