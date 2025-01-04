@@ -8,7 +8,8 @@
             "doc",
             "bool",
             "php",
-            "api"
+            "api",
+            "formatter"
         ],
         "directories": []
     }
