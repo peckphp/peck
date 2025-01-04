@@ -50,7 +50,7 @@ Peck can be configured using a `peck.json` file in the root of your project. Her
 You can also specify the path to the configuration file using the `--config` option:
 
 ```bash
-./vendor/bin/peck check --config relative/path/to/peck.json
+./vendor/bin/peck --config relative/path/to/peck.json
 ```
 
 ---

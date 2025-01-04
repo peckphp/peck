@@ -6,10 +6,12 @@ declare(strict_types=1);
 use Peck\Console\Commands\CheckCommand;
 use Symfony\Component\Console\Application;
 
-foreach ([
-    dirname(__DIR__, 4).'/vendor/autoload.php',
-    dirname(__DIR__).'/vendor/autoload.php',
-] as $autoloadPath) {
+foreach (
+    [
+        dirname(__DIR__, 4) . '/vendor/autoload.php',
+        dirname(__DIR__) . '/vendor/autoload.php',
+    ] as $autoloadPath
+) {
     if (file_exists($autoloadPath)) {
         include_once $autoloadPath;
 
@@ -26,6 +28,6 @@ $application->add(
     new CheckCommand(),
 );
 
-$application->setDefaultCommand('check');
+$application->setDefaultCommand('check', true);
 
 $application->run();
