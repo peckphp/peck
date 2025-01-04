@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Peck\Console\Commands;
 
 use Composer\Autoload\ClassLoader;
-use Peck\Config;
 use Exception;
+use Peck\Config;
 use Peck\Kernel;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -26,6 +26,11 @@ use function Termwind\renderUsing;
 #[AsCommand(name: 'check')]
 final class CheckCommand extends Command
 {
+    /**
+     * @var array<string, array<int, array<string, int>>>
+     */
+    private array $lastColumn = [];
+
     /**
      * Executes the command.
      */
@@ -58,7 +63,12 @@ final class CheckCommand extends Command
         }
 
         foreach ($issues as $issue) {
-            $this->renderIssue($output, $issue, $directory);
+            if ($issue->line === 0) {
+                $this->renderPathIssue($output, $issue, $directory);
+
+                continue;
+            }
+            $this->renderFileIssue($output, $issue, $directory);
         }
 
         return Command::FAILURE;
@@ -90,84 +100,39 @@ final class CheckCommand extends Command
         };
     }
 
-    private function renderIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
+    private function renderFileIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
     {
         renderUsing($output);
 
-        $fullPath = $issue->file;
-        $relativePath = str_replace($currentDirectory, '.', $fullPath);
+        $lines = file($issue->file);
+        $lineContent = $lines[$issue->line - 1] ?? '';
 
-        $column = 0;
+        $column = $this->getIssueColumn($issue, $lineContent);
+        $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] = $column;
 
-        $lineDetails = '';
-        $lineInfo = '';
+        $lineInfo = ":{$issue->line}:$column";
+
+        // termwind "<code>" adds some spaces to the left, plus the space-x-1 of the wrapper div
+        $alignSpacer = str_repeat(' ', 6);
+        $spacer = str_repeat('-', $column);
+
+        $capitalized = strtolower($lineContent[$column]) !== $lineContent[$column];
 
         $suggestions = $issue->misspelling->suggestions;
-
-        static $lastColumn = [];
-
-        if ($issue->line > 0) {
-            // its a file, work with contents
-            $lines = file($fullPath);
-
-            $lineContent = $lines[$issue->line - 1] ?? '';
-            if ($lineContent === '') {
-                throw (new Exception("Could not read the line {$issue->line} in the file '{$fullPath}'"));
-            }
-
-            $fromColumn = isset($lastColumn[$fullPath][$issue->line][$issue->misspelling->word]) ? $lastColumn[$fullPath][$issue->line][$issue->misspelling->word] + 1 : 0;
-            $column = strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
-            if ($column === 0 || $column === false) {
-                throw (new Exception("Could not find the misspelling '{$issue->misspelling->word}' in the line '{$lineContent}'"));
-            }
-
-            $lineInfo = ":{$issue->line}:$column";
-
-            $capitalized = strtolower($lineContent[$column]) !== $lineContent[$column];
-
-            // termwind "<code>" adds some spaces to the left, plus the space-x-1 of the wrapper div
-            $align_spacer = str_repeat(' ', 6);
-            $spacer = str_repeat('-', $column);
-
-            $lastColumn[$fullPath][$issue->line][$issue->misspelling->word] = $column;
-
-            $lineDetails = <<<HTML
-                <code start-line="{$issue->line}">{$lineContent}</code>
-                <pre class="text-red-500 font-bold">{$align_spacer}{$spacer}^</pre>
-            HTML;
-        } else {
-            // it's a path (directory or file)
-            $fromColumn = isset($lastColumn[$fullPath][$issue->line][$issue->misspelling->word]) ? $lastColumn[$fullPath][$issue->line][$issue->misspelling->word] + 1 : 0;
-            $column = strpos(strtolower($fullPath), $issue->misspelling->word, $fromColumn);
-            if ($column === 0 || $column === false) {
-                throw (new Exception("Could not find the misspelling '{$issue->misspelling->word}' in the path '{$fullPath}'"));
-            }
-
-            $capitalized = strtolower($fullPath[$column]) !== $fullPath[$column];
-
-            // termwind "<code>" adds some spaces to the left, plus the space-x-1 of the wrapper div
-            $spacer = str_repeat('-', $column);
-
-            $lastColumn[$fullPath][$issue->line][$issue->misspelling->word] = $column;
-
-            $lineDetails = <<<HTML
-                <pre class="text-blue-300 font-bold">{$fullPath}</pre>
-                <pre class="text-red-500 font-bold">{$spacer}^</pre>
-            HTML;
-        }
-
         if ($capitalized) {
             $suggestions = array_map('ucfirst', $suggestions);
         }
+        $suggestions = implode(', ', $suggestions);
 
-        $suggestions = implode(', ', $issue->misspelling->suggestions);
+        $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
         render(<<<HTML
             <div class="mx-2 mb-2">
                 <div class="space-x-1">
                     <span class="bg-red text-white px-1 font-bold">ISSUE</span>
-                    <span>Misspelling in <strong><a href="{$fullPath}{$lineInfo}">{$relativePath}{$lineInfo}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
-                    {$lineDetails}
+                    <span>Misspelling in <strong><a href="{$issue->file}{$lineInfo}">{$relativePath}{$lineInfo}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
+                    <code start-line="{$issue->line}">{$lineContent}</code>
+                    <pre class="text-red-500 font-bold">{$alignSpacer}{$spacer}^</pre>
                 </div>
 
                 <div class="space-x-1 text-gray-700">
@@ -176,5 +141,54 @@ final class CheckCommand extends Command
                 </div>
             </div>
         HTML);
+    }
+
+    private function renderPathIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
+    {
+        renderUsing($output);
+
+        $column = $this->getIssueColumn($issue, $issue->file);
+        $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] = $column;
+
+        // termwind "<code>" adds some spaces to the left, plus the space-x-1 of the wrapper div
+        $spacer = str_repeat('-', $column);
+
+        $capitalized = strtolower($issue->file[$column]) !== $issue->file[$column];
+
+        $suggestions = $issue->misspelling->suggestions;
+        if ($capitalized) {
+            $suggestions = array_map('ucfirst', $suggestions);
+        }
+        $suggestions = implode(', ', $suggestions);
+
+        $relativePath = str_replace($currentDirectory, '.', $issue->file);
+
+        render(<<<HTML
+            <div class="mx-2 mb-2">
+                <div class="space-x-1">
+                    <span class="bg-red text-white px-1 font-bold">ISSUE</span>
+                    <span>Misspelling in <strong><a href="{$issue->file}">{$relativePath}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
+                    <pre class="text-blue-300 font-bold">{$issue->file}</pre>
+                    <pre class="text-red-500 font-bold">{$spacer}^</pre>
+                </div>
+
+                <div class="space-x-1 text-gray-700">
+                    <span>Did you mean:</span>
+                    <span class="font-bold">{$suggestions}</span>
+                </div>
+            </div>
+        HTML);
+    }
+
+    private function getIssueColumn(Issue $issue, string $lineContent): int
+    {
+        $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word]) ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
+        $column = strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
+
+        if ($column === false) {
+            throw (new Exception("Could not find the misspelling '{$issue->misspelling->word}' in the line '{$lineContent}'"));
+        }
+
+        return $column;
     }
 }
