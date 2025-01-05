@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peck\Checkers;
 
+use BackedEnum;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
@@ -153,6 +154,7 @@ final readonly class SourceCodeChecker implements Checker
 
     /**
      * Get the constant names and their values contained in the given reflection.
+     * This also includes cases from enums and their values (for string backed enums).
      *
      * @param  ReflectionClass<object>  $reflection
      * @return array<int, string>
@@ -163,7 +165,7 @@ final readonly class SourceCodeChecker implements Checker
 
         return array_values(array_filter([
             ...array_keys($constants),
-            ...\array_values($constants),
+            ...array_map(fn (mixed $value): mixed => $value instanceof BackedEnum && is_string($value->value) ? $value->value : $value, array_values($constants)),
         ], fn (mixed $values): bool => is_string($values)));
     }
 
