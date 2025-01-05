@@ -16,6 +16,9 @@ it('should have a default configuration', function (): void {
         'bool',
         'php',
         'api',
+        'enum',
+        'enums',
+        'backend',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 

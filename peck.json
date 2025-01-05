@@ -8,7 +8,10 @@
             "doc",
             "bool",
             "php",
-            "api"
+            "api",
+            "enum",
+            "enums",
+            "backend"
         ],
         "directories": []
     }
