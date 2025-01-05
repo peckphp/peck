@@ -19,7 +19,7 @@ it('requires a config value when --config is passed', function (): void {
     ]);
 })->throws(InvalidOptionException::class);
 
-it('it throws an exception when an invalid --config is passed', function (): void {
+it('throws an exception when an invalid --config is passed', function (): void {
     // Find the application
     $application = new Application;
     $application->add(new CheckCommand);
@@ -31,7 +31,7 @@ it('it throws an exception when an invalid --config is passed', function (): voi
     ]);
 })->throws(InvalidOptionException::class);
 
-it('it works when a valid --config is passed', function (): void {
+it('works when a valid --config is passed', function (): void {
     // Arrange
 
     // I've chosen to create a small config file here, as opposed to creating files all over the place, & losing track.
