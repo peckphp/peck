@@ -11,5 +11,5 @@ it('handles multiple checkers', function (): void {
         'directory' => __DIR__.'/../Fixtures',
     ]);
 
-    expect($issues)->toHaveCount(31);
+    expect($issues)->toHaveCount(33);
 });
