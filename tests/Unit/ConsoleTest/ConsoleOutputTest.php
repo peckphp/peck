@@ -32,6 +32,9 @@ it('it throws an exception when an invalid --config is passed', function (): voi
 })->throws(InvalidOptionException::class);
 
 it('it works when a valid --config is passed', function (): void {
+    // Arrange
+
+    // I've chosen to create a small config file here, as opposed to creating files all over the place, & losing track.
     $tempConfig = 'peck2.json';
     touch($tempConfig);
     file_put_contents($tempConfig, <<<'JSON'
@@ -57,6 +60,8 @@ JSON
     unlink($tempConfig);
 
     // Assert
+    // The "namespace" word has been removed from the exclusions, so that should be picked up,
+    // but the "config" should still be ignored
     expect($output)
         ->toContain('Did you mean: name space, name-space, names pace, names-pace')
         ->not()->toContain('Did you mean: con fig, con-fig, Cong, confide');
