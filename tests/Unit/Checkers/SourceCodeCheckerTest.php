@@ -21,7 +21,7 @@ it('does not detect issues in the given directory', function (): void {
     expect($issues)->toBeEmpty();
 });
 
-it('detects issues in the given directory', function (): void {
+it('detects issues in the given directory of classes', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
         InMemorySpellchecker::default(),
@@ -91,7 +91,7 @@ it('detects issues in the given directory', function (): void {
         ]);
 });
 
-it('detects issues in the given directory, but ignores the whitelisted words', function (): void {
+it('detects issues in the given directory of classes, but ignores the whitelisted words', function (): void {
     $config = new Config(
         whitelistedWords: ['Properyt', 'bolck'],
     );
@@ -144,7 +144,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         ]);
 });
 
-it('detects issues in the given directory, but ignores the whitelisted directories', function (): void {
+it('detects issues in the given directory of classes, but ignores the whitelisted directories', function (): void {
     $checker = new SourceCodeChecker(
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
@@ -221,4 +221,259 @@ it('handles well when it can not detect the line problem', function (): void {
     $line = (fn (): int => $this->getErrorLine($splFileInfo, str_repeat('a', 100)))->call($checker);
 
     expect($line)->toBe(0);
+});
+
+it('detects issues in the given directory of enums', function (): void {
+    $checker = new SourceCodeChecker(
+        Config::instance(),
+        InMemorySpellchecker::default(),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/EnumsToTest',
+    ]);
+
+    expect($issues)->toHaveCount(12)
+        ->and($issues[0]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[0]->line)->toBe(21)
+        ->and($issues[0]->misspelling->word)->toBe('spellling')
+        ->and($issues[0]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[1]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[1]->line)->toBe(26)
+        ->and($issues[1]->misspelling->word)->toBe('spellling')
+        ->and($issues[1]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[2]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[2]->line)->toBe(37)
+        ->and($issues[2]->misspelling->word)->toBe('spellling')
+        ->and($issues[2]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[3]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[3]->line)->toBe(13)
+        ->and($issues[3]->misspelling->word)->toBe('spellling')
+        ->and($issues[3]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[4]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[4]->line)->toBe(14)
+        ->and($issues[4]->misspelling->word)->toBe('spellling')
+        ->and($issues[4]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[5]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[5]->line)->toBe(8)
+        ->and($issues[5]->misspelling->word)->toBe('spellling')
+        ->and($issues[5]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[6]->file)->toEndWith('tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored/EnumWithTypoErrors.php')
+        ->and($issues[6]->line)->toBe(9)
+        ->and($issues[6]->misspelling->word)->toBe('spellling')
+        ->and($issues[6]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[7]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[7]->line)->toBe(20)
+        ->and($issues[7]->misspelling->word)->toBe('spellling')
+        ->and($issues[7]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[8]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[8]->line)->toBe(25)
+        ->and($issues[8]->misspelling->word)->toBe('spellling')
+        ->and($issues[8]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[9]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[9]->line)->toBe(36)
+        ->and($issues[9]->misspelling->word)->toBe('spellling')
+        ->and($issues[9]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[10]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[10]->line)->toBe(13)
+        ->and($issues[10]->misspelling->word)->toBe('spellling')
+        ->and($issues[10]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[11]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[11]->line)->toBe(8)
+        ->and($issues[11]->misspelling->word)->toBe('spellling')
+        ->and($issues[11]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ]);
+});
+
+it('detects issues in the given directory of enums, but ignores the whitelisted words', function (): void {
+    $config = new Config(
+        whitelistedWords: ['spellling'],
+    );
+
+    $checker = new SourceCodeChecker(
+        $config,
+        new InMemorySpellchecker(
+            $config,
+            Aspell::create(),
+        ),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/EnumsToTest',
+    ]);
+
+    expect($issues)->toBeEmpty();
+});
+
+it('detects issues in the given directory of enums, but ignores the whitelisted directories', function (): void {
+    $checker = new SourceCodeChecker(
+        new Config(
+            whitelistedDirectories: ['FolderThatShouldBeIgnored'],
+        ),
+        InMemorySpellchecker::default(),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/EnumsToTest',
+    ]);
+
+    expect($issues)->toHaveCount(11)
+        ->and($issues[0]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[0]->line)->toBe(21)
+        ->and($issues[0]->misspelling->word)->toBe('spellling')
+        ->and($issues[0]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[1]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[1]->line)->toBe(26)
+        ->and($issues[1]->misspelling->word)->toBe('spellling')
+        ->and($issues[1]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[2]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[2]->line)->toBe(37)
+        ->and($issues[2]->misspelling->word)->toBe('spellling')
+        ->and($issues[2]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[3]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[3]->line)->toBe(13)
+        ->and($issues[3]->misspelling->word)->toBe('spellling')
+        ->and($issues[3]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[4]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[4]->line)->toBe(14)
+        ->and($issues[4]->misspelling->word)->toBe('spellling')
+        ->and($issues[4]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[5]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
+        ->and($issues[5]->line)->toBe(8)
+        ->and($issues[5]->misspelling->word)->toBe('spellling')
+        ->and($issues[5]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[6]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[6]->line)->toBe(20)
+        ->and($issues[6]->misspelling->word)->toBe('spellling')
+        ->and($issues[6]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[7]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[7]->line)->toBe(25)
+        ->and($issues[7]->misspelling->word)->toBe('spellling')
+        ->and($issues[7]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[8]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[8]->line)->toBe(36)
+        ->and($issues[8]->misspelling->word)->toBe('spellling')
+        ->and($issues[8]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[9]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[9]->line)->toBe(13)
+        ->and($issues[9]->misspelling->word)->toBe('spellling')
+        ->and($issues[9]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ])
+        ->and($issues[10]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
+        ->and($issues[10]->line)->toBe(8)
+        ->and($issues[10]->misspelling->word)->toBe('spellling')
+        ->and($issues[10]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
+        ]);
 });
