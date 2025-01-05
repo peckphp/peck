@@ -19,7 +19,7 @@ it('requires a config value when --config is passed', function (): void {
     ]);
 })->throws(InvalidOptionException::class);
 
-it('W throw an exception when an invalid --config is passed', function (): void {
+it('it throws an exception when an invalid --config is passed', function (): void {
     // Find the application
     $application = new Application;
     $application->add(new CheckCommand);
@@ -31,7 +31,7 @@ it('W throw an exception when an invalid --config is passed', function (): void 
     ]);
 })->throws(InvalidOptionException::class);
 
-it('It works when a valid --config is passed', function (): void {
+it('it works when a valid --config is passed', function (): void {
     $tempConfig = 'peck2.json';
     touch($tempConfig);
     file_put_contents($tempConfig, <<<'JSON'
