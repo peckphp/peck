@@ -13,7 +13,6 @@ namespace Tests\Fixtures\ClassesToTest;
  */
 trait TraitWithTypo
 {
-
     public int $propertyWithoutSpellingMistake = 1;
 
     public int $properytWithSpelllingMistake = 2;
