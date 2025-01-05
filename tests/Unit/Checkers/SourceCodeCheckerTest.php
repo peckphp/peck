@@ -31,7 +31,7 @@ it('detects issues in the given directory of classes', function (): void {
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
     ]);
 
-    expect($issues)->toHaveCount(7)
+    expect($issues)->toHaveCount(9)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
         ->and($issues[0]->misspelling->word)->toBe('erorr')
@@ -88,6 +88,22 @@ it('detects issues in the given directory of classes', function (): void {
             'propriety',
             'properer',
             'properest',
+        ])->and($issues[7]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
+        ->and($issues[7]->line)->toBe(12)
+        ->and($issues[7]->misspelling->word)->toBe('erorr')
+        ->and($issues[7]->misspelling->suggestions)->toBe([
+            'error',
+            'errors',
+            'Orr',
+            'err',
+        ])->and($issues[8]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
+        ->and($issues[8]->line)->toBe(8)
+        ->and($issues[8]->misspelling->word)->toBe('spellling')
+        ->and($issues[8]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
         ]);
 });
 
@@ -108,7 +124,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
     ]);
 
-    expect($issues)->toHaveCount(4)
+    expect($issues)->toHaveCount(6)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
         ->and($issues[0]->misspelling->word)->toBe('erorr')
@@ -141,6 +157,22 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'tat',
             'ST',
             'St',
+        ])->and($issues[4]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
+        ->and($issues[4]->line)->toBe(12)
+        ->and($issues[4]->misspelling->word)->toBe('erorr')
+        ->and($issues[4]->misspelling->suggestions)->toBe([
+            'error',
+            'errors',
+            'Orr',
+            'err',
+        ])->and($issues[5]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
+        ->and($issues[5]->line)->toBe(8)
+        ->and($issues[5]->misspelling->word)->toBe('spellling')
+        ->and($issues[5]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
         ]);
 });
 
@@ -156,7 +188,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
     ]);
 
-    expect($issues)->toHaveCount(6)
+    expect($issues)->toHaveCount(8)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
         ->and($issues[0]->misspelling->word)->toBe('erorr')
@@ -205,6 +237,22 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'tat',
             'ST',
             'St',
+        ])->and($issues[6]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
+        ->and($issues[6]->line)->toBe(12)
+        ->and($issues[6]->misspelling->word)->toBe('erorr')
+        ->and($issues[6]->misspelling->suggestions)->toBe([
+            'error',
+            'errors',
+            'Orr',
+            'err',
+        ])->and($issues[7]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
+        ->and($issues[7]->line)->toBe(8)
+        ->and($issues[7]->misspelling->word)->toBe('spellling')
+        ->and($issues[7]->misspelling->suggestions)->toBe([
+            'spelling',
+            'spilling',
+            'spell ling',
+            'spell-ling',
         ]);
 });
 
