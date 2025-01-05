@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Peck\Checkers\ClassChecker;
+use Peck\Checkers\SourceCodeChecker;
 use Peck\Config;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('does not detect issues in the given directory', function (): void {
-    $checker = new ClassChecker(
+    $checker = new SourceCodeChecker(
         Config::instance(),
         InMemorySpellchecker::default(),
     );
@@ -22,7 +22,7 @@ it('does not detect issues in the given directory', function (): void {
 });
 
 it('detects issues in the given directory', function (): void {
-    $checker = new ClassChecker(
+    $checker = new SourceCodeChecker(
         Config::instance(),
         InMemorySpellchecker::default(),
     );
@@ -96,7 +96,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         whitelistedWords: ['Properyt', 'bolck'],
     );
 
-    $checker = new ClassChecker(
+    $checker = new SourceCodeChecker(
         $config,
         new InMemorySpellchecker(
             $config,
@@ -145,7 +145,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
 });
 
 it('detects issues in the given directory, but ignores the whitelisted directories', function (): void {
-    $checker = new ClassChecker(
+    $checker = new SourceCodeChecker(
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
@@ -209,7 +209,7 @@ it('detects issues in the given directory, but ignores the whitelisted directori
 });
 
 it('handles well when it can not detect the line problem', function (): void {
-    $checker = new ClassChecker(
+    $checker = new SourceCodeChecker(
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
