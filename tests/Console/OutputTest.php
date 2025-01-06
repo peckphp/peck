@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Symfony\Component\Process\Process;
 
 it('may fail', function (): void {
