@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Peck\Cache\CacheManager;
 use Peck\Checkers\ClassChecker;
 use Peck\Config;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
@@ -117,6 +118,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         new InMemorySpellchecker(
             $config,
             Aspell::create(),
+            CacheManager::create('Peck.ClassCheckerTest'),
         ),
     );
 

@@ -8,5 +8,6 @@
 /composer.lock
 /phpunit.xml
 /vendor/
+/var/
 *.swp
 *.swo

@@ -1,7 +1,11 @@
 {
     "name": "peckphp/peck",
     "description": "Peck is a CLI tool that detects wording / or spelling mistakes in your codebase.",
-    "keywords": ["php", "spelling", "checker"],
+    "keywords": [
+        "php",
+        "spelling",
+        "checker"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -12,6 +16,7 @@
     "require": {
         "php": "^8.3.0",
         "nunomaduro/termwind": "^2.3",
+        "symfony/cache": "^7.2.1",
         "symfony/console": "^7.2.1",
         "symfony/finder": "^7.2.2",
         "tigitz/php-spellchecker": "^0.7.0"
