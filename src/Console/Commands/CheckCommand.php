@@ -11,6 +11,7 @@ use Peck\Kernel;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -44,7 +45,7 @@ final class CheckCommand extends Command
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
-            'directory' => $directory = $this->inferProjectPath(),
+            'directory' => $directory = $this->findPathToScan($input),
         ]);
 
         $output->writeln('');
@@ -79,7 +80,27 @@ final class CheckCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Checks for misspellings in the given directory.')
-            ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'The configuration file to use.', 'peck.json');
+            ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'The configuration file to use.', 'peck.json')
+            ->addOption(
+                'path',
+                'p',
+                InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
+                'The path to check for misspellings.'
+            );
+    }
+
+    /**
+     * Decides whether to use a passed directory, or figure out the directory to scan automatically
+     */
+    private function findPathToScan(InputInterface $input): string
+    {
+        $passedDirectory = $input->getOption('path');
+
+        if (! is_string($passedDirectory)) {
+            return $this->inferProjectPath();
+        }
+
+        return $passedDirectory;
     }
 
     /**
