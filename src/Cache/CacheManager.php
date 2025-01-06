@@ -23,9 +23,9 @@ final readonly class CacheManager
     /**
      * Creates the default instance of CacheManager.
      */
-    public static function create(string $namespace = 'Peck', int $defaultLifetime = 3600): self
+    public static function create(string $namespace = 'Peck', int $defaultLifetime = 3600, ?string $cacheDirectory = null): self
     {
-        return new self(new FilesystemAdapter($namespace, $defaultLifetime, __DIR__.'/../../var/cache'));
+        return new self(new FilesystemAdapter($namespace, $defaultLifetime, $cacheDirectory ?? dirname(__DIR__, 5).'/.peck.cache'));
     }
 
     /**

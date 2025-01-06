@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Peck\Cache\CacheManager;
 
 beforeEach(function (): void {
-    $this->cacheManager = CacheManager::create('Peck.CacheManagerTest');
+    $this->cacheManager = CacheManager::create('Peck.CacheManagerTest', 3600, __DIR__.'/../../../.peck.cache');
 });
 
 afterAll(function (): void {
