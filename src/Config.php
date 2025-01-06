@@ -50,10 +50,6 @@ final class Config
         $defaultConfigPath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]).'/';
         $configFile = self::findConfigFile(inputOptions: $input, defaultConfigPath: $defaultConfigPath);
 
-        if ($configFile === null) {
-            throw new \RuntimeException('Configuration file "peck.json" not found.');
-        }
-
         $contents = (string) file_get_contents($configFile);
 
         /** @var array{
@@ -88,7 +84,13 @@ final class Config
             return $defaultConfigFilePath;
         }
 
-        return self::searchForConfigFileInDirectory(dirname($defaultConfigFilePath));
+        $foundConfigPath = self::searchForConfigFileInDirectory(dirname($defaultConfigFilePath));
+
+        if ($foundConfigPath === null) {
+            throw new \RuntimeException('Configuration file "peck.json" not found.');
+        }
+
+        return $foundConfigPath;
     }
 
     /**
@@ -126,7 +128,15 @@ final class Config
      */
     private static function isValidConfigFile(string $filePath): bool
     {
-        return is_file($filePath) && basename($filePath) === self::CONFIG_FILE_NAME;
+        if (!is_file($filePath)) {
+            $directory = dirname($filePath);
+            if (is_dir($directory)) {
+                throw new \RuntimeException('The directory exists, but the configuration file "peck.json" is missing.');
+            }
+            return false;
+        }
+
+        return basename($filePath) === self::CONFIG_FILE_NAME;
     }
 
     /**
