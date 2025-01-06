@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Peck\Console\Commands;
 
 use Composer\Autoload\ClassLoader;
+use Peck\Config;
 use Peck\Kernel;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Termwind\render;
@@ -28,6 +30,7 @@ class DefaultCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        Config::instance($input);
         $kernel = Kernel::default();
 
         $issues = $kernel->handle([
@@ -63,7 +66,16 @@ class DefaultCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setDescription('Checks for misspellings in the given directory.');
+        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+
+        $this->setDescription('Checks for misspellings in the given directory.')
+            ->addOption(
+                'config-path',
+                'cp',
+                InputOption::VALUE_OPTIONAL,
+                'The path to the configuration file directory.',
+                $basePath,
+            );
     }
 
     protected function renderIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void

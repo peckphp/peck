@@ -10,3 +10,8 @@
 /vendor/
 *.swp
 *.swo
+
+#Docker
+docker-compose.*yml
+Dockerfile.*
+.docker
