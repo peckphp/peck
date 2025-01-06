@@ -9,7 +9,6 @@ use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
 use Peck\Support\NameParser;
 use Peck\ValueObjects\Issue;
-use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -76,17 +75,14 @@ final readonly class ClassChecker implements Checker
 
         $reflectionClass = new ReflectionClass($class);
 
-        $namesToCheck = [
-            ...$this->getMethodNames($reflectionClass),
-            ...$this->getPropertyNames($reflectionClass),
-            ...$this->getConstantNames($reflectionClass),
-        ];
+        $namesToCheck = array_merge(
+            $this->getMethodNames($reflectionClass),
+            $this->getPropertyNames($reflectionClass),
+            $this->getConstantNames($reflectionClass)
+        );
 
         if ($docComment = $reflectionClass->getDocComment()) {
-            $namesToCheck = [
-                ...$namesToCheck,
-                ...explode(PHP_EOL, $docComment),
-            ];
+            $namesToCheck = array_merge($namesToCheck, explode(PHP_EOL, $docComment));
         }
 
         if ($namesToCheck === []) {
@@ -96,15 +92,15 @@ final readonly class ClassChecker implements Checker
         $issues = [];
 
         foreach ($namesToCheck as $name) {
-            $issues = [
-                ...$issues,
-                ...array_map(
-                    fn (Misspelling $misspelling): Issue => new Issue(
-                        $misspelling,
-                        $file->getRealPath(),
-                        $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check(NameParser::parse($name))),
-            ];
+            $misspellings = $this->spellchecker->check(NameParser::parse($name));
+
+            foreach ($misspellings as $misspelling) {
+                $issues[] = new Issue(
+                    $misspelling,
+                    $file->getRealPath(),
+                    $this->getErrorLine($file, $name)
+                );
+            }
         }
 
         return $issues;
