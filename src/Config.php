@@ -70,9 +70,9 @@ final class Config
      * Finds the configuration file based on the provided input and default path.
      *
      * @param  string  $defaultConfigPath  The default path to the configuration file.
-     * @return string|null The path to the configuration file, or null if not found.
+     * @return string The path to the configuration file, or null if not found.
      */
-    private static function findConfigFile(?InputInterface $inputOptions, string $defaultConfigPath): ?string
+    private static function findConfigFile(?InputInterface $inputOptions, string $defaultConfigPath): string
     {
         $customConfigPath = self::getCustomConfigPath($inputOptions);
         if ($customConfigPath && self::isValidConfigFile($customConfigPath)) {
@@ -128,11 +128,12 @@ final class Config
      */
     private static function isValidConfigFile(string $filePath): bool
     {
-        if (!is_file($filePath)) {
+        if (! is_file($filePath)) {
             $directory = dirname($filePath);
             if (is_dir($directory)) {
                 throw new \RuntimeException('The directory exists, but the configuration file "peck.json" is missing.');
             }
+
             return false;
         }
 
