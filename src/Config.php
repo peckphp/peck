@@ -49,7 +49,7 @@ final class Config
         }
 
         $defaultConfigPath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]) . '/';
-        $configFile = self::findConfigFile($input, defaultConfigPath:  $defaultConfigPath);
+        $configFile = self::findConfigFile(inputOptions:  $input, defaultConfigPath:  $defaultConfigPath);
 
         if ($configFile === null) {
             throw new \RuntimeException('Configuration file "peck.json" not found.');
@@ -72,58 +72,77 @@ final class Config
     }
 
     /**
-     * Find the configuration file.
+     * Finds the configuration file based on the provided input and default path.
      *
-     * @param InputInterface|null $customConfigPath
-     * @param string $defaultConfigPath
+     * @param InputInterface|null $inputOptions
+     * @param string $defaultConfigPath The default path to the configuration file.
      * @return string|null The path to the configuration file, or null if not found.
      */
-    private static function findConfigFile( ?InputInterface $input, string $defaultConfigPath): ?string
+    private static function findConfigFile(?InputInterface $inputOptions, string $defaultConfigPath): ?string
     {
-        // Get the custom config path from the input
-        $customConfigPath = $input?->getOption('config-path');
-
-        // Debugging: Check the value of $customConfigPath
-        if ($customConfigPath) {
-            echo "Custom config path provided: " . $customConfigPath . PHP_EOL; // Debugging output
-        } else {
-            echo "No custom config path provided, using default." . PHP_EOL; // Debugging output
+        $customConfigPath = self::getCustomConfigPath($inputOptions);
+        if ($customConfigPath && self::isValidConfigFile($customConfigPath)) {
+            return $customConfigPath;
         }
 
-        // If a custom config path is provided, check if it's a valid file
-        if ($customConfigPath) {
-            $configPath = rtrim($customConfigPath, '/') . '/' . self::CONFIG_FILE_NAME;
-            echo "Checking config file at: " . $configPath . PHP_EOL; // Debugging output
-            if (is_file($configPath)) {
-                return $configPath;
-            }
+        $defaultConfigFilePath = self::getDefaultConfigPath($defaultConfigPath);
+        if (self::isValidConfigFile($defaultConfigFilePath)) {
+            return $defaultConfigFilePath;
         }
 
-        // Fallback to the default config path
-        $configPath = $defaultConfigPath . self::CONFIG_FILE_NAME;
-        echo "Fallback config path: " . $configPath . PHP_EOL; // Debugging output
+        return self::searchForConfigFileInDirectory(dirname($defaultConfigFilePath));
+    }
 
-        if (is_file($configPath)) {
-            return $configPath;
-        }
-////        $configPath = isset($customConfigPath) ? $defaultConfigPath . $customConfigPath?->getOption('config-path') : $defaultConfigPath;
-//
-//        $configPath = $customConfigPath?->getOption('config-path') ?: $defaultConfigPath;
-//
-//        if (is_file($configPath) && basename($configPath) === self::CONFIG_FILE_NAME) {
-//            return $configPath;
-//        }
+    /**
+     * Retrieves the custom configuration path from the input.
+     *
+     * @param InputInterface|null $inputOptions
+     * @return string|null The custom configuration path, or null if not provided.
+     */
+    private static function getCustomConfigPath(?InputInterface $inputOptions): ?string
+    {
+        $customConfigPath = $inputOptions?->getOption('config-path');
+        return $customConfigPath ? rtrim($customConfigPath, '/') . '/' . self::CONFIG_FILE_NAME : null;
+    }
 
-        if (is_dir(dirname($configPath))) {
+    /**
+     * Constructs the default configuration path.
+     *
+     * @param string $defaultConfigPath The base path for the configuration file.
+     * @return string The full path to the default configuration file.
+     */
+    private static function getDefaultConfigPath(string $defaultConfigPath): string
+    {
+        return $defaultConfigPath . self::CONFIG_FILE_NAME;
+    }
 
+    /**
+     * Validates if the given file path is a valid configuration file.
+     *
+     * @param string $filePath The path to the configuration file.
+     * @return bool True if the file is valid, false otherwise.
+     */
+    private static function isValidConfigFile(string $filePath): bool
+    {
+        return is_file($filePath) && basename($filePath) === self::CONFIG_FILE_NAME;
+    }
+
+    /**
+     * Searches for the configuration file in the specified directory.
+     *
+     * @param string $directory The directory to search for the configuration file.
+     * @return string|null The path to the found configuration file, or null if not found.
+     */
+    private static function searchForConfigFileInDirectory(string $directory): ?string
+    {
+        if (is_dir($directory)) {
             $finder = new Finder();
-            $finder->files()->name(self::CONFIG_FILE_NAME)->in($configPath)->depth('< ' . self::CONFIG_SEARCH_MAX_DEPTH);
+            $finder->files()->name(self::CONFIG_FILE_NAME)->in($directory)->depth('< ' . self::CONFIG_SEARCH_MAX_DEPTH);
 
             foreach ($finder as $file) {
                 return $file->getRealPath();
             }
         }
-
         return null;
     }
 }
