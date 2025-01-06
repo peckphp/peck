@@ -11,6 +11,8 @@ use Peck\Kernel;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidOptionException;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,8 +38,7 @@ final class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configurationPath = $input->getOption('config');
-        Config::resolveConfigFilePathUsing(fn (): mixed => $configurationPath);
+        $this->getConfigFile($input);
 
         $kernel = Kernel::default();
 
@@ -80,7 +81,30 @@ final class CheckCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Checks for misspellings in the given directory.')
-            ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'The configuration file to use.', 'peck.json');
+            ->addOption(
+                'config',
+                'c',
+                InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
+                'The configuration file to use.', 'peck.json'
+            );
+    }
+
+    /**
+     * If a user passes a config option to the command, attempt to load that file.
+     *
+     * If the file doesn't exist, throw an exception
+     *
+     * @throws InvalidOptionException
+     */
+    private function getConfigFile(InputInterface $input): void
+    {
+        $configurationPath = $input->getOption('config');
+
+        if (! is_string($configurationPath) || ! file_exists($configurationPath)) {
+            throw new InvalidOptionException('The config file you tried to load does not exist.');
+        }
+
+        Config::resolveConfigFilePathUsing(fn (): mixed => $configurationPath);
     }
 
     /**
