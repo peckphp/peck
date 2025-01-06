@@ -20,8 +20,6 @@ use function Termwind\render;
 use function Termwind\renderUsing;
 
 /**
- * @codeCoverageIgnore
- *
  * @internal
  */
 #[AsCommand(name: 'check')]

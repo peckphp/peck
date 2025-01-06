@@ -1,15 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 use Symfony\Component\Process\Process;
 
 it('may fail', function (): void {
-    // Prepare
-    $process = Process::fromShellCommandline('./bin/peck');
+    $process = Process::fromShellCommandline('./bin/peck check --path tests/Fixtures');
 
-    // Act
     $exitCode = $process->run();
 
-    // Assert
+    $output = removeProjectDirectory($process->getOutput());
+
     expect($exitCode)->toBe(1)
-        ->and($process->getOutput())->toContain('Did you mean:');
-})->todo();
+        ->and($output)->toMatchSnapshot();
+});
+
+it('may pass', function (): void {
+    $process = Process::fromShellCommandline('./bin/peck');
+
+    $exitCode = $process->run();
+
+    $output = removeProjectDirectory($process->getOutput());
+
+    expect($exitCode)->toBe(0)
+        ->and($output)->toMatchSnapshot();
+});
+
+function removeProjectDirectory(string $output): string
+{
+    $projectDirectory = (string) realpath(__DIR__.'/../../');
+
+    return str_replace($projectDirectory, '', $output);
+}
