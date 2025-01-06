@@ -33,29 +33,29 @@ final readonly class FileSystemChecker implements Checker
      */
     public function check(array $parameters): array
     {
-        $filesOrDirectories = Finder::create()
+        $finder = Finder::create()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
-            ->in($parameters['directory'])
-            ->getIterator();
+            ->in($parameters['directory']);
 
         $issues = [];
 
-        foreach ($filesOrDirectories as $fileOrDirectory) {
-            $name = $fileOrDirectory->getFilenameWithoutExtension();
-            $name = NameParser::parse($name);
+        foreach ($finder as $fileOrDirectory) {
+            $name = NameParser::parse($fileOrDirectory->getFilenameWithoutExtension());
 
-            $issues = [
-                ...$issues,
+            array_push(
+                $issues,
                 ...array_map(
                     fn (Misspelling $misspelling): Issue => new Issue(
                         $misspelling,
                         $fileOrDirectory->getRealPath(),
-                        0,
-                    ), $this->spellchecker->check($name)),
-            ];
+                        0
+                    ),
+                    $this->spellchecker->check($name)
+                )
+            );
         }
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);

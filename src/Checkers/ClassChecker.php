@@ -40,7 +40,7 @@ final readonly class ClassChecker implements Checker
      */
     public function check(array $parameters): array
     {
-        $classesFiles = Finder::create()
+        $finder = Finder::create()
             ->files()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
@@ -48,21 +48,17 @@ final readonly class ClassChecker implements Checker
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
-            ->name('*.php')
-            ->getIterator();
+            ->name('*.php');
 
         $issues = [];
 
-        foreach ($classesFiles as $classFile) {
-            $issues = [
-                ...$issues,
-                ...$this->getIssuesFromClass($classFile),
-            ];
+        foreach ($finder as $classFile) {
+            array_push($issues, ...$this->getIssuesFromClass($classFile));
         }
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
-        return array_values($issues);
+        return $issues;
     }
 
     /**
