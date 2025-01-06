@@ -75,10 +75,11 @@ final readonly class ClassChecker implements Checker
 
         $reflectionClass = new ReflectionClass($class);
 
-        $namesToCheck = $this->getMethodNames($reflectionClass);
-
-        array_push($namesToCheck, ...$this->getPropertyNames($reflectionClass));
-        array_push($namesToCheck, ...$this->getConstantNames($reflectionClass));
+        $namesToCheck = array_merge(
+            $this->getMethodNames($reflectionClass),
+            $this->getPropertyNames($reflectionClass),
+            $this->getConstantNames($reflectionClass)
+        );
 
         if ($docComment = $reflectionClass->getDocComment()) {
             array_push($namesToCheck, ...explode(PHP_EOL, $docComment));
