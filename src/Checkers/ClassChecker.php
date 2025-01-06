@@ -7,7 +7,7 @@ namespace Peck\Checkers;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
-use Peck\Services\NameParser;
+use Peck\Support\NameParser;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
@@ -27,7 +27,6 @@ final readonly class ClassChecker implements Checker
      */
     public function __construct(
         private Config $config,
-        private NameParser $nameParser,
         private Spellchecker $spellchecker,
     ) {
         //
@@ -84,6 +83,7 @@ final readonly class ClassChecker implements Checker
         $namesToCheck = [
             ...$this->getMethodNames($reflectionClass),
             ...$this->getPropertyNames($reflectionClass),
+            ...$this->getConstantNames($reflectionClass),
         ];
 
         if ($docComment = $reflectionClass->getDocComment()) {
@@ -107,7 +107,7 @@ final readonly class ClassChecker implements Checker
                         $misspelling,
                         $file->getRealPath(),
                         $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check($this->nameParser->parse($name))),
+                    ), $this->spellchecker->check(NameParser::parse($name))),
             ];
         }
 
@@ -151,6 +151,22 @@ final readonly class ClassChecker implements Checker
             fn (ReflectionParameter $parameter): string => $parameter->getName(),
             $method->getParameters(),
         );
+    }
+
+    /**
+     * Get the constant names and their values contained in the given class.
+     *
+     * @param  ReflectionClass<object>  $class
+     * @return array<int, string>
+     */
+    private function getConstantNames(ReflectionClass $class): array
+    {
+        $constants = $class->getConstants();
+
+        return array_values(array_filter([
+            ...array_keys($constants),
+            ...array_values($constants),
+        ], fn (mixed $values): bool => is_string($values)));
     }
 
     /**

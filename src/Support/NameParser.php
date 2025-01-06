@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Peck\Services;
+namespace Peck\Support;
 
 final readonly class NameParser
 {
@@ -10,7 +10,7 @@ final readonly class NameParser
      * Transforms the given input (method or class names) into a
      * human-readable format which can be used for spellchecking.
      */
-    public function parse(string $input): string
+    public static function parse(string $input): string
     {
         // Trim leading underscores (e.g. __construct -> construct)
         $input = ltrim($input, '_');

@@ -6,7 +6,6 @@ namespace Peck;
 
 use Peck\Checkers\ClassChecker;
 use Peck\Checkers\FileSystemChecker;
-use Peck\Services\NameParser;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 
 final readonly class Kernel
@@ -28,13 +27,12 @@ final readonly class Kernel
     public static function default(): self
     {
         $config = Config::instance();
-        $nameParser = new NameParser;
         $inMemoryChecker = InMemorySpellchecker::default();
 
         return new self(
             [
-                new FileSystemChecker($config, $nameParser, $inMemoryChecker),
-                new ClassChecker($config, $nameParser, $inMemoryChecker),
+                new FileSystemChecker($config, $inMemoryChecker),
+                new ClassChecker($config, $inMemoryChecker),
             ],
         );
     }
