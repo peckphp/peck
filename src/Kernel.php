@@ -48,10 +48,7 @@ final readonly class Kernel
         $issues = [];
 
         foreach ($this->checkers as $checker) {
-            $issues = [
-                ...$issues,
-                ...$checker->check($parameters),
-            ];
+            array_push($issues, ...$checker->check($parameters));
         }
 
         return $issues;
