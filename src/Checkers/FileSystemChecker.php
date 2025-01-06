@@ -45,17 +45,13 @@ final readonly class FileSystemChecker implements Checker
         foreach ($finder as $fileOrDirectory) {
             $name = NameParser::parse($fileOrDirectory->getFilenameWithoutExtension());
 
-            array_push(
-                $issues,
-                ...array_map(
-                    fn (Misspelling $misspelling): Issue => new Issue(
-                        $misspelling,
-                        $fileOrDirectory->getRealPath(),
-                        0
-                    ),
-                    $this->spellchecker->check($name)
-                )
-            );
+            array_push($issues, ...array_map(
+                fn (Misspelling $misspelling): Issue => new Issue(
+                    $misspelling,
+                    $fileOrDirectory->getRealPath(),
+                    0
+                ), $this->spellchecker->check($name)
+            ));
         }
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
