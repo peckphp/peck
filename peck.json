@@ -1,0 +1,15 @@
+{
+    "ignore": {
+        "words": [
+            "config",
+            "aspell",
+            "args",
+            "namespace",
+            "doc",
+            "bool",
+            "php",
+            "api"
+        ],
+        "directories": []
+    }
+}
