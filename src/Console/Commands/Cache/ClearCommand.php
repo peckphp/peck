@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Peck\Console\Commands\Cache;
 
 use Exception;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Peck\Cache\CacheManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,7 +41,11 @@ final class ClearCommand extends Command
         $namespace = $input->getArgument('namespace');
 
         try {
-            (new FilesystemAdapter(is_string($namespace) ? $namespace : ''))->clear();
+            CacheManager::create(
+                namespace: is_string($namespace) ? $namespace : '',
+                cacheDirectory: dirname(__DIR__, 7).'/.peck.cache'
+            )->clear();
+
             $output->writeln('<info>Cache successfully cleared!</info>');
 
             return Command::SUCCESS;
