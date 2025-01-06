@@ -9,6 +9,7 @@ use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
 use Peck\Support\NameParser;
 use Peck\ValueObjects\Issue;
+use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -92,15 +93,13 @@ final readonly class ClassChecker implements Checker
         $issues = [];
 
         foreach ($namesToCheck as $name) {
-            $misspellings = $this->spellchecker->check(NameParser::parse($name));
-
-            foreach ($misspellings as $misspelling) {
-                $issues[] = new Issue(
+            array_push($issues, ...array_map(
+                fn (Misspelling $misspelling): Issue => new Issue(
                     $misspelling,
                     $file->getRealPath(),
-                    $this->getErrorLine($file, $name)
-                );
-            }
+                    $this->getErrorLine($file, $name),
+                ), $this->spellchecker->check(NameParser::parse($name))
+            ));
         }
 
         return $issues;
