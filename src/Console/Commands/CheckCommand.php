@@ -29,13 +29,15 @@ final class CheckCommand extends Command
     /**
      * @var array<string, array<int, array<string, int>>>
      */
-    private array $lastColumn = [];
+    private array $lastColumn = []; // 1MB, 2MB, 4
 
     /**
      * Executes the command.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        renderUsing($output);
+
         $configurationPath = $input->getOption('config');
         Config::resolveConfigFilePathUsing(fn (): mixed => $configurationPath);
 
@@ -48,7 +50,6 @@ final class CheckCommand extends Command
         $output->writeln('');
 
         if ($issues === []) {
-            renderUsing($output);
             render(<<<'HTML'
                 <div class="mx-2 mb-1">
                     <div class="space-x-1">
@@ -63,12 +64,10 @@ final class CheckCommand extends Command
         }
 
         foreach ($issues as $issue) {
-            if ($issue->line === 0) {
-                $this->renderPathIssue($output, $issue, $directory);
-
-                continue;
-            }
-            $this->renderFileIssue($output, $issue, $directory);
+            match ($issue->line > 0) {
+                true => $this->renderLineIssue($issue, $directory),
+                default => $this->renderLineLessIssue($issue, $directory),
+            };
         }
 
         return Command::FAILURE;
@@ -100,10 +99,11 @@ final class CheckCommand extends Command
         };
     }
 
-    private function renderFileIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
+    /**
+     * Render the issue with the line.
+     */
+    private function renderLineIssue(Issue $issue, string $currentDirectory): void
     {
-        renderUsing($output);
-
         $lines = file($issue->file);
         $lineContent = $lines[$issue->line - 1] ?? '';
 
@@ -112,17 +112,13 @@ final class CheckCommand extends Command
 
         $lineInfo = ":{$issue->line}:$column";
 
-        // termwind "<code>" adds some spaces to the left, plus the space-x-1 of the wrapper div
         $alignSpacer = str_repeat(' ', 6);
         $spacer = str_repeat('-', $column);
 
-        $capitalized = strtolower($lineContent[$column]) !== $lineContent[$column];
-
-        $suggestions = $issue->misspelling->suggestions;
-        if ($capitalized) {
-            $suggestions = array_map('ucfirst', $suggestions);
-        }
-        $suggestions = implode(', ', $suggestions);
+        $suggestions = $this->formatIssueSuggestionsForDisplay(
+            $issue,
+            strtolower($lineContent[$column]) !== $lineContent[$column],
+        );
 
         $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
@@ -143,23 +139,20 @@ final class CheckCommand extends Command
         HTML);
     }
 
-    private function renderPathIssue(OutputInterface $output, Issue $issue, string $currentDirectory): void
+    /**
+     * Render the issue without the line.
+     */
+    private function renderLineLessIssue(Issue $issue, string $currentDirectory): void
     {
-        renderUsing($output);
-
         $column = $this->getIssueColumn($issue, $issue->file);
         $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] = $column;
 
-        // termwind "<code>" adds some spaces to the left, plus the space-x-1 of the wrapper div
         $spacer = str_repeat('-', $column);
 
-        $capitalized = strtolower($issue->file[$column]) !== $issue->file[$column];
-
-        $suggestions = $issue->misspelling->suggestions;
-        if ($capitalized) {
-            $suggestions = array_map('ucfirst', $suggestions);
-        }
-        $suggestions = implode(', ', $suggestions);
+        $suggestions = $this->formatIssueSuggestionsForDisplay(
+            $issue,
+            strtolower($issue->file[$column]) !== $issue->file[$column],
+        );
 
         $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
@@ -180,6 +173,23 @@ final class CheckCommand extends Command
         HTML);
     }
 
+    /**
+     * Format the issue suggestions.
+     */
+    private function formatIssueSuggestionsForDisplay(Issue $issue, bool $capitalized): string
+    {
+        $suggestions = $issue->misspelling->suggestions;
+
+        if ($capitalized) {
+            $suggestions = array_map('ucfirst', $suggestions);
+        }
+
+        return implode(', ', $suggestions);
+    }
+
+    /**
+     * Get the column of the issue in the line.
+     */
     private function getIssueColumn(Issue $issue, string $lineContent): int
     {
         $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word]) ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
