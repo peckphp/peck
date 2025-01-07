@@ -62,7 +62,7 @@ final readonly class ClassChecker implements Checker
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
-        return array_values($issues);
+        return $issues;
     }
 
     /**
