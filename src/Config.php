@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peck;
 
+use Closure;
 use Composer\Autoload\ClassLoader;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Finder\Finder;
@@ -14,6 +15,11 @@ final class Config
      * The instance of the configuration.
      */
     private static ?self $instance = null;
+
+    /**
+     * The closure to resolve the config file path.
+     */
+    private static ?Closure $resolveConfigFilePathUsing = null;
 
     /**
      * The name of the configuration file
@@ -39,18 +45,43 @@ final class Config
     }
 
     /**
+     * Resolves the configuration file path.
+     */
+    public static function resolveConfigFilePathUsing(Closure $closure): void
+    {
+        self::flush();
+
+        self::$resolveConfigFilePathUsing = $closure;
+    }
+
+    /**
+     * Flushes the configuration.
+     */
+    public static function flush(): void
+    {
+        self::$instance = null;
+        self::$resolveConfigFilePathUsing = null;
+    }
+
+    /**
      * Fetches the instance of the configuration.
      */
-    public static function instance(?InputInterface $input = null): self
+    public static function instance(): self
     {
         if (self::$instance instanceof self) {
             return self::$instance;
         }
 
-        $defaultConfigPath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]).'/';
+        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
         $configFile = self::findConfigFile(inputOptions: $input, defaultConfigPath: $defaultConfigPath);
 
-        $contents = (string) file_get_contents($configFile);
+        $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
+            ? (self::$resolveConfigFilePathUsing)()
+            : $configFile);
+
+        $contents = file_exists($filePath)
+            ? (string) file_get_contents($filePath)
+            : '{}';
 
         /** @var array{
          *     ignore?: array{

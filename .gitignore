@@ -10,8 +10,8 @@
 /vendor/
 *.swp
 *.swo
-
-#Docker
-docker-compose.*yml
-Dockerfile.*
-.docker
+/.peck.cache
+/tests/.peck-test.cache
+/docker-compose.*yml
+/Dockerfile.*
+/.docker

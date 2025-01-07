@@ -10,7 +10,7 @@ namespace Peck\ValueObjects;
 final readonly class Issue
 {
     /**
-     * Creates a new instance of FsIssue
+     * Creates a new instance of Issue
      */
     public function __construct(
         public Misspelling $misspelling,

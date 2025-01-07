@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Peck\Kernel;
 
 it('handles multiple checkers', function (): void {
@@ -9,5 +11,5 @@ it('handles multiple checkers', function (): void {
         'directory' => __DIR__.'/../Fixtures',
     ]);
 
-    expect($issues)->toHaveCount(4);
+    expect($issues)->toHaveCount(13);
 });

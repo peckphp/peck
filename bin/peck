@@ -3,17 +3,18 @@
 
 declare(strict_types=1);
 
+use Peck\Console\Commands\CheckCommand;
 use Symfony\Component\Console\Application;
 
-$vendorPath = dirname(__DIR__, 4).'/vendor/autoload.php';
-$localPath = dirname(__DIR__).'/vendor/autoload.php';
+foreach ([
+    dirname(__DIR__, 4).'/vendor/autoload.php',
+    dirname(__DIR__).'/vendor/autoload.php',
+] as $autoloadPath) {
+    if (file_exists($autoloadPath)) {
+        include_once $autoloadPath;
 
-if (file_exists($vendorPath)) {
-    include_once $vendorPath;
-    $autoloadPath = $vendorPath;
-} else {
-    include_once $localPath;
-    $autoloadPath = $localPath;
+        break;
+    }
 }
 
 $application = new Application(
@@ -22,9 +23,9 @@ $application = new Application(
 );
 
 $application->add(
-    new \Peck\Console\Commands\DefaultCommand(),
+    new CheckCommand(),
 );
 
-$application->setDefaultCommand('default');
+$application->setDefaultCommand('check');
 
 $application->run();

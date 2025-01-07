@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peck;
 
+use Peck\Checkers\ClassChecker;
 use Peck\Checkers\FileSystemChecker;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 
@@ -31,6 +32,7 @@ final readonly class Kernel
         return new self(
             [
                 new FileSystemChecker($config, $inMemoryChecker),
+                new ClassChecker($config, $inMemoryChecker),
             ],
         );
     }
