@@ -43,11 +43,10 @@ final readonly class InMemorySpellchecker implements Spellchecker
      */
     public function check(string $text): array
     {
-        $cacheKey = md5($text);
         /**
          * @var array<int, MisspellingInterface>
          */
-        $misspellings = $this->cache->has($cacheKey) ? $this->cache->get($cacheKey) : $this->getMisspellings($text);
+        $misspellings = $this->cache->has($text) ? $this->cache->get($text) : $this->getMisspellings($text);
         $misspellings = $this->filterWhitelistedWords($misspellings);
 
         return array_map(fn (MisspellingInterface $misspelling): Misspelling => new Misspelling(
@@ -64,7 +63,7 @@ final readonly class InMemorySpellchecker implements Spellchecker
     private function getMisspellings(string $text): array
     {
         $misspellings = iterator_to_array($this->aspell->check($text));
-        $this->cache->set(md5($text), $misspellings);
+        $this->cache->set($text, $misspellings);
 
         return $misspellings;
     }
