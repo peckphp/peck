@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Peck\Console\Commands;
 
 use Composer\Autoload\ClassLoader;
-use Exception;
 use Peck\Config;
 use Peck\Kernel;
 use Peck\ValueObjects\Issue;
@@ -111,8 +110,8 @@ final class CheckCommand extends Command
         return match (true) {
             isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
             default => match (true) {
-                is_dir($basePath.'/src') => ($basePath.'/src'),
                 is_dir($basePath.'/app') => ($basePath.'/app'),
+                is_dir($basePath.'/src') => ($basePath.'/src'),
                 default => $basePath,
             },
         };
@@ -211,13 +210,9 @@ final class CheckCommand extends Command
      */
     private function getIssueColumn(Issue $issue, string $lineContent): int
     {
-        $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word]) ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
-        $column = strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
+        $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word])
+            ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
 
-        if ($column === false) {
-            throw (new Exception("Could not find the misspelling '{$issue->misspelling->word}' in the line '{$lineContent}'"));
-        }
-
-        return $column;
+        return (int) strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
     }
 }

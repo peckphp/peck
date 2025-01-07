@@ -41,13 +41,19 @@ final readonly class Cache
             return null;
         }
 
-        $serializedContents = file_get_contents($cacheFile);
+        $serializedContents = @file_get_contents($cacheFile);
 
-        if ($serializedContents === false) {
+        if ($serializedContents === false || $serializedContents === '') {
             return null;
         }
 
-        return unserialize($serializedContents);
+        $data = @unserialize($serializedContents);
+
+        if ($data === false && $serializedContents !== 'b:0;') {
+            return null;
+        }
+
+        return $data;
     }
 
     /**
