@@ -35,6 +35,7 @@ final class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $start = microtime(true);
         renderUsing($output);
 
         $configurationPath = $input->getOption('config');
@@ -49,11 +50,14 @@ final class CheckCommand extends Command
         $output->writeln('');
 
         if ($issues === []) {
-            render(<<<'HTML'
+            render(<<<HTML
                 <div class="mx-2 mb-1">
-                    <div class="space-x-1">
+                    <div class="space-x-1 mb-1">
                         <span class="bg-green text-white px-1 font-bold">PASS</span>
                         <span>No misspellings found in your project.</span>
+                    </div>
+                    <div>
+                        <span class="font-bold text-gray-600">Duration:</span> {$this->getDuration($start)}s
                     </div>
                 </div>
                 HTML
@@ -68,6 +72,15 @@ final class CheckCommand extends Command
                 default => $this->renderLineLessIssue($issue, $directory),
             };
         }
+
+        render(<<<HTML
+            <div class="mx-2 mb-1">
+                <div>
+                    <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
+                </div>
+            </div>
+            HTML
+        );
 
         return Command::FAILURE;
     }
@@ -219,5 +232,10 @@ final class CheckCommand extends Command
         }
 
         return $column;
+    }
+
+    private function getDuration(float $startTime): string
+    {
+        return number_format(microtime(true) - $startTime, 2);
     }
 }
