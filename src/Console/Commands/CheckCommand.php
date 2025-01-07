@@ -212,7 +212,9 @@ final class CheckCommand extends Command
     private function getIssueColumn(Issue $issue, string $lineContent): int
     {
         $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word]) ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
-        $column = strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
+        $projectDirectory = (string) realpath(__DIR__.'/../../../');
+        $lineContent = str_replace(strtolower($projectDirectory), '', strtolower($lineContent));
+        $column = strpos($lineContent, $issue->misspelling->word, $fromColumn);
 
         if ($column === false) {
             throw (new Exception("Could not find the misspelling '{$issue->misspelling->word}' in the line '{$lineContent}'"));
