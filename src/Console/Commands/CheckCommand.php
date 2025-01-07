@@ -166,6 +166,9 @@ final class CheckCommand extends Command
         );
     }
 
+    /*
+     * Initialize the configuration file.
+     */
     private function initConfigFile(OutputInterface $output): int
     {
         $output->writeln('');
