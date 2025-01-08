@@ -85,7 +85,7 @@ final class CheckCommand extends Command
      *
      * @throws InvalidOptionException
      */
-    private function getConfigFile(InputInterface $input): void
+    private function intializeConfigFromParameter(InputInterface $input): void
     {
         $configurationPath = $input->getOption('config');
 
