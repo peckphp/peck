@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Peck\Checkers\FileSystemChecker;
 use Peck\Config;
+use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
 
@@ -76,6 +77,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         new InMemorySpellchecker(
             $config,
             Aspell::create(),
+            Cache::default(),
         ),
     );
 

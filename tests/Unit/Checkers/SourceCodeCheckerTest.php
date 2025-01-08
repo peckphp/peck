@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Peck\Checkers\SourceCodeChecker;
 use Peck\Config;
+use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
 use Symfony\Component\Finder\SplFileInfo;
@@ -181,6 +182,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
         new InMemorySpellchecker(
             $config,
             Aspell::create(),
+            Cache::default(),
         ),
     );
 
@@ -586,6 +588,7 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
         new InMemorySpellchecker(
             $config,
             Aspell::create(),
+            Cache::default(),
         ),
     );
 
