@@ -41,19 +41,13 @@ final readonly class Cache
             return null;
         }
 
-        $serializedContents = @file_get_contents($cacheFile);
+        $serializedContents = file_get_contents($cacheFile);
 
-        if ($serializedContents === false || $serializedContents === '') {
+        if ($serializedContents === false || ! $this->isSerialized($serializedContents)) {
             return null;
         }
 
-        $data = @unserialize($serializedContents);
-
-        if ($data === false && $serializedContents !== 'b:0;') {
-            return null;
-        }
-
-        return $data;
+        return @unserialize($serializedContents);
     }
 
     /**
@@ -96,5 +90,13 @@ final readonly class Cache
     public function getCacheKey(string $key): string
     {
         return md5($key);
+    }
+
+    /**
+     * Checks if the given string is serialized.
+     */
+    private function isSerialized(string $string): bool
+    {
+        return $string === serialize(false) || @unserialize($string) !== false;
     }
 }
