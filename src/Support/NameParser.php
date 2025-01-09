@@ -12,13 +12,16 @@ final readonly class NameParser
      */
     public static function parse(string $input): string
     {
-        $trimmed = ltrim($input, '_');
+        // Remove leading underscores
+        $input = ltrim($input, '_');
 
-        $dashed = str_replace(['_', '-'], ' ', $trimmed);
+        // Replace underscores and dashes with spaces
+        $input = str_replace(['_', '-'], ' ', $input);
 
-        // Add spaces before capital letters (for camel and pascal case)
-        $words = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $dashed);
+        // Insert spaces between lowercase and uppercase letters (camelCase or PascalCase)
+        $input = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $input);
 
-        return strtolower($words);
+        // Convert the final result to lowercase
+        return strtolower($input);
     }
 }
