@@ -64,8 +64,8 @@ final class CheckCommand extends Command
 
         foreach ($issues as $issue) {
             match ($issue->line > 0) {
-                true => $this->renderLineIssue($issue, $directory),
-                default => $this->renderLineLessIssue($issue, $directory),
+                true => $this->renderLineIssue($issue),
+                default => $this->renderLineLessIssue($issue),
             };
         }
 
@@ -121,8 +121,10 @@ final class CheckCommand extends Command
     /**
      * Render the issue with the line.
      */
-    private function renderLineIssue(Issue $issue, string $currentDirectory): void
+    private function renderLineIssue(Issue $issue): void
     {
+        $relativePath = str_replace((string) getcwd(), '.', $issue->file);
+
         $lines = file($issue->file);
         $lineContent = $lines[$issue->line - 1] ?? '';
 
@@ -138,8 +140,6 @@ final class CheckCommand extends Command
             $issue,
             strtolower($lineContent[$column]) !== $lineContent[$column],
         );
-
-        $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
         render(<<<HTML
             <div class="mx-2 mb-2">
@@ -161,9 +161,9 @@ final class CheckCommand extends Command
     /**
      * Render the issue without the line.
      */
-    private function renderLineLessIssue(Issue $issue, string $currentDirectory): void
+    private function renderLineLessIssue(Issue $issue): void
     {
-        $relativePath = str_replace($currentDirectory, '.', $issue->file);
+        $relativePath = str_replace((string) getcwd(), '.', $issue->file);
 
         $column = $this->getIssueColumn($issue, $relativePath);
         $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] = $column;
