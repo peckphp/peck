@@ -48,7 +48,7 @@ it('should be able to create a peck.json config file', function (): void {
     $backup = $configFilePath.'.backup';
     rename($configFilePath, $backup);
 
-    $created = Config::createInitialConfigFile();
+    $created = Config::init();
     $config = Config::instance();
 
     expect($created)->toBeTrue()
@@ -56,10 +56,10 @@ it('should be able to create a peck.json config file', function (): void {
         ->and($config->whitelistedDirectories)->toBe([]);
 
     rename($backup, $configFilePath);
-});
+})->skip('rewrite this test a little bit differently without modifying the root level peck.json file');
 
 it('should not recreate a file that already exists', function (): void {
-    $created = Config::createInitialConfigFile();
+    $created = Config::init();
     $config = Config::instance();
 
     expect($created)->toBeFalse()
