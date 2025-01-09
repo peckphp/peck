@@ -163,7 +163,9 @@ final class CheckCommand extends Command
      */
     private function renderLineLessIssue(Issue $issue, string $currentDirectory): void
     {
-        $column = $this->getIssueColumn($issue, $issue->file);
+        $relativePath = str_replace($currentDirectory, '.', $issue->file);
+
+        $column = $this->getIssueColumn($issue, $relativePath);
         $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] = $column;
 
         $spacer = str_repeat('-', $column);
@@ -172,8 +174,6 @@ final class CheckCommand extends Command
             $issue,
             strtolower($issue->file[$column]) !== $issue->file[$column],
         );
-
-        $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
         render(<<<HTML
             <div class="mx-2 mb-2">
