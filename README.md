@@ -23,7 +23,7 @@ Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wi
 You can require Peck using [Composer](https://getcomposer.org) with the following command:
 
 ```bash
-composer require peckphp/peck
+composer require peckphp/peck --dev
 ```
 
 ## Usage
