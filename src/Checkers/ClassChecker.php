@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Peck\Checkers;
 
-use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
 use Peck\Support\NameParser;
@@ -14,7 +13,6 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -26,43 +24,31 @@ final readonly class ClassChecker implements Checker
      * Creates a new instance of ClassChecker.
      */
     public function __construct(
-        private Config $config,
         private Spellchecker $spellchecker,
     ) {
         //
     }
 
     /**
-     * Checks for issues in the given directory.
+     * Checks the given file for issues.
      *
-     * @param  array<string, string>  $parameters
      * @return array<int, Issue>
      */
-    public function check(array $parameters): array
+    public function check(SplFileInfo $file): array
     {
-        $classesFiles = Finder::create()
-            ->files()
-            ->notPath($this->config->whitelistedDirectories)
-            ->ignoreDotFiles(true)
-            ->ignoreVCS(true)
-            ->ignoreUnreadableDirs()
-            ->ignoreVCSIgnored(true)
-            ->in($parameters['directory'])
-            ->name('*.php')
-            ->getIterator();
-
-        $issues = [];
-
-        foreach ($classesFiles as $classFile) {
-            $issues = [
-                ...$issues,
-                ...$this->getIssuesFromClass($classFile),
-            ];
-        }
+        $issues = $this->getIssuesFromClass($file);
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
         return array_values($issues);
+    }
+
+    /**
+     * Checks if the checker supports the given file.
+     */
+    public function supports(SplFileInfo $file): bool
+    {
+        return $file->isFile() && $file->getExtension() === 'php';
     }
 
     /**
@@ -107,7 +93,9 @@ final readonly class ClassChecker implements Checker
                         $misspelling,
                         $file->getRealPath(),
                         $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check(NameParser::parse($name))),
+                    ),
+                    $this->spellchecker->check(NameParser::parse($name))
+                ),
             ];
         }
 
