@@ -35,11 +35,11 @@ final class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getOption('init')) {
-            return $this->initConfigFile($output);
-        }
-
         renderUsing($output);
+
+        if ($input->getOption('init')) {
+            return $this->initConfiguration($output);
+        }
 
         $configurationPath = $input->getOption('config');
         Config::resolveConfigFilePathUsing(fn (): mixed => $configurationPath);
@@ -166,43 +166,41 @@ final class CheckCommand extends Command
     /*
      * Initialize the configuration file.
      */
-    private function initConfigFile(OutputInterface $output): int
+    private function initConfiguration(OutputInterface $output): int
     {
-        $output->writeln('');
-        renderUsing($output);
-        if (Config::createInitialConfigFile()) {
+        if (! Config::init()) {
             render(<<<'HTML'
-                <div>
-                    <div class="mx-2 mb-1">
-                        <div class="space-x-1">
-                            <span class="bg-green text-white px-1 font-bold">SUCCESS</span>
-                            <span>Configuration file has been created.</span>
-                        </div>
-                    </div>
-                    <div class="mx-2 mb-1">
-                        <span>Now you can specify the words or directories to ignore in <strong>peck.json</strong>.</span>
-                    </div>
-                    <div class="mx-2 mb-1">
-                        <span>Then run <strong>./vendor/bin/peck</strong> to check your project for spelling mistakes.</span>
+                <div class="mx-2 mb-1">
+                    <div class="space-x-1">
+                        <span class="bg-blue text-white px-1 font-bold">INFO</span>
+                        <span>Configuration file already exists.</span>
                     </div>
                 </div>
-            HTML
+                HTML,
             );
 
-            return Command::SUCCESS;
+            return Command::FAILURE;
         }
+
         render(<<<'HTML'
-            <div class="mx-2 mb-1">
-                <div class="space-x-1">
-                    <span class="bg-red text-white px-1 font-bold">ERROR</span>
-                    <span>It seems that a configuration file already exists</span>
+            <div class="mt-1">
+                <div class="mx-2 mb-1">
+                    <div class="space-x-1">
+                        <span class="bg-green text-white px-1 font-bold">SUCCESS</span>
+                        <span>Configuration file has been created.</span>
+                    </div>
+                </div>
+                <div class="mx-2 mb-1">
+                    <span>Now you can specify the words or directories to ignore in <strong>[peck.json]</strong>.</span>
+                </div>
+                <div class="mx-2 mb-1">
+                    <span>Then run <strong>[./vendor/bin/peck]</strong> to check your project for spelling mistakes.</span>
                 </div>
             </div>
-        HTML
+            HTML
         );
-        $output->writeln('<info></info>');
 
-        return Command::FAILURE;
+        return Command::SUCCESS;
     }
 
     /**

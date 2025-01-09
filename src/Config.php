@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Peck;
 
 use Closure;
-use Composer\Autoload\ClassLoader;
+use Peck\Support\ProjectPath;
 
 final class Config
 {
@@ -60,16 +60,17 @@ final class Config
             return self::$instance;
         }
 
-        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+        $basePath = ProjectPath::get();
         $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
-                ? (self::$resolveConfigFilePathUsing)()
-                : 'peck.json');
+            ? (self::$resolveConfigFilePathUsing)()
+            : 'peck.json');
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
             : '{}';
 
-        /** @var array{
+        /**
+         * @var array{
          *     ignore?: array{
          *         words?: array<int, string>,
          *         directories?: array<int, string>
@@ -85,28 +86,19 @@ final class Config
     }
 
     /**
-     * Creates the initial configuration file in the root directory.
-     * Returns true if the file was created successfully.
-     * Returns false if the file already exists.
+     * Creates the configuration file for the user running the command.
      */
-    public static function createInitialConfigFile(): bool
+    public static function init(): bool
     {
-        $filePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]).'/peck.json';
-        if (file_exists($filePath)) {
-            return false;
-        }
+        $filePath = ProjectPath::get().'/peck.json';
 
-        $initialConfig = [
+        return ! file_exists($filePath) && file_put_contents($filePath, json_encode([
             'ignore' => [
                 'words' => [
                     'php',
                 ],
                 'directories' => [],
             ],
-        ];
-
-        file_put_contents($filePath, json_encode($initialConfig, JSON_PRETTY_PRINT));
-
-        return true;
+        ], JSON_PRETTY_PRINT));
     }
 }
