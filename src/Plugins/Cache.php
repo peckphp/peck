@@ -47,7 +47,7 @@ final readonly class Cache
             return null;
         }
 
-        return @unserialize($serializedContents);
+        return unserialize($serializedContents);
     }
 
     /**
