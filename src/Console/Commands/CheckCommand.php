@@ -138,7 +138,6 @@ final class CheckCommand extends Command
 
         $suggestions = $this->formatIssueSuggestionsForDisplay(
             $issue,
-            strtolower($lineContent[$column]) !== $lineContent[$column],
         );
 
         render(<<<HTML
@@ -172,7 +171,6 @@ final class CheckCommand extends Command
 
         $suggestions = $this->formatIssueSuggestionsForDisplay(
             $issue,
-            strtolower($issue->file[$column]) !== $issue->file[$column],
         );
 
         render(<<<HTML
@@ -195,13 +193,12 @@ final class CheckCommand extends Command
     /**
      * Format the issue suggestions.
      */
-    private function formatIssueSuggestionsForDisplay(Issue $issue, bool $capitalized): string
+    private function formatIssueSuggestionsForDisplay(Issue $issue): string
     {
-        $suggestions = $issue->misspelling->suggestions;
-
-        if ($capitalized) {
-            $suggestions = array_map('ucfirst', $suggestions);
-        }
+        $suggestions = array_map(
+            'strtolower',
+            $issue->misspelling->suggestions,
+        );
 
         return implode(', ', $suggestions);
     }
