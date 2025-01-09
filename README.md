@@ -36,7 +36,14 @@ To check your project for spelling mistakes, run:
 
 ## Configuration
 
-Peck can be configured using a `peck.json` file in the root of your project. Here's an example configuration:
+Peck can be configured using a `peck.json` file in the root of your project. 
+
+You can scaffold the `peck.json` file with:
+```bash
+./vendor/bin/peck --init
+```
+
+Here's an example configuration:
 
 ```json
 {
