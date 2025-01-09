@@ -12,12 +12,13 @@ final readonly class NameParser
      */
     public static function parse(string $input): string
     {
-        return strtolower(
-            (string) preg_replace(
-                '/([a-z])([A-Z])/',
-                '$1 $2',
-                str_replace(['_', '-'], ' ', ltrim($input, '_'))
-            )
-        );
+        $trimmed = ltrim($input, '_');
+
+        $dashed = str_replace(['_', '-'], ' ', $trimmed);
+
+        // Add spaces before capital letters (for camel and pascal case)
+        $words = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $dashed);
+
+        return strtolower($words);
     }
 }
