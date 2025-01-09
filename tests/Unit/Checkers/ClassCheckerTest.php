@@ -6,6 +6,7 @@ use Peck\Checkers\ClassChecker;
 use Peck\Config;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('does not detect issues in the given directory', function (): void {
@@ -105,6 +106,21 @@ it('detects issues in the given directory', function (): void {
             'properer',
             'properest',
         ]);
+});
+
+// If this test fails, it's probably because class checker is checking things in parent classes (extends, implements, traits)
+it('should never have line 0 in misspellings from ClassChecker', function (): void {
+    $checker = new ClassChecker(
+        Config::instance(),
+        InMemorySpellchecker::default(),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
+    ]);
+    foreach ($issues as $issue) {
+        expect($issue->line)->not->toBe(0);
+    }
 });
 
 it('detects issues in the given directory, but ignores the whitelisted words', function (): void {
@@ -237,4 +253,20 @@ it('handles well when it can not detect the line problem', function (): void {
     $line = (fn (): int => $this->getErrorLine($splFileInfo, str_repeat('a', 100)))->call($checker);
 
     expect($line)->toBe(0);
+});
+
+it('should not verify the parent class', function (): void {
+    $checker = new ClassChecker(Config::instance(), InMemorySpellchecker::default());
+
+    $files = Finder::create()
+        ->files()
+        ->in(__DIR__.'/../../Fixtures/FolderForParentTesting')
+        ->getIterator();
+
+    [$childClass, $parentClass] = array_values(iterator_to_array($files));
+    $childClassIssues = $checker->getIssuesFromClass($childClass);
+    $parentClassIssues = $checker->getIssuesFromClass($parentClass);
+
+    expect($childClassIssues)->toBeEmpty()
+        ->and($parentClassIssues)->toHaveCount(4);
 });

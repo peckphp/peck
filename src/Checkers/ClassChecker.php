@@ -11,6 +11,7 @@ use Peck\Support\NameParser;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
+use ReflectionClassConstant;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
@@ -70,7 +71,7 @@ final readonly class ClassChecker implements Checker
      *
      * @return array<int, Issue>
      */
-    private function getIssuesFromClass(SplFileInfo $file): array
+    public function getIssuesFromClass(SplFileInfo $file): array
     {
         $class = $this->getClassNameWithNamespace($file);
 
@@ -123,6 +124,9 @@ final readonly class ClassChecker implements Checker
     private function getMethodNames(ReflectionClass $class): array
     {
         foreach ($class->getMethods() as $method) {
+            if ($method->class !== $class->name) {
+                continue;
+            }
             $namesToCheck[] = $method->getName();
             $namesToCheck = [
                 ...$namesToCheck,
@@ -161,12 +165,18 @@ final readonly class ClassChecker implements Checker
      */
     private function getConstantNames(ReflectionClass $class): array
     {
-        $constants = $class->getConstants();
+        return array_merge(...array_values(array_map(
+            function (ReflectionClassConstant $constant) use ($class): array {
+                if ($constant->class !== $class->name) {
+                    return [];
+                }
 
-        return array_values(array_filter([
-            ...array_keys($constants),
-            ...array_values($constants),
-        ], fn (mixed $values): bool => is_string($values)));
+                return is_string($constant->getValue())
+                    ? [$constant->name, $constant->getValue()]
+                    : [$constant->name];
+            },
+            $class->getReflectionConstants()
+        )));
     }
 
     /**
@@ -180,7 +190,10 @@ final readonly class ClassChecker implements Checker
         $properties = $class->getProperties();
         $propertiesNames = array_map(
             fn (ReflectionProperty $property): string => $property->getName(),
-            $properties,
+            array_filter(
+                $properties,
+                fn (ReflectionProperty $property): bool => $property->class === $class->name,
+            )
         );
 
         $propertiesDocComments = array_reduce(
