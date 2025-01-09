@@ -38,7 +38,7 @@ final class CheckCommand extends Command
         renderUsing($output);
 
         if ($input->getOption('init')) {
-            return $this->initConfiguration($output);
+            return $this->initConfiguration();
         }
 
         $configurationPath = $input->getOption('config');
@@ -166,7 +166,7 @@ final class CheckCommand extends Command
     /*
      * Initialize the configuration file.
      */
-    private function initConfiguration(OutputInterface $output): int
+    private function initConfiguration(): int
     {
         if (! Config::init()) {
             render(<<<'HTML'
