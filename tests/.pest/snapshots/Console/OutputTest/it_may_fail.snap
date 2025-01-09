@@ -1,77 +1,77 @@
 
-   ISSUE  Misspelling in [1m/./FolderWithTypoos[0m: '[1mtypoos[0m'  
-  /tests/Fixtures/FolderWithTypoos     
-  ----------------------------------------------------------^     
-  Did you mean: Typos, Typo's, Types, Type's  
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
+  ./tests/Fixtures/FolderWithTypoos     
+  ---------------------------^     
+  Did you mean: typos, typo's, types, type's  
 
 
-   ISSUE  Misspelling in [1m/./FolderWithTypoos/FileThatShouldBeIgnroed.php[0m: '[1mignroed[0m'  
-  /tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php     
-  ---------------------------------------------------------------------------------^     
-  Did you mean: Ignored, Ignores, Ignore, Inroad  
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php[0m: '[1mignroed[0m'  
+  ./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php     
+  --------------------------------------------------^     
+  Did you mean: ignored, ignores, ignore, inroad  
 
 
-   ISSUE  Misspelling in [1m/./FolderWithTypoos/FileWithTppyo.php[0m: '[1mtppyo[0m'  
-  /tests/Fixtures/FolderWithTypoos/FileWithTppyo.php     
-  -------------------------------------------------------------------------^     
-  Did you mean: Typo, Tokyo, Typos, Topi  
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FileWithTppyo.php[0m: '[1mtppyo[0m'  
+  ./tests/Fixtures/FolderWithTypoos/FileWithTppyo.php     
+  ------------------------------------------^     
+  Did you mean: typo, tokyo, typos, topi  
 
 
-   ISSUE  Misspelling in [1m/./FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php[0m: '[1mshoud[0m'  
-  /tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php     
-  ---------------------------------------------------------------------------------------------------^     
-  Did you mean: Should, Shroud, Shod, Shout  
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php[0m: '[1mshoud[0m'  
+  ./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php     
+  --------------------------------------------------------------------^     
+  Did you mean: should, shroud, shod, shout  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoErrors.php:30:34[0m: '[1merorr[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:30:34[0m: '[1merorr[0m'  
     30▕ [1m    public function methodWithTypoErorr(): string[0m  
         ----------------------------------^     
-  Did you mean: Error, Errors, Orr, Err  
+  Did you mean: error, errors, orr, err  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoErrors.php:36:17[0m: '[1mmetohd[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:36:17[0m: '[1mmetohd[0m'  
     36▕ [1m     * This is a metohd with a doc block typo error[0m  
         -----------------^     
   Did you mean: method, meted, mooted, mated  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoErrors.php:43:112[0m: '[1merorr[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:43:112[0m: '[1merorr[0m'  
     43▕ [1m    public function methodWithTypoErrorInParameters(string $parameterWithoutTypoError, string $parameterWithTypoErorr): string[0m  
         ----------------------------------------------------------------------------------------------------------------^     
-  Did you mean: Error, Errors, Orr, Err  
+  Did you mean: error, errors, orr, err  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoErrors.php:18:16[0m: '[1mproperyt[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:18:16[0m: '[1mproperyt[0m'  
     18▕ [1m    public int $properytWithTypoError = 2;[0m  
         ----------------^     
   Did you mean: property, propriety, properer, properest  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoErrors.php:21:37[0m: '[1mbolck[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:21:37[0m: '[1mbolck[0m'  
     21▕ [1m     * This is a property with a doc bolck typo error[0m  
         -------------------------------------^     
   Did you mean: block, bock, bloc, bilk  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoErrors.php:10:25[0m: '[1mtst[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:10:25[0m: '[1mtst[0m'  
     10▕ [1m * This class is used to tst type errors in class properties, methods, method parameters and class documentation block.[0m  
         -------------------------^     
-  Did you mean: test, tat, ST, St  
+  Did you mean: test, tat, st, st  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoOnConstants.php:11:31[0m: '[1mtypoo[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:31[0m: '[1mtypoo[0m'  
     11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m  
         -------------------------------^     
-  Did you mean: Typo, Typos, Type, Topi  
+  Did you mean: typo, typos, type, topi  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/ClassWithTypoOnConstants.php:11:54[0m: '[1mtypoo[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:54[0m: '[1mtypoo[0m'  
     11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m  
         ------------------------------------------------------^     
   Did you mean: typo, typos, type, topi  
 
 
-   ISSUE  Misspelling in [1m/./ClassesToTest/FolderThatShouldBeIgnored/ClassWithTypoErrors.php:9:16[0m: '[1mproperyt[0m'  
+   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/ClassWithTypoErrors.php:9:16[0m: '[1mproperyt[0m'  
      9▕ [1m    public int $properytWithTypoError = 1;[0m  
         ----------------^     
   Did you mean: property, propriety, properer, properest  

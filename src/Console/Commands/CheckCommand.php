@@ -68,8 +68,8 @@ final class CheckCommand extends Command
 
         foreach ($issues as $issue) {
             match ($issue->line > 0) {
-                true => $this->renderLineIssue($issue, $directory),
-                default => $this->renderLineLessIssue($issue, $directory),
+                true => $this->renderLineIssue($issue),
+                default => $this->renderLineLessIssue($issue),
             };
         }
 
@@ -134,8 +134,10 @@ final class CheckCommand extends Command
     /**
      * Render the issue with the line.
      */
-    private function renderLineIssue(Issue $issue, string $currentDirectory): void
+    private function renderLineIssue(Issue $issue): void
     {
+        $relativePath = str_replace((string) getcwd(), '.', $issue->file);
+
         $lines = file($issue->file);
         $lineContent = $lines[$issue->line - 1] ?? '';
 
@@ -149,10 +151,7 @@ final class CheckCommand extends Command
 
         $suggestions = $this->formatIssueSuggestionsForDisplay(
             $issue,
-            strtolower($lineContent[$column]) !== $lineContent[$column],
         );
-
-        $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
         render(<<<HTML
             <div class="mx-2 mb-2">
@@ -174,26 +173,25 @@ final class CheckCommand extends Command
     /**
      * Render the issue without the line.
      */
-    private function renderLineLessIssue(Issue $issue, string $currentDirectory): void
+    private function renderLineLessIssue(Issue $issue): void
     {
-        $column = $this->getIssueColumn($issue, $issue->file);
+        $relativePath = str_replace((string) getcwd(), '.', $issue->file);
+
+        $column = $this->getIssueColumn($issue, $relativePath);
         $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] = $column;
 
         $spacer = str_repeat('-', $column);
 
         $suggestions = $this->formatIssueSuggestionsForDisplay(
             $issue,
-            strtolower($issue->file[$column]) !== $issue->file[$column],
         );
-
-        $relativePath = str_replace($currentDirectory, '.', $issue->file);
 
         render(<<<HTML
             <div class="mx-2 mb-2">
                 <div class="space-x-1">
                     <span class="bg-red text-white px-1 font-bold">ISSUE</span>
                     <span>Misspelling in <strong><a href="{$issue->file}">{$relativePath}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
-                    <pre class="text-blue-300 font-bold">{$issue->file}</pre>
+                    <pre class="text-blue-300 font-bold">{$relativePath}</pre>
                     <pre class="text-red-500 font-bold">{$spacer}^</pre>
                 </div>
 
@@ -208,13 +206,12 @@ final class CheckCommand extends Command
     /**
      * Format the issue suggestions.
      */
-    private function formatIssueSuggestionsForDisplay(Issue $issue, bool $capitalized): string
+    private function formatIssueSuggestionsForDisplay(Issue $issue): string
     {
-        $suggestions = $issue->misspelling->suggestions;
-
-        if ($capitalized) {
-            $suggestions = array_map('ucfirst', $suggestions);
-        }
+        $suggestions = array_map(
+            'strtolower',
+            $issue->misspelling->suggestions,
+        );
 
         return implode(', ', $suggestions);
     }

@@ -47,8 +47,9 @@ it('should be possible to use other cache directories', function (): void {
 });
 
 it('throws an exception when the cache directory cannot be created', function (): void {
-    // i need to use a directory that fail on macos and ubuntu too, when using root, on ubuntu, this test is failing
-    new Cache('/etc/peck/cache');
+    $dir = '/root/.peck-test.cache';
+
+    (new Cache($dir))->set('key', 'value');
 })->throws(RuntimeException::class);
 
 it('should return null when cache file exists but is not readable', function (): void {
@@ -68,6 +69,7 @@ it('should return null when cache file exists but is not readable', function ():
 
     $cache->set($key, 'value');
 
+    $key = $cache->getCacheKey($key);
     chmod($cache->getCacheFile($key), 0);
 
     expect($cache->get($key))->toBeNull();
