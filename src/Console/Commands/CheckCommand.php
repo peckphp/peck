@@ -35,6 +35,7 @@ final class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
         renderUsing($output);
 
         $configurationPath = $input->getOption('config');
@@ -49,7 +50,8 @@ final class CheckCommand extends Command
         $output->writeln('');
 
         if ($issues === []) {
-            render(<<<'HTML'
+            render(
+                <<<'HTML'
                 <div class="mx-2 mb-1">
                     <div class="space-x-1">
                         <span class="bg-green text-white px-1 font-bold">PASS</span>
@@ -84,6 +86,12 @@ final class CheckCommand extends Command
                 'p',
                 InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
                 'The path to check for misspellings.'
+            )
+            ->addOption(
+                'parallel',
+                'P',
+                InputOption::VALUE_NONE,
+                'Run the checks in parallel.'
             );
     }
 

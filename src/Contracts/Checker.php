@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Peck\Contracts;
 
 use Peck\ValueObjects\Issue;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @internal
@@ -12,10 +13,15 @@ use Peck\ValueObjects\Issue;
 interface Checker
 {
     /**
-     * Checks of issues in the given text.
+     * Checks the given file for issues.
      *
-     * @param  array<string, string>  $parameters
      * @return array<int, Issue>
      */
-    public function check(array $parameters): array;
+    public function check(SplFileInfo $file): array;
+
+    /**
+     * Checks if the checker supports the given file.
+     * (Some checkers may only support certain file types, e.g. PHP files).
+     */
+    public function supports(SplFileInfo $file): bool;
 }
