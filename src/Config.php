@@ -10,6 +10,11 @@ use Peck\Support\ProjectPath;
 final class Config
 {
     /**
+     * The name of the configuration file.
+     */
+    private const string JSON_CONFIGURATION_NAME = 'peck.json';
+
+    /**
      * The instance of the configuration.
      */
     private static ?self $instance = null;
@@ -63,7 +68,7 @@ final class Config
         $basePath = ProjectPath::get();
         $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
             ? (self::$resolveConfigFilePathUsing)()
-            : 'peck.json');
+            : self::JSON_CONFIGURATION_NAME);
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
@@ -90,7 +95,7 @@ final class Config
      */
     public static function init(): bool
     {
-        $filePath = ProjectPath::get().'/peck.json';
+        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
 
         return ! file_exists($filePath) && file_put_contents($filePath, json_encode([
             'ignore' => [
