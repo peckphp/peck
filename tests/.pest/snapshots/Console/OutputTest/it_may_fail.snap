@@ -1,25 +1,25 @@
 
    ISSUE  Misspelling in [1m/./FolderWithTypoos[0m: '[1mtypoos[0m'  
-  /tests/Fixtures/FolderWithTypoos     
-  ----------------------------------------------------------^     
+  /./FolderWithTypoos     
+  -----------------------------------------------------^     
   Did you mean: Typos, Typo's, Types, Type's  
 
 
    ISSUE  Misspelling in [1m/./FolderWithTypoos/FileThatShouldBeIgnroed.php[0m: '[1mignroed[0m'  
-  /tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php     
-  ---------------------------------------------------------------------------------^     
+  /./FolderWithTypoos/FileThatShouldBeIgnroed.php     
+  ----------------------------------------------------------------------------^     
   Did you mean: Ignored, Ignores, Ignore, Inroad  
 
 
    ISSUE  Misspelling in [1m/./FolderWithTypoos/FileWithTppyo.php[0m: '[1mtppyo[0m'  
-  /tests/Fixtures/FolderWithTypoos/FileWithTppyo.php     
-  -------------------------------------------------------------------------^     
+  /./FolderWithTypoos/FileWithTppyo.php     
+  --------------------------------------------------------------------^     
   Did you mean: Typo, Tokyo, Typos, Topi  
 
 
    ISSUE  Misspelling in [1m/./FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php[0m: '[1mshoud[0m'  
-  /tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php     
-  ---------------------------------------------------------------------------------------------------^     
+  /./FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php     
+  ----------------------------------------------------------------------------------------------^     
   Did you mean: Should, Shroud, Shod, Shout  
 
 

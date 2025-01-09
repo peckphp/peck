@@ -180,7 +180,7 @@ final class CheckCommand extends Command
                 <div class="space-x-1">
                     <span class="bg-red text-white px-1 font-bold">ISSUE</span>
                     <span>Misspelling in <strong><a href="{$issue->file}">{$relativePath}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
-                    <pre class="text-blue-300 font-bold">{$issue->file}</pre>
+                    <pre class="text-blue-300 font-bold">{$relativePath}</pre>
                     <pre class="text-red-500 font-bold">{$spacer}^</pre>
                 </div>
 
