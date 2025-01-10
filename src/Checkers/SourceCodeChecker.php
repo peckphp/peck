@@ -12,6 +12,7 @@ use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
+use ReflectionClassConstant;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
@@ -122,6 +123,10 @@ final readonly class SourceCodeChecker implements Checker
     private function getMethodNames(ReflectionClass $reflection): array
     {
         foreach ($reflection->getMethods() as $method) {
+            if ($method->class !== $reflection->getName()) {
+                continue;
+            }
+
             $namesToCheck[] = $method->getName();
             $namesToCheck = [
                 ...$namesToCheck,
@@ -161,12 +166,25 @@ final readonly class SourceCodeChecker implements Checker
      */
     private function getConstantNames(ReflectionClass $reflection): array
     {
-        $constants = $reflection->getConstants();
+        return array_merge(...array_values((array_map(
+            function (ReflectionClassConstant $constant) use ($reflection): array {
+                if ($constant->class !== $reflection->name) {
+                    return [];
+                }
+                $value = $constant->getValue();
 
-        return array_values(array_filter([
-            ...array_keys($constants),
-            ...array_map(fn (mixed $value): mixed => $value instanceof BackedEnum && is_string($value->value) ? $value->value : $value, array_values($constants)),
-        ], fn (mixed $values): bool => is_string($values)));
+                if ($value instanceof BackedEnum) {
+                    return is_string($value->value)
+                        ? [$value->name, $value->value]
+                        : [$value->name];
+                }
+
+                return is_string($value)
+                    ? [$constant->name, $value]
+                    : [$constant->name];
+            },
+            $reflection->getReflectionConstants()
+        ))));
     }
 
     /**
@@ -177,7 +195,10 @@ final readonly class SourceCodeChecker implements Checker
      */
     private function getPropertyNames(ReflectionClass $reflection): array
     {
-        $properties = $reflection->getProperties();
+        $properties = array_filter(
+            $reflection->getProperties(),
+            fn (ReflectionProperty $property): bool => $property->class === $reflection->name,
+        );
 
         $propertiesNames = array_map(
             fn (ReflectionProperty $property): string => $property->getName(),

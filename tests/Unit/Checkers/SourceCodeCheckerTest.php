@@ -7,6 +7,7 @@ use Peck\Config;
 use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
 use PhpSpellcheck\Spellchecker\Aspell;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('does not detect issues in the given directory', function (): void {
@@ -301,7 +302,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 it('detects issues in the given directory of classes, but ignores the whitelisted directories', function (): void {
     $checker = new SourceCodeChecker(
         new Config(
-            whitelistedDirectories: ['FolderThatShouldBeIgnored'],
+            whitelistedDirectories: ['FolderThatShouldBeIgnored', 'ChildAndParent'],
         ),
         InMemorySpellchecker::default(),
     );
@@ -711,4 +712,37 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
             'spieling',
             'spellings',
         ]);
+});
+
+// If this test fails, it's probably because class checker is checking things in parent classes (extends, implements, traits)
+it('should never have line 0 in misspellings from ClassChecker', function (): void {
+    $checker = new SourceCodeChecker(
+        Config::instance(),
+        InMemorySpellchecker::default(),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
+    ]);
+    foreach ($issues as $issue) {
+        expect($issue->line)->not->toBe(0);
+    }
+});
+
+it('should not verify the parent class', function (): void {
+    $checker = new SourceCodeChecker(Config::instance(), InMemorySpellchecker::default());
+
+    $files = Finder::create()
+        ->files()
+        ->in(__DIR__.'/../../Fixtures/ChildAndParent')
+        ->getIterator();
+
+    foreach ($files as $file) {
+        $issues = (fn (): array => $this->getIssuesFromSourceFile($file))->call($checker);
+        if ($file->getFilename() === 'ChildClass.php') {
+            expect($issues)->toBeEmpty();
+        } else {
+            expect($issues)->toHaveCount(4);
+        }
+    }
 });
