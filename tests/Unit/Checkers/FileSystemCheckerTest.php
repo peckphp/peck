@@ -100,32 +100,32 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         ->and($issues[1]->misspelling->suggestions)->toBe([
             'backed',
             'bookend',
-            'back end',
-            'back-end',
+            'blackened',
+            'beckoned',
         ])->and($issues[2]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[2]->line)->toBe(0)
         ->and($issues[2]->misspelling->word)->toBe('enum')
         ->and($issues[2]->misspelling->suggestions)->toBe([
             'enema',
             'enemy',
-            'en um',
-            'en-um',
+            'emu',
+            'anime',
         ])->and($issues[3]->file)->toEndWith('tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored/EnumWithTypoErrors.php')
         ->and($issues[3]->line)->toBe(0)
         ->and($issues[3]->misspelling->word)->toBe('enum')
         ->and($issues[3]->misspelling->suggestions)->toBe([
             'enema',
             'enemy',
-            'en um',
-            'en-um',
+            'emu',
+            'anime',
         ])->and($issues[4]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[4]->line)->toBe(0)
         ->and($issues[4]->misspelling->word)->toBe('enum')
         ->and($issues[4]->misspelling->suggestions)->toBe([
             'enema',
             'enemy',
-            'en um',
-            'en-um',
+            'emu',
+            'anime',
         ])->and($issues[5]->file)->toEndWith('tests/Fixtures/FolderWithTypoos')
         ->and($issues[5]->line)->toBe(0)
         ->and($issues[5]->misspelling->word)->toBe('typoos')
@@ -134,11 +134,6 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
             'types',
             'tops',
             'poos',
-        ])->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
-        ->and($issues[1]->line)->toBe(0)
-        ->and($issues[1]->misspelling->word)->toBe('tppyo')
-        ->and($issues[1]->misspelling->suggestions)->toBe([
-            'type\'s',
         ])->and($issues[6]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
         ->and($issues[6]->line)->toBe(0)
         ->and($issues[6]->misspelling->word)->toBe('tppyo')
