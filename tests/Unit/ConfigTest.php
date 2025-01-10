@@ -18,6 +18,7 @@ it('should have a default configuration', function (): void {
         'json',
         'php',
         'api',
+        'formatter',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 

@@ -10,7 +10,8 @@
             "init",
             "json",
             "php",
-            "api"
+            "api",
+            "formatter"
         ],
         "directories": []
     }
