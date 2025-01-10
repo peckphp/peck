@@ -48,6 +48,9 @@ out the directory to check by itself.
 The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
 can place it in your `peck.json` file. 
 
+##### `--init`
+
+If you don't have a `peck.json` file yet, you can create a blank configuration file by using the `--init` option.
 
 ## Configuration
 
