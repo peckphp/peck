@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Peck\Support;
 
-final readonly class NameParser
+final readonly class SpellcheckFormatter
 {
     /**
      * Transforms the given input (method or class names) into a
      * human-readable format which can be used for spellchecking.
      */
-    public static function parse(string $input): string
+    public static function format(string $input): string
     {
         // Remove leading underscores
         $input = ltrim($input, '_');

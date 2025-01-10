@@ -7,7 +7,7 @@ namespace Peck\Checkers;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
-use Peck\Support\NameParser;
+use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use Symfony\Component\Finder\Finder;
@@ -44,7 +44,8 @@ final readonly class FileSystemChecker implements Checker
         $issues = [];
 
         foreach ($filesOrDirectories as $fileOrDirectory) {
-            $name = NameParser::parse($fileOrDirectory->getFilenameWithoutExtension());
+
+            $name = SpellcheckFormatter::format($fileOrDirectory->getFilenameWithoutExtension());
 
             $issues = [
                 ...$issues,

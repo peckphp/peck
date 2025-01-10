@@ -7,7 +7,7 @@ namespace Peck\Checkers;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
-use Peck\Support\NameParser;
+use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
@@ -107,7 +107,7 @@ final readonly class ClassChecker implements Checker
                         $misspelling,
                         $file->getRealPath(),
                         $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check(NameParser::parse($name))),
+                    ), $this->spellchecker->check(SpellcheckFormatter::format($name))),
             ];
         }
 

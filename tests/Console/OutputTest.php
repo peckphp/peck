@@ -9,7 +9,7 @@ it('may fail', function (): void {
 
     $exitCode = $process->run();
 
-    $output = removeProjectDirectory($process->getOutput());
+    $output = $process->getOutput();
 
     expect($exitCode)->toBe(1)
         ->and($output)->toMatchSnapshot();
@@ -20,15 +20,8 @@ it('may pass', function (): void {
 
     $exitCode = $process->run();
 
-    $output = removeProjectDirectory($process->getOutput());
+    $output = $process->getOutput();
 
     expect($exitCode)->toBe(0)
         ->and($output)->toMatchSnapshot();
 });
-
-function removeProjectDirectory(string $output): string
-{
-    $projectDirectory = (string) realpath(__DIR__.'/../../');
-
-    return str_replace($projectDirectory, '', $output);
-}
