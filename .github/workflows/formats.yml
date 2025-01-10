@@ -47,3 +47,9 @@ jobs:
 
     - name: Type Checks
       run: composer test:types
+
+    - name: Test Refacto
+      run: composer test:refacto
+
+    - name: Test Typos
+      run: composer test:typos
