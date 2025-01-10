@@ -252,7 +252,7 @@ it('handles well when it can not detect the line problem', function (): void {
 
     $splFileInfo = new SplFileInfo(__FILE__, '', '');
 
-    $line = (fn(): int => $this->getErrorLine($splFileInfo, str_repeat('a', 100)))->call($checker);
+    $line = (fn (): int => $this->getErrorLine($splFileInfo, str_repeat('a', 100)))->call($checker);
 
     expect($line)->toBe(0);
 });
@@ -266,7 +266,7 @@ it('should not verify the parent class', function (): void {
         ->getIterator();
 
     foreach ($files as $file) {
-        $issues = (fn(): array => $this->getIssuesFromClass($file))->call($checker);
+        $issues = (fn (): array => $this->getIssuesFromClass($file))->call($checker);
         if ($file->getFilename() === 'ChildClass.php') {
             expect($issues)->toBeEmpty();
         } else {
