@@ -80,6 +80,9 @@ final readonly class InMemorySpellchecker implements Spellchecker
             fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
         );
 
+        // Remove duplicate identical suggestions
+        $filteredSuggestions = array_unique($filteredSuggestions);
+
         return array_slice(array_values($filteredSuggestions), 0, $count);
     }
 
