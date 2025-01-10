@@ -105,6 +105,21 @@ You can also specify the path to the configuration file using the `--config` opt
 ./vendor/bin/peck --config relative/path/to/peck.json
 ```
 
+## Running Peck on GitHub Actions
+
+When running Peck on GitHub Actions, you can use the following workflow or something similar:
+
+```yaml
+- name: Install Aspell
+    shell: bash
+    run: |
+        if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y aspell aspell-en
+        elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install aspell
+        fi
+```
+
 ---
 
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
