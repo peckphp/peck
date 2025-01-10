@@ -110,14 +110,14 @@ The path to check can be overwritten with the `--path` option. If the path is on
 When running Peck on GitHub Actions, you can use the following workflow before running Peck:
 
 ```yaml
-- name: Install Aspell
-    shell: bash
-    run: |
-        if [[ "$RUNNER_OS" == "Linux" ]]; then
+    - name: Install Aspell
+      shell: bash
+      run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
             sudo apt-get update && sudo apt-get install -y aspell aspell-en
-        elif [[ "$RUNNER_OS" == "macOS" ]]; then
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
             brew install aspell
-        fi
+          fi
 ```
 
 ---
