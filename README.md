@@ -45,7 +45,7 @@ Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell
 You can require Peck using [Composer](https://getcomposer.org) with the following command:
 
 ```bash
-composer require peckphp/peck
+composer require peckphp/peck --dev
 ```
 
 ## Usage
@@ -103,6 +103,21 @@ You can also specify the path to the configuration file using the `--config` opt
 
 ```bash
 ./vendor/bin/peck --config relative/path/to/peck.json
+```
+
+## Running Peck on GitHub Actions
+
+When running Peck on GitHub Actions, you can use the following workflow or something similar:
+
+```yaml
+- name: Install Aspell
+    shell: bash
+    run: |
+        if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y aspell aspell-en
+        elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install aspell
+        fi
 ```
 
 ---

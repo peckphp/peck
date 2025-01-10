@@ -43,7 +43,7 @@ final readonly class Cache
 
         $serializedContents = file_get_contents($cacheFile);
 
-        if ($serializedContents === false) {
+        if ($serializedContents === false || ! $this->isSerialized($serializedContents)) {
             return null;
         }
 
@@ -90,5 +90,13 @@ final readonly class Cache
     public function getCacheKey(string $key): string
     {
         return md5($key);
+    }
+
+    /**
+     * Checks if the given string is serialized.
+     */
+    private function isSerialized(string $string): bool
+    {
+        return $string === serialize(false) || @unserialize($string) !== false;
     }
 }

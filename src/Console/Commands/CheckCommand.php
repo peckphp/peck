@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Peck\Console\Commands;
 
 use Composer\Autoload\ClassLoader;
-use Exception;
 use Peck\Config;
 use Peck\Kernel;
 use Peck\ValueObjects\Issue;
@@ -35,6 +34,8 @@ final class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $start = microtime(true);
+
         renderUsing($output);
 
         if ($input->getOption('init')) {
@@ -53,11 +54,14 @@ final class CheckCommand extends Command
         $output->writeln('');
 
         if ($issues === []) {
-            render(<<<'HTML'
+            render(<<<HTML
                 <div class="mx-2 mb-1">
-                    <div class="space-x-1">
+                    <div class="space-x-1 mb-1">
                         <span class="bg-green text-white px-1 font-bold">PASS</span>
                         <span>No misspellings found in your project.</span>
+                    </div>
+                    <div>
+                        <span class="font-bold text-gray-600">Duration:</span> {$this->getDuration($start)}s
                     </div>
                 </div>
                 HTML
@@ -72,6 +76,15 @@ final class CheckCommand extends Command
                 default => $this->renderLineLessIssue($issue),
             };
         }
+
+        render(<<<HTML
+            <div class="mx-2 mb-1">
+                <div>
+                    <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
+                </div>
+            </div>
+            HTML
+        );
 
         return Command::FAILURE;
     }
@@ -116,8 +129,8 @@ final class CheckCommand extends Command
         return match (true) {
             isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
             default => match (true) {
-                is_dir($basePath.'/src') => ($basePath.'/src'),
                 is_dir($basePath.'/app') => ($basePath.'/app'),
+                is_dir($basePath.'/src') => ($basePath.'/src'),
                 default => $basePath,
             },
         };
@@ -254,13 +267,14 @@ final class CheckCommand extends Command
      */
     private function getIssueColumn(Issue $issue, string $lineContent): int
     {
-        $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word]) ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
-        $column = strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
+        $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word])
+            ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
 
-        if ($column === false) {
-            throw (new Exception("Could not find the misspelling '{$issue->misspelling->word}' in the line '{$lineContent}'"));
-        }
+        return (int) strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
+    }
 
-        return $column;
+    private function getDuration(float $startTime): string
+    {
+        return number_format(microtime(true) - $startTime, 2);
     }
 }

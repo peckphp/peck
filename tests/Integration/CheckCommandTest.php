@@ -39,3 +39,39 @@ it('may pass', function (): void {
 
     expect(trim($output))->toContain('PASS  No misspellings found in your project.');
 });
+
+it('may pass with lineless issues', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--path' => 'tests/Fixtures/FolderWithTypoos',
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('Misspelling in');
+});
+
+it('may pass with init option', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--init' => true,
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('INFO  Configuration file already exists.');
+});

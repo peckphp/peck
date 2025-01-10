@@ -24,9 +24,9 @@ it('detects issues', function (): void {
         ->and($issues[0]->word)->toBe('viewerss')
         ->and($issues[0]->suggestions)->toBe([
             'viewers',
-            'viewer\'s',
             'viewer',
             'viewed',
+            'veers',
         ]);
 });
 
@@ -57,8 +57,8 @@ it('detects issues that always don\'t have cache', function (): void {
         ->and($issues[0]->word)->toBe('viewerss')
         ->and($issues[0]->suggestions)->toBe([
             'viewers',
-            'viewer\'s',
             'viewer',
             'viewed',
+            'veers',
         ]);
 });

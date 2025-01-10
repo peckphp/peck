@@ -12,18 +12,16 @@ final readonly class SpellcheckFormatter
      */
     public static function format(string $input): string
     {
-        // Trim leading underscores (e.g. __construct -> construct)
+        // Remove leading underscores
         $input = ltrim($input, '_');
 
-        // Replace underscores and hyphens with spaces (for snake, screaming snake, and kebab case)
+        // Replace underscores and dashes with spaces
         $input = str_replace(['_', '-'], ' ', $input);
 
-        // Add spaces before capital letters (for camel and pascal case)
+        // Insert spaces between lowercase and uppercase letters (camelCase or PascalCase)
         $input = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $input);
 
-        // Lowercase the input
-        $input = strtolower($input);
-
-        return $input;
+        // Convert the final result to lowercase
+        return strtolower($input);
     }
 }
