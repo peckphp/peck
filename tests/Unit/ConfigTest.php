@@ -19,6 +19,8 @@ it('should have a default configuration', function (): void {
         'php',
         'api',
         'formatter',
+        'enum',
+        'enums',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 
@@ -72,6 +74,8 @@ it('should not recreate a file that already exists', function (): void {
             'php',
             'api',
             'formatter',
+            'enum',
+            'enums',
         ])
         ->and($config->whitelistedDirectories)->toBe([]);
 });

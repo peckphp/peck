@@ -11,7 +11,9 @@
             "json",
             "php",
             "api",
-            "formatter"
+            "formatter",
+            "enum",
+            "enums"
         ],
         "directories": []
     }
