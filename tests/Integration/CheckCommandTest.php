@@ -55,5 +55,23 @@ it('may pass with lineless issues', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Did you mean: Ignored, Ignores, Ignore, Inroad');
+    expect(trim($output))->toContain('Misspelling in');
+});
+
+it('may pass with init option', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--init' => true,
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('INFO  Configuration file already exists.');
 });
