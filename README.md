@@ -35,7 +35,10 @@ Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell
     ```
 
 - **Windows:**\
-    Please refer to the [Aspell website](http://aspell.net/) for installation instructions.
+    > Move to WSL / WSL2, an use the following command:
+    sudo apt-get install aspell aspell-en
+
+    > If you are using native shells like powershell, etc, please lease refer to the [Aspell website](http://aspell.net/) for installation instructions.
 
 ### Installing Peck
 
