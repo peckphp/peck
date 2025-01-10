@@ -45,7 +45,7 @@ Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell
 You can require Peck using [Composer](https://getcomposer.org) with the following command:
 
 ```bash
-composer require peckphp/peck
+composer require peckphp/peck --dev
 ```
 
 ## Usage
