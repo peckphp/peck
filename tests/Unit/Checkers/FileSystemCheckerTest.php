@@ -37,9 +37,9 @@ it('detects issues in the given directory', function (): void {
         ->and($issues[0]->misspelling->word)->toBe('typoos')
         ->and($issues[0]->misspelling->suggestions)->toBe([
             'typos',
-            'typo\'s',
             'types',
-            'type\'s',
+            'tops',
+            'poos',
         ])->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php')
         ->and($issues[1]->line)->toBe(0)
         ->and($issues[1]->misspelling->word)->toBe('ignroed')
@@ -91,9 +91,9 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
         ->and($issues[0]->misspelling->word)->toBe('typoos')
         ->and($issues[0]->misspelling->suggestions)->toBe([
             'typos',
-            'typo\'s',
             'types',
-            'type\'s',
+            'tops',
+            'poos',
         ])->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileWithTppyo.php')
         ->and($issues[1]->line)->toBe(0)
         ->and($issues[1]->misspelling->word)->toBe('tppyo')
@@ -132,9 +132,9 @@ it('detects issues in the given directory, but ignores the whitelisted directori
         ->and($issues[0]->misspelling->word)->toBe('typoos')
         ->and($issues[0]->misspelling->suggestions)->toBe([
             'typos',
-            'typo\'s',
             'types',
-            'type\'s',
+            'tops',
+            'poos',
         ])->and($issues[1]->file)->toEndWith('tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php')
         ->and($issues[1]->line)->toBe(0)
         ->and($issues[1]->misspelling->word)->toBe('ignroed')

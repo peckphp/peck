@@ -2,7 +2,7 @@
    ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
   ./tests/Fixtures/FolderWithTypoos     
   ---------------------------^     
-  Did you mean: typos, typo's, types, type's  
+  Did you mean: typos, types, tops, poos  
 
 
    ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php[0m: '[1mignroed[0m'  
