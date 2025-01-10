@@ -77,3 +77,27 @@
   Did you mean: property, propriety, properer, properest  
 
 
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderForParentTesting/ParentClass.php:13:26[0m: '[1mmetod[0m'  
+    13▕ [1m    public function parentMetodWithTypo(): void[0m  
+        --------------------------^     
+  Did you mean: method, meted, mated, muted  
+
+
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderForParentTesting/ParentClass.php:11:25[0m: '[1mpropertt[0m'  
+    11▕ [1m    public string $parentProperttWithTypo = '';[0m  
+        -------------------------^     
+  Did you mean: property, proper, properer, properly  
+
+
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderForParentTesting/ParentClass.php:9:22[0m: '[1mconstnat[0m'  
+     9▕ [1m    const PARENT_WITH_CONSTNAT_TYPE = 'parent_constantvaleu_typo';[0m  
+        ----------------------^     
+  Did you mean: constant, constants, consonant, consent  
+
+
+   ISSUE  Misspelling in [1m./tests/Fixtures/FolderForParentTesting/ParentClass.php:9:46[0m: '[1mconstantvaleu[0m'  
+     9▕ [1m    const PARENT_WITH_CONSTNAT_TYPE = 'parent_constantvaleu_typo';[0m  
+        ----------------------------------------------^     
+  Did you mean: constantly, constantine, constants, constant  
+
+
