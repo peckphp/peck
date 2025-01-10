@@ -13,7 +13,8 @@
             "api",
             "formatter",
             "enum",
-            "enums"
+            "enums",
+            "backend"
         ],
         "directories": []
     }

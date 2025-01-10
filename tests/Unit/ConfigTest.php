@@ -21,6 +21,7 @@ it('should have a default configuration', function (): void {
         'formatter',
         'enum',
         'enums',
+        'backend',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 
@@ -76,6 +77,7 @@ it('should not recreate a file that already exists', function (): void {
             'formatter',
             'enum',
             'enums',
+            'backend',
         ])
         ->and($config->whitelistedDirectories)->toBe([]);
 });
