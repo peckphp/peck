@@ -302,7 +302,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 it('detects issues in the given directory of classes, but ignores the whitelisted directories', function (): void {
     $checker = new SourceCodeChecker(
         new Config(
-            whitelistedDirectories: ['FolderThatShouldBeIgnored', 'ChildAndParent'],
+            whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
         InMemorySpellchecker::default(),
     );
