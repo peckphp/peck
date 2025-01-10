@@ -11,7 +11,7 @@ namespace Tests\Fixtures\ClassesToTest;
  *
  * @internal
  */
-final class ClassWithTypoErrors
+final class ClassWithTypoErrors implements InterfaceWithSpellingMistake
 {
     public int $propertyWithoutTypoError = 1;
 
