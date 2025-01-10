@@ -71,7 +71,7 @@ final readonly class ClassChecker implements Checker
      *
      * @return array<int, Issue>
      */
-    public function getIssuesFromClass(SplFileInfo $file): array
+    private function getIssuesFromClass(SplFileInfo $file): array
     {
         $class = $this->getClassNameWithNamespace($file);
 

@@ -264,8 +264,9 @@ it('should not verify the parent class', function (): void {
         ->getIterator();
 
     [$childClass, $parentClass] = array_values(iterator_to_array($files));
-    $childClassIssues = $checker->getIssuesFromClass($childClass);
-    $parentClassIssues = $checker->getIssuesFromClass($parentClass);
+
+    $childClassIssues = (fn (): array => $this->getIssuesFromClass($childClass))->call($checker);
+    $parentClassIssues = (fn (): array => $this->getIssuesFromClass($parentClass))->call($checker);
 
     expect($childClassIssues)->toBeEmpty()
         ->and($parentClassIssues)->toHaveCount(4);
