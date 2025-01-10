@@ -18,7 +18,29 @@ Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wi
 
 ## Installation
 
-> **Requires [PHP 8.3+](https://php.net/releases/)**
+> **Requires [PHP 8.3+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
+
+Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell is installed on your system before using Peck.
+
+### Installing GNU Aspell
+
+- **Debian/Ubuntu:**
+    ```bash
+    sudo apt-get install aspell aspell-en
+    ```
+    
+- **MacOS (using Homebrew):**
+    ```bash
+    brew install aspell
+    ```
+
+- **Windows:**\
+    > Move to WSL / WSL2, an use the following command:
+    sudo apt-get install aspell aspell-en
+
+    > If you are using native shells like powershell, etc, please lease refer to the [Aspell website](http://aspell.net/) for installation instructions.
+
+### Installing Peck
 
 You can require Peck using [Composer](https://getcomposer.org) with the following command:
 
