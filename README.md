@@ -36,7 +36,14 @@ To check your project for spelling mistakes, run:
 
 ## Configuration
 
-Peck can be configured using a `peck.json` file in the root of your project. Here's an example configuration:
+Peck can be configured using a `peck.json` file in the root of your project. 
+
+You can scaffold the `peck.json` file with:
+```bash
+./vendor/bin/peck --init
+```
+
+Here's an example configuration:
 
 ```json
 {
@@ -61,3 +68,14 @@ You can also specify the path to the configuration file using the `--config` opt
 ---
 
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
+
+---
+
+## Command Options
+
+The behaviour of `peck` can be modified with the following options:
+
+### `--path`
+
+The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
+can place it in your `peck.json` file. 
