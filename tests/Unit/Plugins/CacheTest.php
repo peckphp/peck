@@ -74,3 +74,37 @@ it('should return null when cache file exists but is not readable', function ():
 
     expect($cache->get($key))->toBeNull();
 });
+
+it('should return null if unserializedContents is false', function (): void {
+    $cache = Cache::default();
+
+    $key = uniqid();
+
+    $cache->set($key, 'test');
+
+    file_put_contents($cache->getCacheFile($cache->getCacheKey($key)), 'invalid serialized string');
+
+    expect($cache->get($key))->toBeNull();
+});
+
+it('should return false if unserializedContents is false and serializedContents is b:0;', function (): void {
+    $cache = Cache::default();
+
+    $key = uniqid();
+
+    $cache->set($key, false);
+
+    expect($cache->get($key))->toBeFalse();
+});
+
+it('should return null if serializedContents is false', function (): void {
+    $cache = Cache::default();
+
+    $key = uniqid();
+
+    $cache->set($key, 'test');
+
+    file_put_contents($cache->getCacheFile($cache->getCacheKey($key)), false);
+
+    expect($cache->get($key))->toBeNull();
+});

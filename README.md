@@ -18,12 +18,34 @@ Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wi
 
 ## Installation
 
-> **Requires [PHP 8.3+](https://php.net/releases/)**
+> **Requires [PHP 8.3+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
+
+Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell is installed on your system before using Peck.
+
+### Installing GNU Aspell
+
+- **Debian/Ubuntu:**
+    ```bash
+    sudo apt-get install aspell aspell-en
+    ```
+    
+- **MacOS (using Homebrew):**
+    ```bash
+    brew install aspell
+    ```
+
+- **Windows:**\
+    > Move to WSL / WSL2, an use the following command:
+    sudo apt-get install aspell aspell-en
+
+    > If you are using native shells like powershell, etc, please lease refer to the [Aspell website](http://aspell.net/) for installation instructions.
+
+### Installing Peck
 
 You can require Peck using [Composer](https://getcomposer.org) with the following command:
 
 ```bash
-composer require peckphp/peck
+composer require peckphp/peck --dev
 ```
 
 ## Usage
@@ -33,6 +55,24 @@ To check your project for spelling mistakes, run:
 ```bash
 ./vendor/bin/peck
 ```
+
+### Command Options
+
+The behaviour of `peck` can be modified with the following options:
+
+##### `--config`
+
+By default `peck` will check for a `peck.json` file in your project root. If one isn't available it will try to figure
+out the directory to check by itself.
+
+##### `--path`
+
+The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
+can place it in your `peck.json` file. 
+
+##### `--init`
+
+If you don't have a `peck.json` file yet, you can create a blank configuration file by using the `--init` option.
 
 ## Configuration
 
@@ -65,17 +105,21 @@ You can also specify the path to the configuration file using the `--config` opt
 ./vendor/bin/peck --config relative/path/to/peck.json
 ```
 
+## Running Peck on GitHub Actions
+
+When running Peck on GitHub Actions, you can use the following workflow or something similar:
+
+```yaml
+- name: Install Aspell
+    shell: bash
+    run: |
+        if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y aspell aspell-en
+        elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install aspell
+        fi
+```
+
 ---
 
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
-
----
-
-## Command Options
-
-The behaviour of `peck` can be modified with the following options:
-
-### `--path`
-
-The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
-can place it in your `peck.json` file. 

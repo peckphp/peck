@@ -18,6 +18,7 @@ it('should have a default configuration', function (): void {
         'json',
         'php',
         'api',
+        'formatter',
     ])->and($config->whitelistedDirectories)->toBe([]);
 });
 
@@ -70,6 +71,7 @@ it('should not recreate a file that already exists', function (): void {
             'json',
             'php',
             'api',
+            'formatter',
         ])
         ->and($config->whitelistedDirectories)->toBe([]);
 });
