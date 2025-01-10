@@ -6,6 +6,7 @@ namespace Peck\Services\Spellcheckers;
 
 use Peck\Config;
 use Peck\Contracts\Services\Spellchecker;
+use Peck\Plugins\Cache;
 use Peck\ValueObjects\Misspelling;
 use PhpSpellcheck\MisspellingInterface;
 use PhpSpellcheck\Spellchecker\Aspell;
@@ -18,6 +19,7 @@ final readonly class InMemorySpellchecker implements Spellchecker
     public function __construct(
         private Config $config,
         private Aspell $aspell,
+        private Cache $cache,
     ) {
         //
     }
@@ -30,6 +32,7 @@ final readonly class InMemorySpellchecker implements Spellchecker
         return new self(
             Config::instance(),
             Aspell::create(),
+            Cache::default(),
         );
     }
 
@@ -40,12 +43,29 @@ final readonly class InMemorySpellchecker implements Spellchecker
      */
     public function check(string $text): array
     {
-        $misspellings = $this->filterWhitelistedWords(iterator_to_array($this->aspell->check($text)));
+        /**
+         * @var array<int, MisspellingInterface>
+         */
+        $misspellings = $this->cache->has($text) ? $this->cache->get($text) : $this->getMisspellings($text);
+        $misspellings = $this->filterWhitelistedWords($misspellings);
 
         return array_map(fn (MisspellingInterface $misspelling): Misspelling => new Misspelling(
             $misspelling->getWord(),
             $this->extractSuggestions($misspelling, count: 4),
         ), $misspellings);
+    }
+
+    /**
+     * Gets the misspellings from the given text.
+     *
+     * @return array<int, MisspellingInterface>
+     */
+    private function getMisspellings(string $text): array
+    {
+        $misspellings = iterator_to_array($this->aspell->check($text));
+        $this->cache->set($text, $misspellings);
+
+        return $misspellings;
     }
 
     /**
