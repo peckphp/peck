@@ -23,6 +23,13 @@ Clone your fork, then install the dev dependencies:
 ```bash
 composer install
 ```
+
+Before starting development, please ensure that [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell) is installed on your machine. This is required for the spell-checking functionality.
+
+- **Installing Aspell:**\
+Please refer to the instructions in the [README](README.md) under the Installation section or the [Aspell website](http://aspell.net/) for instructions on how to install Aspell.
+
+
 ## Lint
 
 Lint your code:

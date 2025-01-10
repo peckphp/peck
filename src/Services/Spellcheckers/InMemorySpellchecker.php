@@ -51,7 +51,7 @@ final readonly class InMemorySpellchecker implements Spellchecker
 
         return array_map(fn (MisspellingInterface $misspelling): Misspelling => new Misspelling(
             $misspelling->getWord(),
-            array_slice($misspelling->getSuggestions(), 0, 4),
+            $this->extractSuggestions($misspelling, count: 4),
         ), $misspellings);
     }
 
@@ -66,6 +66,24 @@ final readonly class InMemorySpellchecker implements Spellchecker
         $this->cache->set($text, $misspellings);
 
         return $misspellings;
+    }
+
+    /**
+     * Extracts the suggestions from the given misspelling.
+     * Filters words that can't be used in code (e.g. apostrophes).
+     *
+     * @return array<int, string>
+     */
+    private function extractSuggestions(MisspellingInterface $misspelling, int $count): array
+    {
+        $filteredSuggestions = array_filter($misspelling->getSuggestions(),
+            fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
+        );
+
+        // Remove duplicate identical suggestions
+        $filteredSuggestions = array_unique($filteredSuggestions);
+
+        return array_slice(array_values($filteredSuggestions), 0, $count);
     }
 
     /**
