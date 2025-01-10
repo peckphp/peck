@@ -34,9 +34,34 @@ To check your project for spelling mistakes, run:
 ./vendor/bin/peck
 ```
 
+### Command Options
+
+The behaviour of `peck` can be modified with the following options:
+
+##### `--config`
+
+By default `peck` will check for a `peck.json` file in your project root. If one isn't available it will try to figure
+out the directory to check by itself.
+
+##### `--path`
+
+The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
+can place it in your `peck.json` file. 
+
+##### `--init`
+
+If you don't have a `peck.json` file yet, you can create a blank configuration file by using the `--init` option.
+
 ## Configuration
 
-Peck can be configured using a `peck.json` file in the root of your project. Here's an example configuration:
+Peck can be configured using a `peck.json` file in the root of your project. 
+
+You can scaffold the `peck.json` file with:
+```bash
+./vendor/bin/peck --init
+```
+
+Here's an example configuration:
 
 ```json
 {

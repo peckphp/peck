@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace Peck;
 
 use Closure;
-use Composer\Autoload\ClassLoader;
+use Peck\Support\ProjectPath;
 
 final class Config
 {
+    /**
+     * The name of the configuration file.
+     */
+    private const string JSON_CONFIGURATION_NAME = 'peck.json';
+
     /**
      * The instance of the configuration.
      */
@@ -61,22 +66,24 @@ final class Config
             return self::$instance;
         }
 
-        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+        $basePath = ProjectPath::get();
         $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
             ? (self::$resolveConfigFilePathUsing)()
-            : 'peck.json');
+            : self::JSON_CONFIGURATION_NAME);
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
             : '{}';
 
-        /** @var array{
+        /**
+         * @var array{
          *     language?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
          *         directories?: array<int, string>
          *     }
-         *  } $jsonAsArray */
+         *  } $jsonAsArray
+         */
         $jsonAsArray = json_decode($contents, true) ?: [];
 
         return self::$instance = new self(
@@ -84,5 +91,22 @@ final class Config
             $jsonAsArray['ignore']['directories'] ?? [],
             $jsonAsArray['language'] ?? null,
         );
+    }
+
+    /**
+     * Creates the configuration file for the user running the command.
+     */
+    public static function init(): bool
+    {
+        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
+
+        return ! file_exists($filePath) && file_put_contents($filePath, json_encode([
+            'ignore' => [
+                'words' => [
+                    'php',
+                ],
+                'directories' => [],
+            ],
+        ], JSON_PRETTY_PRINT));
     }
 }

@@ -8,7 +8,11 @@
             "namespace",
             "doc",
             "bool",
-            "php"
+            "init",
+            "json",
+            "php",
+            "api",
+            "formatter"
         ],
         "directories": []
     }
