@@ -1,320 +1,169 @@
+  ..............................
+
+   Misspelling  [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
+  ./tests/Fixtures/FolderWithTypoos     
+  ---------------------------^     
+  Did you mean: typos, types, tops, poos  
+
+   Misspelling  [1m./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php[0m: '[1mignroed[0m'  
+  ./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php     
+  --------------------------------------------------^     
+  Did you mean: ignored, ignores, ignore, inroad  
+
+   Misspelling  [1m./tests/Fixtures/FolderWithTypoos/FileWithTppyo.php[0m: '[1mtppyo[0m'  
+  ./tests/Fixtures/FolderWithTypoos/FileWithTppyo.php     
+  ------------------------------------------^     
+  Did you mean: typo, tokyo, typos, topi  
+
+   Misspelling  [1m./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php[0m: '[1mshoud[0m'  
+  ./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php     
+  --------------------------------------------------------------------^     
+  Did you mean: should, shroud, shod, shout  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:30:34[0m: '[1merorr[0m'  
+    30▕ [1m    public function methodWithTypoErorr(): string[0m  
+        ----------------------------------^     
+  Did you mean: error, errors, orr, err  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:36:17[0m: '[1mmetohd[0m'  
+    36▕ [1m     * This is a metohd with a doc block typo error[0m  
+        -----------------^     
+  Did you mean: method, meted, mooted, mated  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:43:112[0m: '[1merorr[0m'  
+    43▕ [1m    public function methodWithTypoErrorInParameters(string $parameterWithoutTypoError, string $parameterWithTypoErorr): string[0m  
+        ----------------------------------------------------------------------------------------------------------------^     
+  Did you mean: error, errors, orr, err  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:18:16[0m: '[1mproperyt[0m'  
+    18▕ [1m    public int $properytWithTypoError = 2;[0m  
+        ----------------^     
+  Did you mean: property, propriety, properer, properest  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:21:37[0m: '[1mbolck[0m'  
+    21▕ [1m     * This is a property with a doc bolck typo error[0m  
+        -------------------------------------^     
+  Did you mean: block, bock, bloc, bilk  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:10:25[0m: '[1mtst[0m'  
+    10▕ [1m * This class is used to tst type errors in class properties, methods, method parameters and class documentation block.[0m  
+        -------------------------^     
+  Did you mean: test, tat, st, st  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:31[0m: '[1mtypoo[0m'  
+    11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m  
+        -------------------------------^     
+  Did you mean: typo, typos, type, topi  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:54[0m: '[1mtypoo[0m'  
+    11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m  
+        ------------------------------------------------------^     
+  Did you mean: typo, typos, type, topi  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/ClassWithTypoErrors.php:9:16[0m: '[1mproperyt[0m'  
+     9▕ [1m    public int $properytWithTypoError = 1;[0m  
+        ----------------^     
+  Did you mean: property, propriety, properer, properest  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:12:34[0m: '[1merorr[0m'  
+    12▕ [1m    public function methodWithTypoErorr(): string;[0m  
+        ----------------------------------^     
+  Did you mean: error, errors, orr, err  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:8:3[0m: '[1mspellling[0m'  
+     8▕ [1m * Spellling mistake in the interface documentation.[0m  
+        ---^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:25:31[0m: '[1mspellling[0m'  
+    25▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m  
+        -------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:30:67[0m: '[1mspellling[0m'  
+    30▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m  
+        -------------------------------------------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:41:31[0m: '[1mspellling[0m'  
+    41▕ [1m     * This is a method with a spellling mistake in the doc block.[0m  
+        -------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:18:16[0m: '[1mproperyt[0m'  
+    18▕ [1m    public int $properytWithSpelllingMistake = 2;[0m  
+        ----------------^     
+  Did you mean: property, propriety, properer, properest  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:18:28[0m: '[1mspellling[0m'  
+    18▕ [1m    public int $properytWithSpelllingMistake = 2;[0m  
+        ----------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:10:25[0m: '[1mtst[0m'  
+    10▕ [1m * This trait is used to tst type errors in trait properties, methods, method parameters and trait documentation block.[0m  
+        -------------------------^     
+  Did you mean: test, tat, st, st  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:21:31[0m: '[1mspellling[0m'  
+    21▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m  
+        -------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:26:67[0m: '[1mspellling[0m'  
+    26▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m  
+        -------------------------------------------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:37:31[0m: '[1mspellling[0m'  
+    37▕ [1m     * This is a method with a spellling mistake in the doc block.[0m  
+        -------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:13:9[0m: '[1mspellling[0m'  
+    13▕ [1m    case SPELLLING_MISTAKE_IN_CASE_NAME = 'Spelling mistake in case name';[0m  
+        ---------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:14:43[0m: '[1mspellling[0m'  
+    14▕ [1m    case SPELLING_MISTAKE_IN_CASE_VALUE = 'Spellling mistake in case value';[0m  
+        -------------------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'  
+     8▕ [1m * Even the documentation has spellling mistakes.[0m  
+        ------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored/EnumWithTypoErrors.php:9:19[0m: '[1mspellling[0m'  
+     9▕ [1m    case CASE_WITH_SPELLLING_MISTAKE_IN_CASE_NAME;[0m  
+        -------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:20:31[0m: '[1mspellling[0m'  
+    20▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m  
+        -------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:25:67[0m: '[1mspellling[0m'  
+    25▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m  
+        -------------------------------------------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:36:31[0m: '[1mspellling[0m'  
+    36▕ [1m     * This is a method with a spellling mistake in the doc block.[0m  
+        -------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:13:19[0m: '[1mspellling[0m'  
+    13▕ [1m    case CASE_WITH_SPELLLING_MISTAKE_IN_CASE_NAME;[0m  
+        -------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'  
+     8▕ [1m * Even the documentation has spellling mistakes.[0m  
+        ------------------------------^     
+  Did you mean: spelling, spilling, spieling, spellings  
+
+  Duration: 0.00s  
 
-   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'
-  ./tests/Fixtures/FolderWithTypoos
-  ---------------------------^
-  Did you mean: typos, types, tops, poos
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php[0m: '[1mignroed[0m'
-  ./tests/Fixtures/FolderWithTypoos/FileThatShouldBeIgnroed.php
-  --------------------------------------------------^
-  Did you mean: ignored, ignores, ignore, inroad
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FileWithTppyo.php[0m: '[1mtppyo[0m'
-  ./tests/Fixtures/FolderWithTypoos/FileWithTppyo.php
-  ------------------------------------------^
-  Did you mean: typo, tokyo, typos, topi
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php[0m: '[1mshoud[0m'
-  ./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php
-  --------------------------------------------------------------------^
-  Did you mean: should, shroud, shod, shout
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:30:34[0m: '[1merorr[0m'
-    30▕ [1m    public function methodWithTypoErorr(): string[0m
-        ----------------------------------^
-  Did you mean: error, errors, orr, err
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:36:17[0m: '[1mmetohd[0m'
-    36▕ [1m     * This is a metohd with a doc block typo error[0m
-        -----------------^
-  Did you mean: method, meted, mooted, mated
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:43:112[0m: '[1merorr[0m'
-    43▕ [1m    public function methodWithTypoErrorInParameters(string $parameterWithoutTypoError, string $parameterWithTypoErorr): string[0m
-        ----------------------------------------------------------------------------------------------------------------^
-  Did you mean: error, errors, orr, err
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:18:16[0m: '[1mproperyt[0m'
-    18▕ [1m    public int $properytWithTypoError = 2;[0m
-        ----------------^
-  Did you mean: property, propriety, properer, properest
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:21:37[0m: '[1mbolck[0m'
-    21▕ [1m     * This is a property with a doc bolck typo error[0m
-        -------------------------------------^
-  Did you mean: block, bock, bloc, bilk
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:10:25[0m: '[1mtst[0m'
-    10▕ [1m * This class is used to tst type errors in class properties, methods, method parameters and class documentation block.[0m
-        -------------------------^
-  Did you mean: test, tat, st, st
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:31[0m: '[1mtypoo[0m'
-    11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m
-        -------------------------------^
-  Did you mean: typo, typos, type, topi
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:54[0m: '[1mtypoo[0m'
-    11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m
-        ------------------------------------------------------^
-  Did you mean: typo, typos, type, topi
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/ClassWithTypoErrors.php:9:16[0m: '[1mproperyt[0m'
-     9▕ [1m    public int $properytWithTypoError = 1;[0m
-        ----------------^
-  Did you mean: property, propriety, properer, properest
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:12:34[0m: '[1merorr[0m'
-    12▕ [1m    public function methodWithTypoErorr(): string;[0m
-        ----------------------------------^
-  Did you mean: error, errors, orr, err
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:8:3[0m: '[1mspellling[0m'
-     8▕ [1m * Spellling mistake in the interface documentation.[0m
-        ---^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:25:31[0m: '[1mspellling[0m'
-    25▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:30:67[0m: '[1mspellling[0m'
-    30▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m
-        -------------------------------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:41:31[0m: '[1mspellling[0m'
-    41▕ [1m     * This is a method with a spellling mistake in the doc block.[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:18:16[0m: '[1mproperyt[0m'
-    18▕ [1m    public int $properytWithSpelllingMistake = 2;[0m
-        ----------------^
-  Did you mean: property, propriety, properer, properest
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:18:28[0m: '[1mspellling[0m'
-    18▕ [1m    public int $properytWithSpelllingMistake = 2;[0m
-        ----------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:10:25[0m: '[1mtst[0m'
-    10▕ [1m * This trait is used to tst type errors in trait properties, methods, method parameters and trait documentation block.[0m
-        -------------------------^
-  Did you mean: test, tat, st, st
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:21:31[0m: '[1mspellling[0m'
-    21▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:26:67[0m: '[1mspellling[0m'
-    26▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m
-        -------------------------------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:37:31[0m: '[1mspellling[0m'
-    37▕ [1m     * This is a method with a spellling mistake in the doc block.[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:13:9[0m: '[1mspellling[0m'
-    13▕ [1m    case SPELLLING_MISTAKE_IN_CASE_NAME = 'Spelling mistake in case name';[0m
-        ---------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:14:43[0m: '[1mspellling[0m'
-    14▕ [1m    case SPELLING_MISTAKE_IN_CASE_VALUE = 'Spellling mistake in case value';[0m
-        -------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'
-     8▕ [1m * Even the documentation has spellling mistakes.[0m
-        ------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored/EnumWithTypoErrors.php:9:19[0m: '[1mspellling[0m'
-     9▕ [1m    case CASE_WITH_SPELLLING_MISTAKE_IN_CASE_NAME;[0m
-        -------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:20:31[0m: '[1mspellling[0m'
-    20▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:25:67[0m: '[1mspellling[0m'
-    25▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m
-        -------------------------------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:36:31[0m: '[1mspellling[0m'
-    36▕ [1m     * This is a method with a spellling mistake in the doc block.[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:13:19[0m: '[1mspellling[0m'
-    13▕ [1m    case CASE_WITH_SPELLLING_MISTAKE_IN_CASE_NAME;[0m
-        -------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'
-     8▕ [1m * Even the documentation has spellling mistakes.[0m
-        ------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:12:34[0m: '[1merorr[0m'
-    12▕ [1m    public function methodWithTypoErorr(): string;[0m
-        ----------------------------------^
-  Did you mean: error, errors, orr, err
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:8:3[0m: '[1mspellling[0m'
-     8▕ [1m * Spellling mistake in the interface documentation.[0m
-        ---^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:25:31[0m: '[1mspellling[0m'
-    25▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:30:67[0m: '[1mspellling[0m'
-    30▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m
-        -------------------------------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:41:31[0m: '[1mspellling[0m'
-    41▕ [1m     * This is a method with a spellling mistake in the doc block.[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:18:16[0m: '[1mproperyt[0m'
-    18▕ [1m    public int $properytWithSpelllingMistake = 2;[0m
-        ----------------^
-  Did you mean: property, propriety, properer, properest
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:18:28[0m: '[1mspellling[0m'
-    18▕ [1m    public int $properytWithSpelllingMistake = 2;[0m
-        ----------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/ClassesToTest/TraitWithTypo.php:10:25[0m: '[1mtst[0m'
-    10▕ [1m * This trait is used to tst type errors in trait properties, methods, method parameters and trait documentation block.[0m
-        -------------------------^
-  Did you mean: test, tat, st, st
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:21:31[0m: '[1mspellling[0m'
-    21▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:26:67[0m: '[1mspellling[0m'
-    26▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m
-        -------------------------------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:37:31[0m: '[1mspellling[0m'
-    37▕ [1m     * This is a method with a spellling mistake in the doc block.[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:13:9[0m: '[1mspellling[0m'
-    13▕ [1m    case SPELLLING_MISTAKE_IN_CASE_NAME = 'Spelling mistake in case name';[0m
-        ---------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:14:43[0m: '[1mspellling[0m'
-    14▕ [1m    case SPELLING_MISTAKE_IN_CASE_VALUE = 'Spellling mistake in case value';[0m
-        -------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'
-     8▕ [1m * Even the documentation has spellling mistakes.[0m
-        ------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored/EnumWithTypoErrors.php:9:19[0m: '[1mspellling[0m'
-     9▕ [1m    case CASE_WITH_SPELLLING_MISTAKE_IN_CASE_NAME;[0m
-        -------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:20:31[0m: '[1mspellling[0m'
-    20▕ [1m    private function methodWithSpelllingMistakeInName(): void[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:25:67[0m: '[1mspellling[0m'
-    25▕ [1m    private function methodWithSpellingMistakeInParameters(string $spelllingMistakeInParameter): void[0m
-        -------------------------------------------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:36:31[0m: '[1mspellling[0m'
-    36▕ [1m     * This is a method with a spellling mistake in the doc block.[0m
-        -------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:13:19[0m: '[1mspellling[0m'
-    13▕ [1m    case CASE_WITH_SPELLLING_MISTAKE_IN_CASE_NAME;[0m
-        -------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-   ISSUE  Misspelling in [1m./tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'
-     8▕ [1m * Even the documentation has spellling mistakes.[0m
-        ------------------------------^
-  Did you mean: spelling, spilling, spell ling, spell-ling
-
-
-  Duration: 0.00s

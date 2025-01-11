@@ -83,9 +83,7 @@ final class CheckCommand extends Command
 
         render(<<<HTML
             <div class="mx-2 mb-1">
-                <div>
-                    <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
-                </div>
+                <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
             </div>
             HTML
         );
@@ -163,10 +161,10 @@ final class CheckCommand extends Command
         );
 
         render(<<<HTML
-            <div class="mx-2 mb-2">
+            <div class="mx-2 mb-1">
                 <div class="space-x-1">
-                    <span class="bg-red text-white px-1 font-bold">ISSUE</span>
-                    <span>Misspelling in <strong><a href="{$issue->file}{$lineInfo}">{$relativePath}{$lineInfo}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
+                    <span class="bg-red text-white px-1 font-bold">Misspelling</span>
+                    <span><strong><a href="{$issue->file}{$lineInfo}">{$relativePath}{$lineInfo}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
                     <code start-line="{$issue->line}">{$lineContent}</code>
                     <pre class="text-red-500 font-bold">{$alignSpacer}{$spacer}^</pre>
                 </div>
@@ -237,10 +235,10 @@ final class CheckCommand extends Command
         );
 
         render(<<<HTML
-            <div class="mx-2 mb-2">
+            <div class="mx-2 mb-1">
                 <div class="space-x-1">
-                    <span class="bg-red text-white px-1 font-bold">ISSUE</span>
-                    <span>Misspelling in <strong><a href="{$issue->file}">{$relativePath}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
+                    <span class="bg-red text-white px-1 font-bold">Misspelling</span>
+                    <span><strong><a href="{$issue->file}">{$relativePath}</a></strong>: '<strong>{$issue->misspelling->word}</strong>'</span>
                     <pre class="text-blue-300 font-bold">{$relativePath}</pre>
                     <pre class="text-red-500 font-bold">{$spacer}^</pre>
                 </div>

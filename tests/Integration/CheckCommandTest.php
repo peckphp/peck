@@ -55,7 +55,7 @@ it('may pass with lineless issues', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Misspelling in');
+    expect(trim($output))->toContain('Misspelling');
 });
 
 it('may pass with init option', function (): void {
