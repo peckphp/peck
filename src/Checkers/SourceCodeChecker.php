@@ -12,6 +12,7 @@ use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
@@ -77,7 +78,11 @@ final readonly class SourceCodeChecker implements Checker
             return [];
         }
 
+        // try {
         $reflection = new ReflectionClass($definition);
+        // } catch (ReflectionException) {
+        //            return [];
+        //      }
 
         $namesToCheck = [
             ...$this->getMethodNames($reflection),

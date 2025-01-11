@@ -12,7 +12,7 @@
 
 **Peck** is a powerful CLI tool designed to identify wording or spelling mistakes in your codebase: filenames, class names, method names, property names, docs, and more. Built for speed, simplicity, and seamless integration, Peck fits naturally into your workflow, much like tools such as Pint or Pest.
 
-Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)** via the [github.com/tigitz/php-spellchecker](https://github.com/tigitz/php-spellchecker) PHP wrapper, Peck inspects every corner of your codebase — ensuring your work maintains a high standard of clarity and professionalism.
+Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**, Peck inspects every corner of your codebase — ensuring your work maintains a high standard of clarity and professionalism.
 
 > Note: Peck is still under active development and is not yet ready for production use.
 

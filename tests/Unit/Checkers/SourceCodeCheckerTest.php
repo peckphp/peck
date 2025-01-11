@@ -5,14 +5,13 @@ declare(strict_types=1);
 use Peck\Checkers\SourceCodeChecker;
 use Peck\Config;
 use Peck\Plugins\Cache;
-use Peck\Services\Spellcheckers\InMemorySpellchecker;
-use PhpSpellcheck\Spellchecker\Aspell;
+use Peck\Services\Spellcheckers\Aspell;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('does not detect issues in the given directory', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -25,7 +24,7 @@ it('does not detect issues in the given directory', function (): void {
 it('detects issues in the given directory of classes', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -179,9 +178,8 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 
     $checker = new SourceCodeChecker(
         $config,
-        new InMemorySpellchecker(
+        new Aspell(
             $config,
-            Aspell::create(),
             Cache::default(),
         ),
     );
@@ -303,7 +301,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -447,7 +445,7 @@ it('handles well when it can not detect the line problem', function (): void {
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $splFileInfo = new SplFileInfo(__FILE__, '', '');
@@ -460,7 +458,7 @@ it('handles well when it can not detect the line problem', function (): void {
 it('detects issues in the given directory of enums', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -585,9 +583,8 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
 
     $checker = new SourceCodeChecker(
         $config,
-        new InMemorySpellchecker(
+        new Aspell(
             $config,
-            Aspell::create(),
             Cache::default(),
         ),
     );
@@ -604,7 +601,7 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([

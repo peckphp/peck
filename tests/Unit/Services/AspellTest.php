@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 use Peck\Config;
 use Peck\Plugins\Cache;
-use Peck\Services\Spellcheckers\InMemorySpellchecker;
-use PhpSpellcheck\Spellchecker\Aspell;
+use Peck\Services\Spellcheckers\Aspell;
 
 it('does not detect issues', function (): void {
-    $spellchecker = InMemorySpellchecker::default();
+    $spellchecker = Aspell::default();
 
     $issues = $spellchecker->check('Hello viewers');
 
@@ -16,7 +15,7 @@ it('does not detect issues', function (): void {
 });
 
 it('detects issues', function (): void {
-    $spellchecker = InMemorySpellchecker::default();
+    $spellchecker = Aspell::default();
 
     $issues = $spellchecker->check('Hello viewerss');
 
@@ -37,9 +36,8 @@ it('detects issues that always don\'t have cache', function (): void {
         mkdir($dir);
     }
 
-    $spellchecker = new InMemorySpellchecker(
+    $spellchecker = new Aspell(
         Config::instance(),
-        Aspell::create(),
         new Cache($dir),
     );
 

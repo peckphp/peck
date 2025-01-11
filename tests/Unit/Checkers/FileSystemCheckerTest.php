@@ -5,13 +5,12 @@ declare(strict_types=1);
 use Peck\Checkers\FileSystemChecker;
 use Peck\Config;
 use Peck\Plugins\Cache;
-use Peck\Services\Spellcheckers\InMemorySpellchecker;
-use PhpSpellcheck\Spellchecker\Aspell;
+use Peck\Services\Spellcheckers\Aspell;
 
 it('does not detect issues in the given directory', function (): void {
     $checker = new FileSystemChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -24,7 +23,7 @@ it('does not detect issues in the given directory', function (): void {
 it('detects issues in the given directory', function (): void {
     $checker = new FileSystemChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -74,9 +73,8 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
 
     $checker = new FileSystemChecker(
         $config,
-        new InMemorySpellchecker(
+        new Aspell(
             $config,
-            Aspell::create(),
             Cache::default(),
         ),
     );
@@ -158,7 +156,7 @@ it('detects issues in the given directory, but ignores the whitelisted directori
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([

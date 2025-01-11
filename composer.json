@@ -13,8 +13,7 @@
         "php": "^8.3.0",
         "nunomaduro/termwind": "^2.3",
         "symfony/console": "^7.2.1",
-        "symfony/finder": "^7.2.2",
-        "tigitz/php-spellchecker": "^0.7.0"
+        "symfony/finder": "^7.2.2"
     },
     "require-dev": {
         "laravel/pint": "^1.19.0",
