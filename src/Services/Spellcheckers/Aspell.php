@@ -48,7 +48,9 @@ final class Aspell implements Spellchecker
         /** @var array<int, Misspelling> $misspellings */
         $misspellings = $this->cache->has($text) ? $this->cache->get($text) : $this->getMisspellings($text);
 
-        return $misspellings;
+        return array_filter($misspellings,
+            fn (Misspelling $misspelling): bool => ! in_array(strtolower($misspelling->word), $this->config->whitelistedWords)
+        );
     }
 
     /**
@@ -59,10 +61,6 @@ final class Aspell implements Spellchecker
     private function getMisspellings(string $text): array
     {
         $misspellings = iterator_to_array($this->run($text));
-
-        $misspellings = array_filter($misspellings,
-            fn (Misspelling $misspelling): bool => ! in_array(strtolower($misspelling->word), $this->config->whitelistedWords)
-        );
 
         $this->cache->set($text, $misspellings);
 
