@@ -34,10 +34,10 @@ sudo apt-get install aspell aspell-en
 brew install aspell
 ```
 
-- If you are using **Windows:**:
-> Move to the WSL (Windows Subsystem for Linux) and install GNU Aspell using the following command:
+- If you are using **Windows**:
+> We recommend moving to the **Windows Subsystem for Linux (WSL)** and following the Debian/Ubuntu steps. Alternatively, if you prefer not to use WSL, you can install Aspell using **[Scoop](https://scoop.sh/)**, a package manager for Windows:
 ```bash
-sudo apt-get install aspell aspell-en
+scoop install main/aspell
 ```
 
 ### Installing Peck
