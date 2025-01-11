@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 use Peck\Plugins\Cache;
 
-use function Safe\rmdir;
-use function Safe\scandir;
-
 it('should have a blank cache', function (): void {
     $cache = Cache::default();
 

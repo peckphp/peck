@@ -6,14 +6,14 @@ use Peck\Checkers\SourceCodeChecker;
 use Peck\Config;
 use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\InMemorySpellchecker;
-use PhpSpellcheck\Spellchecker\Aspell;
 use Symfony\Component\Finder\Finder;
+use Peck\Services\Spellcheckers\Aspell;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('does not detect issues in the given directory', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -26,7 +26,7 @@ it('does not detect issues in the given directory', function (): void {
 it('detects issues in the given directory of classes', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -36,12 +36,12 @@ it('detects issues in the given directory of classes', function (): void {
     expect($issues)->toHaveCount(17)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
-        ->and($issues[0]->misspelling->word)->toBe('erorr')
+        ->and($issues[0]->misspelling->word)->toBe('Erorr')
         ->and($issues[0]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[1]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[1]->line)->toBe(36)
         ->and($issues[1]->misspelling->word)->toBe('metohd')
@@ -52,12 +52,12 @@ it('detects issues in the given directory of classes', function (): void {
             'mated',
         ])->and($issues[2]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[2]->line)->toBe(43)
-        ->and($issues[2]->misspelling->word)->toBe('erorr')
+        ->and($issues[2]->misspelling->word)->toBe('Erorr')
         ->and($issues[2]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[3]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[3]->line)->toBe(18)
         ->and($issues[3]->misspelling->word)->toBe('properyt')
@@ -84,12 +84,12 @@ it('detects issues in the given directory of classes', function (): void {
             'St',
         ])->and($issues[6]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php')
         ->and($issues[6]->line)->toBe(11)
-        ->and($issues[6]->misspelling->word)->toBe('typoo')
+        ->and($issues[6]->misspelling->word)->toBe('TYPOO')
         ->and($issues[6]->misspelling->suggestions)->toBe([
-            'typo',
-            'typos',
-            'type',
-            'topi',
+            'TYPO',
+            'TYPOS',
+            'TYPE',
+            'TOPI',
         ])->and($issues[7]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php')
         ->and($issues[7]->line)->toBe(11)
         ->and($issues[7]->misspelling->word)->toBe('typoo')
@@ -108,28 +108,28 @@ it('detects issues in the given directory of classes', function (): void {
             'properest',
         ])->and($issues[9]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
         ->and($issues[9]->line)->toBe(12)
-        ->and($issues[9]->misspelling->word)->toBe('erorr')
+        ->and($issues[9]->misspelling->word)->toBe('Erorr')
         ->and($issues[9]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[10]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
         ->and($issues[10]->line)->toBe(8)
-        ->and($issues[10]->misspelling->word)->toBe('spellling')
+        ->and($issues[10]->misspelling->word)->toBe('Spellling')
         ->and($issues[10]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[11]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[11]->line)->toBe(25)
-        ->and($issues[11]->misspelling->word)->toBe('spellling')
+        ->and($issues[11]->misspelling->word)->toBe('Spellling')
         ->and($issues[11]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[12]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[12]->line)->toBe(30)
         ->and($issues[12]->misspelling->word)->toBe('spellling')
@@ -156,12 +156,12 @@ it('detects issues in the given directory of classes', function (): void {
             'properest',
         ])->and($issues[15]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[15]->line)->toBe(18)
-        ->and($issues[15]->misspelling->word)->toBe('spellling')
+        ->and($issues[15]->misspelling->word)->toBe('Spellling')
         ->and($issues[15]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[16]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[16]->line)->toBe(10)
         ->and($issues[16]->misspelling->word)->toBe('tst')
@@ -180,9 +180,8 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 
     $checker = new SourceCodeChecker(
         $config,
-        new InMemorySpellchecker(
+        new Aspell(
             $config,
-            Aspell::create(),
             Cache::default(),
         ),
     );
@@ -194,12 +193,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
     expect($issues)->toHaveCount(13)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
-        ->and($issues[0]->misspelling->word)->toBe('erorr')
+        ->and($issues[0]->misspelling->word)->toBe('Erorr')
         ->and($issues[0]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[1]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[1]->line)->toBe(36)
         ->and($issues[1]->misspelling->word)->toBe('metohd')
@@ -210,12 +209,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'mated',
         ])->and($issues[2]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[2]->line)->toBe(43)
-        ->and($issues[2]->misspelling->word)->toBe('erorr')
+        ->and($issues[2]->misspelling->word)->toBe('Erorr')
         ->and($issues[2]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[3]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[3]->line)->toBe(10)
         ->and($issues[3]->misspelling->word)->toBe('tst')
@@ -226,12 +225,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'St',
         ])->and($issues[4]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php')
         ->and($issues[4]->line)->toBe(11)
-        ->and($issues[4]->misspelling->word)->toBe('typoo')
+        ->and($issues[4]->misspelling->word)->toBe('TYPOO')
         ->and($issues[4]->misspelling->suggestions)->toBe([
-            'typo',
-            'typos',
-            'type',
-            'topi',
+            'TYPO',
+            'TYPOS',
+            'TYPE',
+            'TOPI',
         ])->and($issues[5]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php')
         ->and($issues[5]->line)->toBe(11)
         ->and($issues[5]->misspelling->word)->toBe('typoo')
@@ -242,28 +241,28 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'topi',
         ])->and($issues[6]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
         ->and($issues[6]->line)->toBe(12)
-        ->and($issues[6]->misspelling->word)->toBe('erorr')
+        ->and($issues[6]->misspelling->word)->toBe('Erorr')
         ->and($issues[6]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[7]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
         ->and($issues[7]->line)->toBe(8)
-        ->and($issues[7]->misspelling->word)->toBe('spellling')
+        ->and($issues[7]->misspelling->word)->toBe('Spellling')
         ->and($issues[7]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[8]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[8]->line)->toBe(25)
-        ->and($issues[8]->misspelling->word)->toBe('spellling')
+        ->and($issues[8]->misspelling->word)->toBe('Spellling')
         ->and($issues[8]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[9]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[9]->line)->toBe(30)
         ->and($issues[9]->misspelling->word)->toBe('spellling')
@@ -282,12 +281,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'spellings',
         ])->and($issues[11]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[11]->line)->toBe(18)
-        ->and($issues[11]->misspelling->word)->toBe('spellling')
+        ->and($issues[11]->misspelling->word)->toBe('Spellling')
         ->and($issues[11]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[12]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[12]->line)->toBe(10)
         ->and($issues[12]->misspelling->word)->toBe('tst')
@@ -304,7 +303,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -314,12 +313,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
     expect($issues)->toHaveCount(16)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(30)
-        ->and($issues[0]->misspelling->word)->toBe('erorr')
+        ->and($issues[0]->misspelling->word)->toBe('Erorr')
         ->and($issues[0]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[1]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[1]->line)->toBe(36)
         ->and($issues[1]->misspelling->word)->toBe('metohd')
@@ -330,12 +329,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'mated',
         ])->and($issues[2]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[2]->line)->toBe(43)
-        ->and($issues[2]->misspelling->word)->toBe('erorr')
+        ->and($issues[2]->misspelling->word)->toBe('Erorr')
         ->and($issues[2]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[3]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php')
         ->and($issues[3]->line)->toBe(18)
         ->and($issues[3]->misspelling->word)->toBe('properyt')
@@ -362,12 +361,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'St',
         ])->and($issues[6]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php')
         ->and($issues[6]->line)->toBe(11)
-        ->and($issues[6]->misspelling->word)->toBe('typoo')
+        ->and($issues[6]->misspelling->word)->toBe('TYPOO')
         ->and($issues[6]->misspelling->suggestions)->toBe([
-            'typo',
-            'typos',
-            'type',
-            'topi',
+            'TYPO',
+            'TYPOS',
+            'TYPE',
+            'TOPI',
         ])->and($issues[7]->file)->toEndWith('tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php')
         ->and($issues[7]->line)->toBe(11)
         ->and($issues[7]->misspelling->word)->toBe('typoo')
@@ -378,28 +377,28 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'topi',
         ])->and($issues[8]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
         ->and($issues[8]->line)->toBe(12)
-        ->and($issues[8]->misspelling->word)->toBe('erorr')
+        ->and($issues[8]->misspelling->word)->toBe('Erorr')
         ->and($issues[8]->misspelling->suggestions)->toBe([
-            'error',
-            'errors',
+            'Error',
+            'Errors',
             'Orr',
-            'err',
+            'Err',
         ])->and($issues[9]->file)->toEndWith('tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php')
         ->and($issues[9]->line)->toBe(8)
-        ->and($issues[9]->misspelling->word)->toBe('spellling')
+        ->and($issues[9]->misspelling->word)->toBe('Spellling')
         ->and($issues[9]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[10]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[10]->line)->toBe(25)
-        ->and($issues[10]->misspelling->word)->toBe('spellling')
+        ->and($issues[10]->misspelling->word)->toBe('Spellling')
         ->and($issues[10]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[11]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[11]->line)->toBe(30)
         ->and($issues[11]->misspelling->word)->toBe('spellling')
@@ -426,12 +425,12 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
             'properest',
         ])->and($issues[14]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[14]->line)->toBe(18)
-        ->and($issues[14]->misspelling->word)->toBe('spellling')
+        ->and($issues[14]->misspelling->word)->toBe('Spellling')
         ->and($issues[14]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])->and($issues[15]->file)->toEndWith('tests/Fixtures/ClassesToTest/TraitWithTypo.php')
         ->and($issues[15]->line)->toBe(10)
         ->and($issues[15]->misspelling->word)->toBe('tst')
@@ -448,7 +447,7 @@ it('handles well when it can not detect the line problem', function (): void {
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $splFileInfo = new SplFileInfo(__FILE__, '', '');
@@ -461,7 +460,7 @@ it('handles well when it can not detect the line problem', function (): void {
 it('detects issues in the given directory of enums', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -471,12 +470,12 @@ it('detects issues in the given directory of enums', function (): void {
     expect($issues)->toHaveCount(12)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(21)
-        ->and($issues[0]->misspelling->word)->toBe('spellling')
+        ->and($issues[0]->misspelling->word)->toBe('Spellling')
         ->and($issues[0]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])
         ->and($issues[1]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[1]->line)->toBe(26)
@@ -498,21 +497,21 @@ it('detects issues in the given directory of enums', function (): void {
         ])
         ->and($issues[3]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[3]->line)->toBe(13)
-        ->and($issues[3]->misspelling->word)->toBe('spellling')
+        ->and($issues[3]->misspelling->word)->toBe('SPELLLING')
         ->and($issues[3]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'SPELLING',
+            'SPILLING',
+            'SPIELING',
+            'SPELLINGS',
         ])
         ->and($issues[4]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[4]->line)->toBe(14)
-        ->and($issues[4]->misspelling->word)->toBe('spellling')
+        ->and($issues[4]->misspelling->word)->toBe('Spellling')
         ->and($issues[4]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])
         ->and($issues[5]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[5]->line)->toBe(8)
@@ -525,21 +524,21 @@ it('detects issues in the given directory of enums', function (): void {
         ])
         ->and($issues[6]->file)->toEndWith('tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored/EnumWithTypoErrors.php')
         ->and($issues[6]->line)->toBe(9)
-        ->and($issues[6]->misspelling->word)->toBe('spellling')
+        ->and($issues[6]->misspelling->word)->toBe('SPELLLING')
         ->and($issues[6]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'SPELLING',
+            'SPILLING',
+            'SPIELING',
+            'SPELLINGS',
         ])
         ->and($issues[7]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[7]->line)->toBe(20)
-        ->and($issues[7]->misspelling->word)->toBe('spellling')
+        ->and($issues[7]->misspelling->word)->toBe('Spellling')
         ->and($issues[7]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])
         ->and($issues[8]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[8]->line)->toBe(25)
@@ -561,12 +560,12 @@ it('detects issues in the given directory of enums', function (): void {
         ])
         ->and($issues[10]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[10]->line)->toBe(13)
-        ->and($issues[10]->misspelling->word)->toBe('spellling')
+        ->and($issues[10]->misspelling->word)->toBe('SPELLLING')
         ->and($issues[10]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'SPELLING',
+            'SPILLING',
+            'SPIELING',
+            'SPELLINGS',
         ])
         ->and($issues[11]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[11]->line)->toBe(8)
@@ -586,9 +585,8 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
 
     $checker = new SourceCodeChecker(
         $config,
-        new InMemorySpellchecker(
+        new Aspell(
             $config,
-            Aspell::create(),
             Cache::default(),
         ),
     );
@@ -605,7 +603,7 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
         new Config(
             whitelistedDirectories: ['FolderThatShouldBeIgnored'],
         ),
-        InMemorySpellchecker::default(),
+        Aspell::default(),
     );
 
     $issues = $checker->check([
@@ -615,12 +613,12 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
     expect($issues)->toHaveCount(11)
         ->and($issues[0]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[0]->line)->toBe(21)
-        ->and($issues[0]->misspelling->word)->toBe('spellling')
+        ->and($issues[0]->misspelling->word)->toBe('Spellling')
         ->and($issues[0]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])
         ->and($issues[1]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[1]->line)->toBe(26)
@@ -642,21 +640,21 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
         ])
         ->and($issues[3]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[3]->line)->toBe(13)
-        ->and($issues[3]->misspelling->word)->toBe('spellling')
+        ->and($issues[3]->misspelling->word)->toBe('SPELLLING')
         ->and($issues[3]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'SPELLING',
+            'SPILLING',
+            'SPIELING',
+            'SPELLINGS',
         ])
         ->and($issues[4]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[4]->line)->toBe(14)
-        ->and($issues[4]->misspelling->word)->toBe('spellling')
+        ->and($issues[4]->misspelling->word)->toBe('Spellling')
         ->and($issues[4]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])
         ->and($issues[5]->file)->toEndWith('tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php')
         ->and($issues[5]->line)->toBe(8)
@@ -669,12 +667,12 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
         ])
         ->and($issues[6]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[6]->line)->toBe(20)
-        ->and($issues[6]->misspelling->word)->toBe('spellling')
+        ->and($issues[6]->misspelling->word)->toBe('Spellling')
         ->and($issues[6]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'Spelling',
+            'Spilling',
+            'Spieling',
+            'Spellings',
         ])
         ->and($issues[7]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[7]->line)->toBe(25)
@@ -696,12 +694,12 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
         ])
         ->and($issues[9]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[9]->line)->toBe(13)
-        ->and($issues[9]->misspelling->word)->toBe('spellling')
+        ->and($issues[9]->misspelling->word)->toBe('SPELLLING')
         ->and($issues[9]->misspelling->suggestions)->toBe([
-            'spelling',
-            'spilling',
-            'spieling',
-            'spellings',
+            'SPELLING',
+            'SPILLING',
+            'SPIELING',
+            'SPELLINGS',
         ])
         ->and($issues[10]->file)->toEndWith('tests/Fixtures/EnumsToTest/UnitEnumWithTypoErrors.php')
         ->and($issues[10]->line)->toBe(8)

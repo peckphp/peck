@@ -6,7 +6,7 @@ namespace Peck;
 
 use Peck\Checkers\FileSystemChecker;
 use Peck\Checkers\SourceCodeChecker;
-use Peck\Services\Spellcheckers\InMemorySpellchecker;
+use Peck\Services\Spellcheckers\Aspell;
 
 final readonly class Kernel
 {
@@ -27,12 +27,12 @@ final readonly class Kernel
     public static function default(): self
     {
         $config = Config::instance();
-        $inMemoryChecker = InMemorySpellchecker::default();
+        $aspell = Aspell::default();
 
         return new self(
             [
-                new FileSystemChecker($config, $inMemoryChecker),
-                new SourceCodeChecker($config, $inMemoryChecker),
+                new FileSystemChecker($config, $aspell),
+                new SourceCodeChecker($config, $aspell),
             ],
         );
     }
