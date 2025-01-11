@@ -12,5 +12,5 @@ it('handles multiple checkers', function (): void {
         'onProgress' => fn (): null => null,
     ]);
 
-    expect($issues)->toHaveCount(33);
+    expect($issues)->toHaveCount(41);
 });

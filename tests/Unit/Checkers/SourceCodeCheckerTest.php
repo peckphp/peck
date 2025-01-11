@@ -6,6 +6,7 @@ use Peck\Checkers\SourceCodeChecker;
 use Peck\Config;
 use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\Aspell;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('does not detect issues in the given directory', function (): void {
@@ -715,4 +716,38 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
             'spieling',
             'spellings',
         ]);
+});
+
+it('should never have line 0 in misspellings from SourceCodeChecker', function (): void {
+    $checker = new SourceCodeChecker(
+        Config::instance(),
+        Aspell::default(),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
+        'onProgress' => fn (): null => null,
+    ]);
+
+    foreach ($issues as $issue) {
+        expect($issue->line)->not->toBe(0);
+    }
+});
+
+it('should not verify the parent class', function (): void {
+    $checker = new SourceCodeChecker(Config::instance(), Aspell::default());
+
+    $files = Finder::create()
+        ->files()
+        ->in(__DIR__.'/../../Fixtures/ParentAndTraits')
+        ->getIterator();
+
+    foreach ($files as $file) {
+        $issues = (fn (): array => $this->getIssuesFromSourceFile($file))->call($checker);
+        if ($file->getFilename() === 'ChildClass.php') {
+            expect($issues)->toBeEmpty();
+        } else {
+            expect($issues)->toHaveCount(4);
+        }
+    }
 });

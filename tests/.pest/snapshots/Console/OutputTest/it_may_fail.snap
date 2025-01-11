@@ -1,4 +1,4 @@
-  ..............................
+  .....................................
 
    Misspelling  [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
   ./tests/Fixtures/FolderWithTypoos     
@@ -164,6 +164,46 @@
      8▕ [1m * Even the documentation has spellling mistakes.[0m  
         ------------------------------^     
   Did you mean: spelling, spilling, spieling, spellings  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/ParentClass.php:13:26[0m: '[1mmetod[0m'  
+    13▕ [1m    public function parentMetodWithTypo(): void[0m  
+        --------------------------^     
+  Did you mean: method, meted, mated, muted  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/ParentClass.php:11:25[0m: '[1mpropertt[0m'  
+    11▕ [1m    public string $parentProperttWithTypo = '';[0m  
+        -------------------------^     
+  Did you mean: property, proper, properer, properly  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/ParentClass.php:9:22[0m: '[1mconstnat[0m'  
+     9▕ [1m    const PARENT_WITH_CONSTNAT_TYPE = 'parent_constantvaleu_typo';[0m  
+        ----------------------^     
+  Did you mean: constant, constants, consonant, consent  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/ParentClass.php:9:46[0m: '[1mconstantvaleu[0m'  
+     9▕ [1m    const PARENT_WITH_CONSTNAT_TYPE = 'parent_constantvaleu_typo';[0m  
+        ----------------------------------------------^     
+  Did you mean: constantly, constantine, constants, constant  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/UsedTrait.php:13:25[0m: '[1mmetod[0m'  
+    13▕ [1m    public function traitMetodWithTypo(): void[0m  
+        -------------------------^     
+  Did you mean: method, meted, mated, muted  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/UsedTrait.php:11:24[0m: '[1mpropertt[0m'  
+    11▕ [1m    public string $traitProperttWithTypo = '';[0m  
+        ------------------------^     
+  Did you mean: property, proper, properer, properly  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/UsedTrait.php:9:21[0m: '[1mconstnat[0m'  
+     9▕ [1m    const TRAIT_WITH_CONSTNAT_TYPE = 'trait_constantvaleu_typo';[0m  
+        ---------------------^     
+  Did you mean: constant, constants, consonant, consent  
+
+   Misspelling  [1m./tests/Fixtures/ParentAndTraits/UsedTrait.php:9:44[0m: '[1mconstantvaleu[0m'  
+     9▕ [1m    const TRAIT_WITH_CONSTNAT_TYPE = 'trait_constantvaleu_typo';[0m  
+        --------------------------------------------^     
+  Did you mean: constantly, constantine, constants, constant  
 
   Duration: 0.00s  
 
