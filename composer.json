@@ -1,7 +1,7 @@
 {
     "name": "peckphp/peck",
-    "description": "Peck is a CLI tool that detects wording / or spelling mistakes in your codebase.",
-    "keywords": ["php", "spelling", "checker"],
+    "description": "Peck is a powerful CLI tool designed to identify pure wording or spelling (grammar) mistakes in your codebase.",
+    "keywords": ["php", "codebase", "spelling", "checker"],
     "license": "MIT",
     "authors": [
         {
