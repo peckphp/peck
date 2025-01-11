@@ -47,10 +47,14 @@ final class CheckCommand extends Command
 
         $kernel = Kernel::default();
 
+        $output->write('  ');
+
         $issues = $kernel->handle([
-            'directory' => $directory = $this->findPathToScan($input),
+            'directory' => $this->findPathToScan($input),
+            'onProgress' => fn () => $output->write('<fg=gray>.</>'),
         ]);
 
+        $output->writeln('');
         $output->writeln('');
 
         if ($issues === []) {

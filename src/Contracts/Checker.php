@@ -14,7 +14,7 @@ interface Checker
     /**
      * Checks of issues in the given text.
      *
-     * @param  array<string, string>  $parameters
+     * @param  array{directory: string, onProgress: callable(): void}  $parameters
      * @return array<int, Issue>
      */
     public function check(array $parameters): array;

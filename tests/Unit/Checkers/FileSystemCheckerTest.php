@@ -15,6 +15,7 @@ it('does not detect issues in the given directory', function (): void {
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../../src',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toBeEmpty();
@@ -28,6 +29,7 @@ it('detects issues in the given directory', function (): void {
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(4)
@@ -81,6 +83,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(8)
@@ -161,6 +164,7 @@ it('detects issues in the given directory, but ignores the whitelisted directori
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(3)

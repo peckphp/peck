@@ -40,7 +40,7 @@ final readonly class Kernel
     /**
      * Handles the given parameters.
      *
-     * @param  array{directory?: string}  $parameters
+     * @param  array{directory: string, onProgress: callable(): void}  $parameters
      * @return array<int, ValueObjects\Issue>
      */
     public function handle(array $parameters): array

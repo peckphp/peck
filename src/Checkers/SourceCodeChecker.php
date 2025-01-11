@@ -35,7 +35,7 @@ final readonly class SourceCodeChecker implements Checker
     /**
      * Checks for issues in the given directory.
      *
-     * @param  array<string, string>  $parameters
+     * @param  array{directory: string, onProgress: callable}  $parameters
      * @return array<int, Issue>
      */
     public function check(array $parameters): array
@@ -58,6 +58,8 @@ final readonly class SourceCodeChecker implements Checker
                 ...$issues,
                 ...$this->getIssuesFromSourceFile($sourceFile),
             ];
+
+            $parameters['onProgress']();
         }
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
@@ -78,11 +80,11 @@ final readonly class SourceCodeChecker implements Checker
             return [];
         }
 
-        // try {
-        $reflection = new ReflectionClass($definition);
-        // } catch (ReflectionException) {
-        //            return [];
-        //      }
+        try {
+            $reflection = new ReflectionClass($definition);
+        } catch (ReflectionException) { // @phpstan-ignore-line
+            return [];
+        }
 
         $namesToCheck = [
             ...$this->getMethodNames($reflection),

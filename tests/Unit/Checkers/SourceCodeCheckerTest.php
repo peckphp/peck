@@ -16,6 +16,7 @@ it('does not detect issues in the given directory', function (): void {
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../../src',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toBeEmpty();
@@ -29,6 +30,7 @@ it('detects issues in the given directory of classes', function (): void {
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(17)
@@ -186,6 +188,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(13)
@@ -306,6 +309,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures/ClassesToTest',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(16)
@@ -463,6 +467,7 @@ it('detects issues in the given directory of enums', function (): void {
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures/EnumsToTest',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(12)
@@ -591,6 +596,7 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures/EnumsToTest',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toBeEmpty();
@@ -606,6 +612,7 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
 
     $issues = $checker->check([
         'directory' => __DIR__.'/../../Fixtures/EnumsToTest',
+        'onProgress' => fn (): null => null,
     ]);
 
     expect($issues)->toHaveCount(11)
