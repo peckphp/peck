@@ -20,7 +20,7 @@ Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wi
 
 > **Requires [PHP 8.3+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
 
-Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell is installed on your system before using Peck.
+Peck relies on GNU Aspell for its spell-checking functionality. Make sure GNU Aspell is installed on your system before using Peck.
 
 ### Installing GNU Aspell
 
@@ -35,7 +35,7 @@ brew install aspell
 ```
 
 - If you are using **Windows:**:
-> Move to the WSL (Windows Subsystem for Linux) and install Aspell using the following command:
+> Move to the WSL (Windows Subsystem for Linux) and install GNU Aspell using the following command:
 ```bash
 sudo apt-get install aspell aspell-en
 ```
