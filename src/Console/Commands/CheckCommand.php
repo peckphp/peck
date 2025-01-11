@@ -270,7 +270,7 @@ final class CheckCommand extends Command
         $fromColumn = isset($this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word])
             ? $this->lastColumn[$issue->file][$issue->line][$issue->misspelling->word] + 1 : 0;
 
-        return (int) strpos($lineContent, $issue->misspelling->word, $fromColumn);
+        return (int) strpos(strtolower($lineContent), $issue->misspelling->word, $fromColumn);
     }
 
     private function getDuration(float $startTime): string

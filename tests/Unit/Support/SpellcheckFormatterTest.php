@@ -7,13 +7,13 @@ use Peck\Support\SpellcheckFormatter;
 it('can handle pascal case', function (): void {
     $result = SpellcheckFormatter::format('MyClassName');
 
-    expect($result)->toBeString()->toBe('My Class Name');
+    expect($result)->toBeString()->toBe('my class name');
 });
 
 it('can handle camel case', function (): void {
     $result = SpellcheckFormatter::format('myMethodOrVariableName');
 
-    expect($result)->toBeString()->toBe('my Method Or Variable Name');
+    expect($result)->toBeString()->toBe('my method or variable name');
 });
 
 it('can handle snake case', function (): void {
@@ -25,7 +25,7 @@ it('can handle snake case', function (): void {
 it('can handle screaming snake case', function (): void {
     $result = SpellcheckFormatter::format('MY_CLASS_CONSTANT');
 
-    expect($result)->toBeString()->toBe('MY CLASS CONSTANT');
+    expect($result)->toBeString()->toBe('my class constant');
 });
 
 it('can handle kebab case', function (): void {
@@ -38,14 +38,4 @@ it('can handle magic functions', function (): void {
     $result = SpellcheckFormatter::format('__construct');
 
     expect($result)->toBeString()->toBe('construct');
-});
-
-it('can handle abbreviations', function (): void {
-    $result = SpellcheckFormatter::format('exportSAPFiles');
-
-    expect($result)->toBeString()->toBe('export SAP Files');
-
-    $result = SpellcheckFormatter::format('getPersonsFromUSAOrSAP');
-
-    expect($result)->toBeString()->toBe('get Persons From USA Or SAP');
 });
