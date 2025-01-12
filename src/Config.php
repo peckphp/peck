@@ -34,7 +34,7 @@ final class Config
         public array $whitelistedWords = [],
         public array $whitelistedDirectories = [],
     ) {
-        $this->whitelistedWords = array_map(fn (string $word): string => strtolower($word), $whitelistedWords);
+        $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
     }
 
     /**
@@ -114,7 +114,7 @@ final class Config
      */
     public function ignoreWords(array $words): void
     {
-        $this->whitelistedWords = array_merge($this->whitelistedWords, array_map(fn (string $word): string => strtolower($word), $words));
+        $this->whitelistedWords = array_merge($this->whitelistedWords, array_map(strtolower(...), $words));
 
         $this->persist();
     }
