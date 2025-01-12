@@ -60,6 +60,12 @@ To check your project for spelling mistakes, run:
 ./vendor/bin/peck
 ```
 
+On the very first run, Peck may detect a large number of spelling mistakes. You may use the `ignore-all` option to ignore all the mistakes at once:
+
+```bash
+./vendor/bin/peck --ignore-all
+```
+
 ## Configuration
 
 Peck can be configured using a `peck.json` file in the root of your project.
@@ -106,6 +112,10 @@ By default `peck` will check for a `peck.json` file in your project root. If one
 #### `--path`
 
 The path to check can be overwritten with the `--path` option. If the path is one you always need checking you can place it in your `peck.json` file.
+
+#### `--ignore-all`
+
+This option will ignore all spelling mistakes in the current run. This is useful when you have a large number of mistakes and want to ignore them all at once.
 
 ## CI / GitHub Actions
 

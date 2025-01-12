@@ -106,4 +106,29 @@ final class Config
             ],
         ], JSON_PRETTY_PRINT));
     }
+
+    /**
+     * Adds a word to the ignore list.
+     */
+    public function ignoreWord(string $word): void
+    {
+        $this->whitelistedWords[] = strtolower($word);
+
+        $this->persist();
+    }
+
+    /**
+     * Save the configuration to the file.
+     */
+    private function persist(): void
+    {
+        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
+
+        file_put_contents($filePath, json_encode([
+            'ignore' => [
+                'words' => $this->whitelistedWords,
+                'directories' => $this->whitelistedDirectories,
+            ],
+        ], JSON_PRETTY_PRINT));
+    }
 }
