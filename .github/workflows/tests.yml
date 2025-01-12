@@ -49,7 +49,7 @@ jobs:
         restore-keys: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-${{ matrix.dependency-version }}-symfony-${{ matrix.symfony }}-composer-
 
     - name: Install Composer dependencies
-      run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --with symfony/console:${{ matrix.symfony-version }} symfony/finder:${{ matrix.symfony-version }}
+      run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --with symfony/console:${{ matrix.symfony }} symfony/finder:${{ matrix.symfony }}
 
     - name: Integration Tests
       run: composer test:unit
