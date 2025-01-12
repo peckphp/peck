@@ -11,6 +11,7 @@ use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @internal
@@ -33,13 +34,15 @@ final readonly class FileSystemChecker implements Checker
      */
     public function check(array $parameters): array
     {
-        $filesOrDirectories = Finder::create()
+        $filesOrDirectories = iterator_to_array(Finder::create()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
-            ->getIterator();
+            ->getIterator());
+
+        usort($filesOrDirectories, fn (SplFileInfo $a, SplFileInfo $b): int => $a->getRealPath() <=> $b->getRealPath());
 
         $issues = [];
 
@@ -61,8 +64,6 @@ final readonly class FileSystemChecker implements Checker
 
             $newIssues !== [] ? $parameters['onFailure']() : $parameters['onSuccess']();
         }
-
-        usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
         return $issues;
     }
