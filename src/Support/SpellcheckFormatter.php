@@ -21,6 +21,12 @@ final readonly class SpellcheckFormatter
         // Insert spaces between lowercase and uppercase letters (camelCase or PascalCase)
         $input = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $input);
 
+        // Split sequences of uppercase letters, ensuring the last uppercase letter starts a new word
+        $input = (string) preg_replace('/([A-Z]+)([A-Z][a-z])/', '$1 $2', $input);
+
+        // Replace multiple spaces with a single space
+        $input = (string) preg_replace('/\s+/', ' ', $input);
+
         // Convert the final result to lowercase
         return strtolower($input);
     }

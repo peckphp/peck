@@ -117,6 +117,7 @@ final class Aspell implements Spellchecker
             '--encoding',
             'utf-8',
             '-a',
+            '--ignore-case',
             '--lang=en_US',
         ]);
 
