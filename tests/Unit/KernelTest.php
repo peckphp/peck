@@ -9,7 +9,8 @@ it('handles multiple checkers', function (): void {
 
     $issues = $kernel->handle([
         'directory' => __DIR__.'/../Fixtures',
+        'onProgress' => fn (): null => null,
     ]);
 
-    expect($issues)->toHaveCount(13);
+    expect($issues)->toHaveCount(41);
 });

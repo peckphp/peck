@@ -1,7 +1,7 @@
 {
     "name": "peckphp/peck",
-    "description": "Peck is a CLI tool that detects wording / or spelling mistakes in your codebase.",
-    "keywords": ["php", "spelling", "checker"],
+    "description": "Peck is a powerful CLI tool designed to identify pure wording or spelling (grammar) mistakes in your codebase.",
+    "keywords": ["php", "codebase", "spelling", "checker"],
     "license": "MIT",
     "authors": [
         {
@@ -13,8 +13,7 @@
         "php": "^8.3.0",
         "nunomaduro/termwind": "^2.3",
         "symfony/console": "^7.2.1",
-        "symfony/finder": "^7.2.2",
-        "tigitz/php-spellchecker": "^0.7.0"
+        "symfony/finder": "^7.2.2"
     },
     "require-dev": {
         "laravel/pint": "^1.19.0",
@@ -53,7 +52,7 @@
         "test:typos": "peck",
         "test:lint": "pint --test",
         "test:types": "phpstan analyse --ansi",
-        "test:unit": "pest --colors=always --coverage --parallel --exactly=91.0",
+        "test:unit": "pest --colors=always --coverage --exactly=98.3",
         "test": [
             "@test:refacto",
             "@test:lint",

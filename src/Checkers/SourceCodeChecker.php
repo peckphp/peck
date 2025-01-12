@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peck\Checkers;
 
+use BackedEnum;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
@@ -11,6 +12,8 @@ use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
+use ReflectionClassConstant;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
@@ -20,27 +23,25 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @internal
  */
-final readonly class ClassChecker implements Checker
+final readonly class SourceCodeChecker implements Checker
 {
     /**
-     * Creates a new instance of ClassChecker.
+     * Creates a new instance of SourceCodeChecker.
      */
     public function __construct(
         private Config $config,
         private Spellchecker $spellchecker,
-    ) {
-        //
-    }
+    ) {}
 
     /**
      * Checks for issues in the given directory.
      *
-     * @param  array<string, string>  $parameters
+     * @param  array{directory: string, onProgress: callable}  $parameters
      * @return array<int, Issue>
      */
     public function check(array $parameters): array
     {
-        $classesFiles = Finder::create()
+        $sourceFiles = Finder::create()
             ->files()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
@@ -53,11 +54,13 @@ final readonly class ClassChecker implements Checker
 
         $issues = [];
 
-        foreach ($classesFiles as $classFile) {
+        foreach ($sourceFiles as $sourceFile) {
             $issues = [
                 ...$issues,
-                ...$this->getIssuesFromClass($classFile),
+                ...$this->getIssuesFromSourceFile($sourceFile),
             ];
+
+            $parameters['onProgress']();
         }
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
@@ -66,27 +69,31 @@ final readonly class ClassChecker implements Checker
     }
 
     /**
-     * Get the issues from the given class.
+     * Get the issues from the given source file.
      *
      * @return array<int, Issue>
      */
-    private function getIssuesFromClass(SplFileInfo $file): array
+    private function getIssuesFromSourceFile(SplFileInfo $file): array
     {
-        $class = $this->getClassNameWithNamespace($file);
+        $definition = $this->getFullyQualifiedDefinitionName($file);
 
-        if ($class === null) {
+        if ($definition === null) {
             return [];
         }
 
-        $reflectionClass = new ReflectionClass($class);
+        try {
+            $reflection = new ReflectionClass($definition);
+        } catch (ReflectionException) { // @phpstan-ignore-line
+            return [];
+        }
 
         $namesToCheck = [
-            ...$this->getMethodNames($reflectionClass),
-            ...$this->getPropertyNames($reflectionClass),
-            ...$this->getConstantNames($reflectionClass),
+            ...$this->getMethodNames($reflection),
+            ...$this->getPropertyNames($reflection),
+            ...$this->getConstantNames($reflection),
         ];
 
-        if ($docComment = $reflectionClass->getDocComment()) {
+        if ($docComment = $reflection->getDocComment()) {
             $namesToCheck = [
                 ...$namesToCheck,
                 ...explode(PHP_EOL, $docComment),
@@ -115,14 +122,27 @@ final readonly class ClassChecker implements Checker
     }
 
     /**
-     * Get the method names contained in the given class.
+     * Get the method names contained in the given reflection.
      *
-     * @param  ReflectionClass<object>  $class
+     * @param  ReflectionClass<object>  $reflection
      * @return array<int, string>
      */
-    private function getMethodNames(ReflectionClass $class): array
+    private function getMethodNames(ReflectionClass $reflection): array
     {
-        foreach ($class->getMethods() as $method) {
+        $methods = array_filter(
+            $reflection->getMethods(),
+            function (ReflectionMethod $method) use ($reflection): bool {
+                foreach ($reflection->getTraits() as $trait) {
+                    if ($trait->hasMethod($method->getName())) {
+                        return false;
+                    }
+                }
+
+                return $method->class === $reflection->name;
+            },
+        );
+
+        foreach ($methods as $method) {
             $namesToCheck[] = $method->getName();
             $namesToCheck = [
                 ...$namesToCheck,
@@ -154,30 +174,61 @@ final readonly class ClassChecker implements Checker
     }
 
     /**
-     * Get the constant names and their values contained in the given class.
+     * Get the constant names and their values contained in the given reflection.
+     * This also includes cases from enums and their values (for string backed enums).
      *
-     * @param  ReflectionClass<object>  $class
+     * @param  ReflectionClass<object>  $reflection
      * @return array<int, string>
      */
-    private function getConstantNames(ReflectionClass $class): array
+    private function getConstantNames(ReflectionClass $reflection): array
     {
-        $constants = $class->getConstants();
+        return array_merge(...array_values((array_map(
+            function (ReflectionClassConstant $constant) use ($reflection): array {
+                foreach ($reflection->getTraits() as $trait) {
+                    if ($trait->hasConstant($constant->getName())) {
+                        return [];
+                    }
+                }
+                if ($constant->class !== $reflection->name) {
+                    return [];
+                }
+                $value = $constant->getValue();
 
-        return array_values(array_filter([
-            ...array_keys($constants),
-            ...array_values($constants),
-        ], fn (mixed $values): bool => is_string($values)));
+                if ($value instanceof BackedEnum) {
+                    return is_string($value->value)
+                        ? [$value->name, $value->value]
+                        : [$value->name];
+                }
+
+                return is_string($value)
+                    ? [$constant->name, $value]
+                    : [$constant->name];
+            },
+            $reflection->getReflectionConstants()
+        ))));
     }
 
     /**
-     * Get the property names contained in the given class.
+     * Get the property names contained in the given reflection.
      *
-     * @param  ReflectionClass<object>  $class
+     * @param  ReflectionClass<object>  $reflection
      * @return array<int, string>
      */
-    private function getPropertyNames(ReflectionClass $class): array
+    private function getPropertyNames(ReflectionClass $reflection): array
     {
-        $properties = $class->getProperties();
+        $properties = array_filter(
+            $reflection->getProperties(),
+            function (ReflectionProperty $property) use ($reflection): bool {
+                foreach ($reflection->getTraits() as $trait) {
+                    if ($trait->hasProperty($property->getName())) {
+                        return false;
+                    }
+                }
+
+                return $property->class === $reflection->name;
+            },
+        );
+
         $propertiesNames = array_map(
             fn (ReflectionProperty $property): string => $property->getName(),
             $properties,
@@ -202,19 +253,17 @@ final readonly class ClassChecker implements Checker
     }
 
     /**
-     * Get the full class name with namespace.
+     * Get the fully qualified definition name of the class, enum or trait.
      *
-     * @return class-string|null
+     * @return class-string<object>|null
      */
-    private function getClassNameWithNamespace(SplFileInfo $file): ?string
+    private function getFullyQualifiedDefinitionName(SplFileInfo $file): ?string
     {
         if (preg_match('/namespace (.*);/', $file->getContents(), $matches)) {
-            /**
-             * @var class-string
-             */
-            $class = $matches[1].'\\'.$file->getFilenameWithoutExtension();
+            /** @var class-string */
+            $fullyQualifiedName = $matches[1].'\\'.$file->getFilenameWithoutExtension();
 
-            return $class;
+            return $fullyQualifiedName;
         }
 
         return null;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Peck;
 
-use Peck\Checkers\ClassChecker;
 use Peck\Checkers\FileSystemChecker;
-use Peck\Services\Spellcheckers\InMemorySpellchecker;
+use Peck\Checkers\SourceCodeChecker;
+use Peck\Services\Spellcheckers\Aspell;
 
 final readonly class Kernel
 {
@@ -27,12 +27,12 @@ final readonly class Kernel
     public static function default(): self
     {
         $config = Config::instance();
-        $inMemoryChecker = InMemorySpellchecker::default();
+        $aspell = Aspell::default();
 
         return new self(
             [
-                new FileSystemChecker($config, $inMemoryChecker),
-                new ClassChecker($config, $inMemoryChecker),
+                new FileSystemChecker($config, $aspell),
+                new SourceCodeChecker($config, $aspell),
             ],
         );
     }
@@ -40,7 +40,7 @@ final readonly class Kernel
     /**
      * Handles the given parameters.
      *
-     * @param  array{directory?: string}  $parameters
+     * @param  array{directory: string, onProgress: callable(): void}  $parameters
      * @return array<int, ValueObjects\Issue>
      */
     public function handle(array $parameters): array

@@ -1,4 +1,3 @@
-
 <p align="center">
     <img src="https://raw.githubusercontent.com/peckphp/peck/main/docs/logo.png" alt="Peck example" height="300">
     <p align="center">
@@ -10,35 +9,36 @@
 </p>
 
 ------
-**Peck** is a powerful CLI tool designed to identify wording or spelling mistakes in your codebase. Built for speed, simplicity, and seamless integration, Peck fits naturally into your workflow, much like tools such as Pint or Pest.
 
-Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)** via the [github.com/tigitz/php-spellchecker](https://github.com/tigitz/php-spellchecker) PHP wrapper, Peck inspects every corner of your codebase — including folder names, file names, method names, comments, and beyond — ensuring your work maintains a high standard of clarity and professionalism.
+**Peck** is a powerful CLI tool designed to identify wording or spelling mistakes in your codebase: filenames, class names, method names, property names, docs, and more. Built for speed, simplicity, and seamless integration, Peck fits naturally into your workflow, much like tools such as Pint or Pest.
 
-> Note: Peck is still under active development and is not yet ready for production use. Currently, only the filesystem checker is implemented, focusing exclusively on detecting spelling mistakes in file and folder names.
+Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**, Peck inspects every corner of your codebase — ensuring your work maintains a high standard of clarity and professionalism.
+
+> Note: Peck is still under active development and is not yet ready for production use.
 
 ## Installation
 
 > **Requires [PHP 8.3+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
 
-Peck relies on GNU Aspell for its spell-checking functionality. Make sure Aspell is installed on your system before using Peck.
+Peck relies on GNU Aspell for its spell-checking functionality. Make sure GNU Aspell is installed on your system before using Peck.
 
 ### Installing GNU Aspell
 
-- **Debian/Ubuntu:**
-    ```bash
-    sudo apt-get install aspell aspell-en
-    ```
-    
-- **MacOS (using Homebrew):**
-    ```bash
-    brew install aspell
-    ```
+- If you are using **Debian/Ubuntu**:
+```bash
+sudo apt-get install aspell aspell-en
+```
+ 
+- If you are using **MacOS (using Homebrew)**:
+```bash
+brew install aspell
+```
 
-- **Windows:**\
-    > Move to WSL / WSL2, an use the following command:
-    sudo apt-get install aspell aspell-en
-
-    > If you are using native shells like powershell, etc, please lease refer to the [Aspell website](http://aspell.net/) for installation instructions.
+- If you are using **Windows:**:
+> Move to the WSL (Windows Subsystem for Linux) and install GNU Aspell using the following command:
+```bash
+sudo apt-get install aspell aspell-en
+```
 
 ### Installing Peck
 
@@ -46,7 +46,11 @@ You can require Peck using [Composer](https://getcomposer.org) with the followin
 
 ```bash
 composer require peckphp/peck --dev
+
+./vendor/bin/peck --init
 ```
+
+Make sure to add the `/.peck.cache` directory to your `.gitignore` file.
 
 ## Usage
 
@@ -56,27 +60,9 @@ To check your project for spelling mistakes, run:
 ./vendor/bin/peck
 ```
 
-### Command Options
-
-The behaviour of `peck` can be modified with the following options:
-
-##### `--config`
-
-By default `peck` will check for a `peck.json` file in your project root. If one isn't available it will try to figure
-out the directory to check by itself.
-
-##### `--path`
-
-The path to check can be overwritten with the `--path` option. If the path is one you always need checking you
-can place it in your `peck.json` file. 
-
-##### `--init`
-
-If you don't have a `peck.json` file yet, you can create a blank configuration file by using the `--init` option.
-
 ## Configuration
 
-Peck can be configured using a `peck.json` file in the root of your project. 
+Peck can be configured using a `peck.json` file in the root of your project.
 
 You can scaffold the `peck.json` file with:
 ```bash
@@ -105,27 +91,41 @@ You can also specify the path to the configuration file using the `--config` opt
 ```bash
 ./vendor/bin/peck --config relative/path/to/peck.json
 ```
-
 ### Presets
 
 In order to make it easier to get started with Peck, we've included a few presets that you can use to ignore common words in your project. The following presets are available:
 
 - `laravel` 
 
+## Command Options
 
-## Running Peck on GitHub Actions
+The behaviour of `peck` can be modified with the following command options:
 
-When running Peck on GitHub Actions, you can use the following workflow or something similar:
+#### `--init`
+
+If you don't have a `peck.json` file yet, you can create a blank configuration file by using the `--init` option.
+
+#### `--config`
+
+By default `peck` will check for a `peck.json` file in your project root. If one isn't available it will try to figure out the directory to check by itself.
+
+#### `--path`
+
+The path to check can be overwritten with the `--path` option. If the path is one you always need checking you can place it in your `peck.json` file.
+
+## CI / GitHub Actions
+
+When running Peck on GitHub Actions, you can use the following workflow before running Peck:
 
 ```yaml
-- name: Install Aspell
-    shell: bash
-    run: |
-        if [[ "$RUNNER_OS" == "Linux" ]]; then
+    - name: Install Aspell
+      shell: bash
+      run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
             sudo apt-get update && sudo apt-get install -y aspell aspell-en
-        elif [[ "$RUNNER_OS" == "macOS" ]]; then
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
             brew install aspell
-        fi
+          fi
 ```
 
 ---

@@ -39,3 +39,9 @@ it('can handle magic functions', function (): void {
 
     expect($result)->toBeString()->toBe('construct');
 });
+
+it('can handle abbreviations', function (): void {
+    $result = SpellcheckFormatter::format('HTTPController');
+
+    expect($result)->toBeString()->toBe('http controller');
+});
