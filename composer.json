@@ -11,14 +11,14 @@
     ],
     "require": {
         "php": "^8.3.0",
-        "nunomaduro/termwind": "^2.3",
-        "symfony/console": "^6.4 | ^7.2.1",
-        "symfony/finder": "^6.4 | ^7.2.2"
+        "nunomaduro/termwind": "^1.17|^2.3",
+        "symfony/console": "^6.4|^7.2.1",
+        "symfony/finder": "^6.4|^7.2.2"
     },
     "require-dev": {
         "laravel/pint": "^1.19.0",
-        "pestphp/pest": "^3.7.1",
-        "pestphp/pest-plugin-type-coverage": "^3.2.3",
+        "pestphp/pest": "^2.36|^3.7.1",
+        "pestphp/pest-plugin-type-coverage": "^2.8.7|^3.2.3",
         "phpstan/phpstan": "^1.12.15",
         "rector/rector": "^1.2.10",
         "symfony/var-dumper": "^7.2.0"
