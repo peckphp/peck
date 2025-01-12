@@ -28,7 +28,7 @@ final readonly class FileSystemChecker implements Checker
     /**
      * Checks for issues in the given directory.
      *
-     * @param  array{directory: string, onProgress: callable}  $parameters
+     * @param  array{directory: string, onSuccess: callable(): void, onFailure: callable(): void}  $parameters
      * @return array<int, Issue>
      */
     public function check(array $parameters): array
@@ -46,17 +46,20 @@ final readonly class FileSystemChecker implements Checker
         foreach ($filesOrDirectories as $fileOrDirectory) {
             $name = SpellcheckFormatter::format($fileOrDirectory->getFilenameWithoutExtension());
 
+            $newIssues = array_map(
+                fn (Misspelling $misspelling): Issue => new Issue(
+                    $misspelling,
+                    $fileOrDirectory->getRealPath(),
+                    0,
+                ), $this->spellchecker->check($name),
+            );
+
             $issues = [
                 ...$issues,
-                ...array_map(
-                    fn (Misspelling $misspelling): Issue => new Issue(
-                        $misspelling,
-                        $fileOrDirectory->getRealPath(),
-                        0,
-                    ), $this->spellchecker->check($name)),
+                ...$newIssues,
             ];
 
-            $parameters['onProgress']();
+            $newIssues !== [] ? $parameters['onFailure']() : $parameters['onSuccess']();
         }
 
         usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);

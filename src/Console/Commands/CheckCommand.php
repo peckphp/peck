@@ -27,7 +27,7 @@ final class CheckCommand extends Command
     /**
      * @var array<string, array<int, array<string, int>>>
      */
-    private array $lastColumn = []; // 1MB, 2MB, 4
+    private array $lastColumn = [];
 
     /**
      * Executes the command.
@@ -51,7 +51,8 @@ final class CheckCommand extends Command
 
         $issues = $kernel->handle([
             'directory' => $this->findPathToScan($input),
-            'onProgress' => fn () => $output->write('<fg=gray>.</>'),
+            'onSuccess' => fn () => $output->write('<fg=gray>.</>'),
+            'onFailure' => fn () => $output->write('<fg=red;options=bold>⨯</>'),
         ]);
 
         $output->writeln('');
