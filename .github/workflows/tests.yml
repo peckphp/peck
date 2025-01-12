@@ -54,5 +54,6 @@ jobs:
         composer update --no-interaction --prefer-dist --with \
           symfony/console:${{ matrix.symfony }} \
           symfony/finder:${{ matrix.symfony }}
+
     - name: Integration Tests
       run: composer test:unit
