@@ -10,7 +10,7 @@ namespace Peck\Support;
  */
 final readonly class PresetProvider
 {
-    private const string PRESET_STUBS_DIRECTORY = '/../../stubs/presets';
+    private const string PRESET_STUBS_DIRECTORY = __DIR__.'/../../stubs/presets';
 
     /**
      * Returns the whitelisted words for the given preset.
@@ -23,17 +23,12 @@ final readonly class PresetProvider
             return [];
         }
 
-        $path = self::getStubPath($preset);
+        $path = sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset);
 
         if (! file_exists($path)) {
             return [];
         }
 
         return array_values(array_filter(array_map('trim', explode("\n", (string) file_get_contents($path)))));
-    }
-
-    private static function getStubPath(string $preset): string
-    {
-        return sprintf('%s/%s.stub', __DIR__.self::PRESET_STUBS_DIRECTORY, $preset);
     }
 }
