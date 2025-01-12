@@ -171,7 +171,7 @@ final class CheckCommand extends Command
 
                 <div class="space-x-1 text-gray-700">
                     <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
+                    <span class="font-bold">{$suggestions}?</span>
                 </div>
             </div>
         HTML
@@ -245,7 +245,7 @@ final class CheckCommand extends Command
 
                 <div class="space-x-1 text-gray-700">
                     <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
+                    <span class="font-bold">{$suggestions}?</span>
                 </div>
             </div>
         HTML);
@@ -261,7 +261,18 @@ final class CheckCommand extends Command
             $issue->misspelling->suggestions,
         );
 
-        return implode(', ', $suggestions);
+        $lastItem = array_pop($suggestions);
+
+        /**
+         * I have had to ignore this block.
+         * I have been unable to find a word that has just a single suggestion and will work cross-platform
+         * @codeCoverageIgnoreStart
+         */
+        if ($suggestions === []) {
+            return (string) $lastItem;
+        } /** @codeCoverageIgnoreEnd */
+
+        return implode(', ', $suggestions).' or '.$lastItem;
     }
 
     /**

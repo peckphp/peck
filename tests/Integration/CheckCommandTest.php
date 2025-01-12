@@ -21,7 +21,7 @@ it('may fail', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Did you mean: property, propriety, properer, properest');
+    expect(trim($output))->toContain('Did you mean: property, propriety, properer or properest?');
 });
 
 it('may pass', function (): void {
