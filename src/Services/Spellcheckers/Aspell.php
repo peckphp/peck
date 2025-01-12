@@ -97,14 +97,21 @@ final class Aspell implements Spellchecker
 
         $output = $process->getOutput();
 
-        return array_values(array_map(function (string $line): Misspelling {
+        return array_values(array_map(function (string $line) use ($text): Misspelling {
+            if (str_ends_with($line, '0') && ! str_contains($line, ':')) {
+                return new Misspelling($text, $this->takeSuggestions([]));
+            }
+
             [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line));
 
             $word = explode(' ', $wordMetadataAsString)[1];
             $suggestions = explode(', ', trim($suggestionsAsString));
 
             return new Misspelling($word, $this->takeSuggestions($suggestions));
-        }, array_filter(explode(PHP_EOL, $output), fn (string $line): bool => str_starts_with($line, '&'))));
+        }, array_filter(
+            explode(PHP_EOL, $output),
+            fn (string $line): bool => ((str_starts_with($line, '&')) || str_ends_with($line, '0'))
+        )));
     }
 
     /**
