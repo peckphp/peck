@@ -29,6 +29,14 @@ it('detects issues', function (): void {
         ]);
 });
 
+it('ignores case', function (): void {
+    $spellchecker = Aspell::default();
+
+    $issues = $spellchecker->check('english');
+
+    expect($issues)->toBeEmpty();
+});
+
 it('detects issues that always don\'t have cache', function (): void {
     $dir = __DIR__.'/../../.peck-test.cache';
 
