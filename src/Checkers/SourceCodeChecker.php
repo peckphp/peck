@@ -41,7 +41,7 @@ final readonly class SourceCodeChecker implements Checker
      */
     public function check(array $parameters): array
     {
-        $sourceFiles = Finder::create()
+        $sourceFiles = iterator_to_array(Finder::create()
             ->files()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
@@ -50,7 +50,9 @@ final readonly class SourceCodeChecker implements Checker
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
             ->name('*.php')
-            ->getIterator();
+            ->getIterator());
+
+        usort($sourceFiles, fn (SplFileInfo $a, SplFileInfo $b): int => $a->getRealPath() <=> $b->getRealPath());
 
         $issues = [];
 
@@ -64,8 +66,6 @@ final readonly class SourceCodeChecker implements Checker
 
             $newIssues !== [] ? $parameters['onFailure']() : $parameters['onSuccess']();
         }
-
-        usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
         return $issues;
     }
