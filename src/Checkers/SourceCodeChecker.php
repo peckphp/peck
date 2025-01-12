@@ -262,7 +262,7 @@ final readonly class SourceCodeChecker implements Checker
     private function getFullyQualifiedDefinitionName(SplFileInfo $file): ?string
     {
         if (preg_match('/namespace (.*);/', $file->getContents(), $matches)) {
-            /** @var class-string */
+            /** @var class-string $fullyQualifiedName */
             $fullyQualifiedName = $matches[1].'\\'.$file->getFilenameWithoutExtension();
 
             return $fullyQualifiedName;
