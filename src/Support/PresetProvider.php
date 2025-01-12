@@ -14,6 +14,8 @@ final readonly class PresetProvider
 
     /**
      * Returns the whitelisted words for the given preset.
+     *
+     * @return array<int, string>
      */
     public static function whitelistedWords(?string $preset): array
     {
