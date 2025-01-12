@@ -67,8 +67,8 @@ final class Config
 
         $basePath = ProjectPath::get();
         $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
-            ? (self::$resolveConfigFilePathUsing)()
-            : self::JSON_CONFIGURATION_NAME);
+                ? (self::$resolveConfigFilePathUsing)()
+                : self::JSON_CONFIGURATION_NAME);
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
@@ -110,9 +110,9 @@ final class Config
     /**
      * Adds a word to the ignore list.
      */
-    public function ignoreWord(string $word): void
+    public function ignoreWords(array $words): void
     {
-        $this->whitelistedWords[] = strtolower($word);
+        $this->whitelistedWords = array_merge($this->whitelistedWords, array_map(fn (string $word): string => strtolower($word), $words));
 
         $this->persist();
     }

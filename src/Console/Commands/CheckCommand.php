@@ -318,6 +318,6 @@ final class CheckCommand extends Command
             $issues,
         );
 
-        Config::instance()->ignoreWord(...$misspellings);
+        Config::instance()->ignoreWords(array_unique($misspellings));
     }
 }
