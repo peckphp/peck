@@ -50,6 +50,8 @@ composer require peckphp/peck --dev
 ./vendor/bin/peck --init
 ```
 
+Make sure to add the `/.peck.cache` directory to your `.gitignore` file.
+
 ## Usage
 
 To check your project for spelling mistakes, run:
