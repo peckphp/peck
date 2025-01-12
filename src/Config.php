@@ -109,6 +109,8 @@ final class Config
 
     /**
      * Adds a word to the ignore list.
+     *
+     * @param  array<int, string>  $words
      */
     public function ignoreWords(array $words): void
     {
