@@ -10,9 +10,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         php: ['8.3', '8.4']
+        symfony: ['^6.4', '^7.2']
         dependency-version: [prefer-lowest, prefer-stable]
 
-    name: Tests P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+    name: Tests P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }} (Symfony ${ { matrix.symfony }})
 
     steps:
 
@@ -27,6 +28,7 @@ jobs:
         elif [[ "$RUNNER_OS" == "macOS" ]]; then
           brew install aspell
         fi
+
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -43,8 +45,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-version-${{ matrix.dependency-version }}-composer-${{ hashFiles('composer.json') }}
-        restore-keys: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-version-${{ matrix.dependency-version }}-composer-
+        key: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-${{ matrix.dependency-version }}-symfony-${{ matrix.symfony }}-composer-${{ hashFiles('composer.json') }}
+        restore-keys: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-${{ matrix.dependency-version }}-symfony-${{ matrix.symfony }}-composer-
 
     - name: Install Composer dependencies
       run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
