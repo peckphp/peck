@@ -14,7 +14,8 @@ it('returns an empty array when the preset is invalid', function (): void {
 
 it('returns the whitelisted words for the given preset', function (): void {
     expect(PresetProvider::whitelistedWords('laravel'))->toBe([
-        'auth',
+        'http',
         'laravel',
+        'fillable',
     ]);
 });
