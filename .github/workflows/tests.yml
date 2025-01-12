@@ -52,7 +52,7 @@ jobs:
       run: |
         composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist && \
         composer update --no-interaction --prefer-dist --with \
-          symfony/console:${{ matrix.symfony-version }} \
-          symfony/finder:${{ matrix.symfony-version }}
+          symfony/console:${{ matrix.symfony }} \
+          symfony/finder:${{ matrix.symfony }}
     - name: Integration Tests
       run: composer test:unit
