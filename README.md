@@ -1,5 +1,7 @@
 <p align="center">
-    <img src="/art/video.png" alt="Overview Peck PHP" style="width:70%;">
+    <a href="https://youtu.be/C1-2I_Y8ih8" target="_blank">
+        <img src="/art/video.png" alt="Overview Peck PHP" style="width:70%;">
+    </a>
 </p>
     
 <p align="center">
