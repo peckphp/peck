@@ -75,3 +75,21 @@ it('may pass with init option', function (): void {
 
     expect(trim($output))->toContain('INFO  Configuration file already exists.');
 });
+
+it('may pass with ignore-all option', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--ignore-all' => true,
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('PASS  No misspellings found in your project.');
+});
