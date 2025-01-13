@@ -162,7 +162,7 @@ final class Config
         $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
 
         file_put_contents($filePath, json_encode([
-            ...$this->preset ? ['preset' => $this->preset] : [],
+            ...$this->preset !== null ? ['preset' => $this->preset] : [],
             'ignore' => [
                 'words' => $this->whitelistedWords,
                 'paths' => $this->whitelistedPaths,
