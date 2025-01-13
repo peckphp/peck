@@ -98,7 +98,10 @@ final readonly class SourceCodeChecker implements Checker
         if ($docComment = $reflection->getDocComment()) {
             $namesToCheck = [
                 ...$namesToCheck,
-                ...explode(PHP_EOL, $docComment),
+                ...array_values(array_filter(
+                    explode(PHP_EOL, $docComment),
+                    fn (string $line): bool => ! str_contains($line, '* @',
+                    ))),
             ];
         }
 
@@ -154,7 +157,10 @@ final readonly class SourceCodeChecker implements Checker
             if ($docComment = $method->getDocComment()) {
                 $namesToCheck = [
                     ...$namesToCheck,
-                    ...explode(PHP_EOL, $docComment),
+                    ...array_values(array_filter(
+                        explode(PHP_EOL, $docComment),
+                        fn (string $line): bool => ! str_contains($line, '* @',
+                        ))),
                 ];
             }
         }
