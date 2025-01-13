@@ -105,7 +105,7 @@ final class CheckCommand extends Command
         if ($input->getOption('ignore-all')) {
             $this->addMisspellingsToConfig($issues);
 
-            $misspellingsAdded = count(array_unique(array_map(
+            $wordsAddedCount = count(array_unique(array_map(
                 fn (Issue $issue): string => $issue->misspelling->word,
                 $issues,
             )));
@@ -114,7 +114,7 @@ final class CheckCommand extends Command
                 <div class="mx-2 mb-1">
                     <div class="space-x-1">
                         <span class="bg-blue text-white px-1 font-bold">INFO</span>
-                        <span>{$misspellingsAdded} misspellings have been added to the configuration file.</span>
+                        <span>{$wordsAddedCount} word(s) added to the ignore list.</span>
                     </div>
                 </div>
                 HTML
