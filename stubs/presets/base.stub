@@ -47,6 +47,16 @@ jwt
 nano
 slugify
 config
+ecr
+cloudflare
+bitbucket
+serverless
+postgres
+dev
+ui
+vite
+tls
+acl
 http
 laravel
 parsable
