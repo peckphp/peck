@@ -82,10 +82,17 @@ final class CheckCommand extends Command
             };
         }
 
+        $issuesCount = count($issues);
+
         render(<<<HTML
             <div class="mx-2 mb-1">
-                <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
-                <span class="mt-2">Hint:</span>
+                <div class="space-x-1">
+                    <span class="bg-red text-white px-1 font-bold">FAIL</span>
+                    <span>{$issuesCount} misspelling(s) found in your project.</span>
+                </div>
+
+                <span class="mt-2 font-bold">Duration:</span> {$this->getDuration($start)}s
+                <span class="mt-1">Hint:</span>
                 <span class="ml-1">You may correct the misspellings individually, ignore them one by one, or ignore all of them using the</span>
                 <span class="ml-1 font-bold">peck --ignore-all</span>
                 <span class="ml-1 ">option.</span>
