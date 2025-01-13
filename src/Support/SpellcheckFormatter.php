@@ -15,8 +15,8 @@ final readonly class SpellcheckFormatter
         // Remove leading underscores
         $input = ltrim($input, '_');
 
-        // Replace underscores and dashes with spaces
-        $input = str_replace(['_', '-'], ' ', $input);
+        // Replace special characters with spaces
+        $input = (string) preg_replace('/[!@#$%^&<>,\/\\\\_\-*]/', ' ', $input);
 
         // Insert spaces between lowercase and uppercase letters (camelCase or PascalCase)
         $input = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $input);
@@ -28,6 +28,6 @@ final readonly class SpellcheckFormatter
         $input = (string) preg_replace('/\s+/', ' ', $input);
 
         // Convert the final result to lowercase
-        return strtolower($input);
+        return trim(strtolower($input));
     }
 }

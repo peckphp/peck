@@ -45,3 +45,13 @@ it('can handle abbreviations', function (): void {
 
     expect($result)->toBeString()->toBe('http controller');
 });
+
+it('can handle special characters in phpdoc', function (string $input, $expectedResult): void {
+    $result = SpellcheckFormatter::format($input);
+
+    expect($result)->toBeString()->toBe($expectedResult);
+})->with([
+    ['/** @use HasFactory<\Database\Factories\ClientFactory> */', 'use has factory database factories client factory'],
+    ['/** @param array<value-of<Suit>, int> $count */', 'param array value of suit int count'],
+    ['/** @var int<0, max> $number */', 'var int 0 max number'],
+]);
