@@ -160,7 +160,7 @@ it('detects issues in the given directory, but ignores the whitelisted words', f
 it('detects issues in the given directory, but ignores the whitelisted directories', function (): void {
     $checker = new FileSystemChecker(
         new Config(
-            whitelistedPaths: ['FolderThatShouldBeIgnored'],
+            whitelistedPaths: ['tests/Fixtures/FolderThatShouldBeIgnored'],
         ),
         Aspell::default(),
     );

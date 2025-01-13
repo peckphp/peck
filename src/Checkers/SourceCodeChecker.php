@@ -8,6 +8,7 @@ use BackedEnum;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
+use Peck\Support\NotPaths;
 use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
@@ -43,7 +44,7 @@ final readonly class SourceCodeChecker implements Checker
     {
         $sourceFiles = iterator_to_array(Finder::create()
             ->files()
-            ->notPath($this->config->whitelistedPaths)
+            ->notPath(NotPaths::get($parameters['directory'], $this->config->whitelistedPaths))
             ->ignoreDotFiles(true)
             ->ignoreVCS(true)
             ->ignoreUnreadableDirs()

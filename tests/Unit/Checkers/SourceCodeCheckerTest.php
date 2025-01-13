@@ -306,7 +306,7 @@ it('detects issues in the given directory of classes, but ignores the whiteliste
 it('detects issues in the given directory of classes, but ignores the whitelisted directories', function (): void {
     $checker = new SourceCodeChecker(
         new Config(
-            whitelistedPaths: ['FolderThatShouldBeIgnored'],
+            whitelistedPaths: ['tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored'],
         ),
         Aspell::default(),
     );
@@ -612,7 +612,7 @@ it('detects issues in the given directory of enums, but ignores the whitelisted 
 it('detects issues in the given directory of enums, but ignores the whitelisted directories', function (): void {
     $checker = new SourceCodeChecker(
         new Config(
-            whitelistedPaths: ['FolderThatShouldBeIgnored'],
+            whitelistedPaths: ['tests/Fixtures/EnumsToTest/FolderThatShouldBeIgnored'],
         ),
         Aspell::default(),
     );

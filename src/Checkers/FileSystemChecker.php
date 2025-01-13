@@ -7,6 +7,7 @@ namespace Peck\Checkers;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
+use Peck\Support\NotPaths;
 use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
@@ -35,7 +36,7 @@ final readonly class FileSystemChecker implements Checker
     public function check(array $parameters): array
     {
         $filesOrDirectories = iterator_to_array(Finder::create()
-            ->notPath($this->config->whitelistedPaths)
+            ->notPath(NotPaths::get($parameters['directory'], $this->config->whitelistedPaths))
             ->ignoreDotFiles(true)
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
