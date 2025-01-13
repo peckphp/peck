@@ -7,6 +7,7 @@ namespace Peck;
 use Closure;
 use Peck\Support\PresetProvider;
 use Peck\Support\ProjectPath;
+use Peck\Support\SpellcheckFormatter;
 
 final class Config
 {
@@ -178,6 +179,8 @@ final class Config
      */
     private function ignoreWordsFromProjectPath(): array
     {
-        return explode(DIRECTORY_SEPARATOR, ProjectPath::get());
+        $directories = explode(DIRECTORY_SEPARATOR, ProjectPath::get());
+
+        return array_map(fn ($directory): string => SpellcheckFormatter::format($directory), array_filter($directories));
     }
 }
