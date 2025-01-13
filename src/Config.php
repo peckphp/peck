@@ -35,6 +35,7 @@ final class Config
         public array $whitelistedWords = [],
         public array $whitelistedPaths = [],
         public ?string $preset = null,
+        public string $language = 'en_US',
     ) {
         $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
     }
@@ -87,6 +88,7 @@ final class Config
         /**
          * @var array{
          *     preset?: string,
+         *     language?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
          *         paths?: array<int, string>
@@ -99,6 +101,7 @@ final class Config
             $jsonAsArray['ignore']['words'] ?? [],
             $jsonAsArray['ignore']['paths'] ?? [],
             $jsonAsArray['preset'] ?? null,
+            $jsonAsArray['language'] ?? 'en_US',
         );
     }
 

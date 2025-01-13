@@ -1,4 +1,4 @@
-  .............⨯⨯⨯.⨯....⨯⨯.⨯⨯⨯⨯⨯⨯....⨯⨯
+  ...............⨯⨯⨯.⨯....⨯⨯⨯.⨯⨯⨯⨯⨯⨯....⨯⨯
 
    Misspelling  [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
   ./tests/Fixtures/FolderWithTypoos     
@@ -19,6 +19,16 @@
   ./tests/Fixtures/FolderWithTypoos/FolderThatShouldBeIgnored/FileThatShoudBeIgnoredBecauseItsInsideWhitelistedFolder.php     
   --------------------------------------------------------------------^     
   Did you mean: should, shroud, shod, shout  
+
+   Misspelling  [1m./tests/Fixtures/BritishClassesToTest/ClassWithTypoOnConstants.php:9:20[0m: '[1mfavourite[0m'  
+     9▕ [1m    public const MY_FAVOURITE_CONSTANT = 'my favorite constant';[0m  
+        --------------------^     
+  Did you mean: favorite, favorites, favored, fluorite  
+
+   Misspelling  [1m./tests/Fixtures/BritishClassesToTest/ClassWithTypoOnConstants.php:11:29[0m: '[1mcolour[0m'  
+    11▕ [1m    public const ITS_WRITTEN_COLOUR = 'color';[0m  
+        -----------------------------^     
+  Did you mean: color, colo, cooler, coolie  
 
    Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoErrors.php:30:34[0m: '[1merorr[0m'  
     30▕ [1m    public function methodWithTypoErorr(): string[0m  

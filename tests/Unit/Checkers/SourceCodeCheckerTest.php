@@ -759,3 +759,46 @@ it('should not verify the parent class', function (): void {
         }
     }
 });
+
+it('detects issues with a different locale', function (): void {
+    $config = new Config(
+        language: 'en_GB',
+    );
+    $cache = new Cache(
+        cacheDirectory: __DIR__.'/../../.peck-test.cache',
+    );
+
+    $checker = new SourceCodeChecker(
+        $config,
+        new Aspell(
+            $config,
+            $cache
+        ),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/BritishClassesToTest',
+        'onSuccess' => fn (): null => null,
+        'onFailure' => fn (): null => null,
+    ]);
+
+    expect($issues)->toHaveCount(2)
+        ->and($issues[0]->file)->toEndWith('tests/Fixtures/BritishClassesToTest/ClassWithTypoOnConstants.php')
+        ->and($issues[0]->line)->toBe(9)
+        ->and($issues[0]->misspelling->word)->toBe('favorite')
+        ->and($issues[0]->misspelling->suggestions)->toBe([
+            'favourite',
+            'favourites',
+            'favoured',
+            'fluorite',
+        ])
+        ->and($issues[1]->file)->toEndWith('tests/Fixtures/BritishClassesToTest/ClassWithTypoOnConstants.php')
+        ->and($issues[1]->line)->toBe(11)
+        ->and($issues[1]->misspelling->word)->toBe('color')
+        ->and($issues[1]->misspelling->suggestions)->toBe([
+            'colour',
+            'Colo',
+            'cool',
+            'Cole',
+        ]);
+});
