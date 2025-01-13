@@ -10,6 +10,9 @@ namespace Peck\Support;
  */
 final readonly class PresetProvider
 {
+    /**
+     * The directory where the preset stubs are stored.
+     */
     private const string PRESET_STUBS_DIRECTORY = __DIR__.'/../../stubs/presets';
 
     /**
@@ -23,6 +26,16 @@ final readonly class PresetProvider
             return [];
         }
 
+        return [...self::getWordsFromStub('base'), ...self::getWordsFromStub($preset)];
+    }
+
+    /**
+     * Gets the words from the given stub.
+     *
+     * @return array<int, string>
+     */
+    private static function getWordsFromStub(string $preset): array
+    {
         $path = sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset);
 
         if (! file_exists($path)) {

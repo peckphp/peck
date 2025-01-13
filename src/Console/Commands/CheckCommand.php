@@ -211,7 +211,7 @@ final class CheckCommand extends Command
     {
         if (! Config::init()) {
             render(<<<'HTML'
-                <div class="mx-2 mb-1">
+                <div class="mx-2 my-1">
                     <div class="space-x-1">
                         <span class="bg-blue text-white px-1 font-bold">INFO</span>
                         <span>Configuration file already exists.</span>

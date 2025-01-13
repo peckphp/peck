@@ -36,10 +36,7 @@ final class Config
         public array $whitelistedDirectories = [],
         public ?string $preset = null,
     ) {
-        $this->whitelistedWords = [
-            ...PresetProvider::whitelistedWords($preset),
-            ...array_map(strtolower(...), $whitelistedWords),
-        ];
+        $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
     }
 
     /**
@@ -105,6 +102,12 @@ final class Config
         $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
 
         return ! file_exists($filePath) && file_put_contents($filePath, json_encode([
+            ...match (true) {
+                class_exists('\Illuminate\Support\Str') => [
+                    'preset' => 'laravel',
+                ],
+                default => [],
+            },
             'ignore' => [
                 'words' => [
                     'php',
@@ -124,6 +127,17 @@ final class Config
         $this->whitelistedWords = array_merge($this->whitelistedWords, array_map(strtolower(...), $words));
 
         $this->persist();
+    }
+
+    /**
+     * Checks if the word is ignored.
+     */
+    public function isWordIgnored(string $word): bool
+    {
+        return in_array(strtolower($word), [
+            ...$this->whitelistedWords,
+            ...PresetProvider::whitelistedWords($this->preset),
+        ]);
     }
 
     /**
