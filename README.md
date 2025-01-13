@@ -1,7 +1,5 @@
-<p align="center"><img src="/art/logo.png" width="50%" alt="Logo Peck PHP"></p>
-
 <p align="center">
-    <img src="/art/overview.png" alt="Overview Peck PHP" style="width:70%;">
+    <img src="/art/video.png" alt="Overview Peck PHP" style="width:70%;">
 </p>
     
 <p align="center">
