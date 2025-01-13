@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Peck;
 
 use Closure;
+use Peck\Support\PresetProvider;
 use Peck\Support\ProjectPath;
 
 final class Config
@@ -33,8 +34,12 @@ final class Config
     public function __construct(
         public array $whitelistedWords = [],
         public array $whitelistedDirectories = [],
+        public ?string $preset = null,
     ) {
-        $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
+        $this->whitelistedWords = [
+            ...PresetProvider::whitelistedWords($preset),
+            ...array_map(strtolower(...), $whitelistedWords),
+        ];
     }
 
     /**
@@ -76,6 +81,7 @@ final class Config
 
         /**
          * @var array{
+         *     preset?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
          *         directories?: array<int, string>
@@ -87,6 +93,7 @@ final class Config
         return self::$instance = new self(
             $jsonAsArray['ignore']['words'] ?? [],
             $jsonAsArray['ignore']['directories'] ?? [],
+            $jsonAsArray['preset'] ?? null,
         );
     }
 

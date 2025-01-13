@@ -79,6 +79,7 @@ Here's an example configuration:
 
 ```json
 {
+    "preset": "laravel",
     "ignore": {
         "words": [
             "config",
@@ -96,6 +97,11 @@ You can also specify the path to the configuration file using the `--config` opt
 ```bash
 ./vendor/bin/peck --config relative/path/to/peck.json
 ```
+### Presets
+
+In order to make it easier to get started with Peck, we've included a few presets that you can use to ignore common words in your project. The following presets are available:
+
+- `laravel` 
 
 ## Command Options
 
