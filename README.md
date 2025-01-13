@@ -1,9 +1,9 @@
-<p align="center"><img src="/art/logo.svg" width="50%" alt="Logo Peck PHP"></p>
+<p align="center"><img src="/art/logo.png" width="50%" alt="Logo Peck PHP"></p>
 
 <p align="center">
     <img src="/art/overview.png" alt="Overview Peck PHP" style="width:70%;">
 </p>
-
+    
 <p align="center">
     <p align="center">
         <a href="https://github.com/peckphp/peck/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/actions/workflow/status/peckphp/peck/tests.yml"></a>
