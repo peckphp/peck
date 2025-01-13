@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Peck\Plugins;
 
-use Composer\Autoload\ClassLoader;
 use RuntimeException;
 
 final readonly class Cache
 {
+    /**
+     * The version of the cache.
+     */
+    private const int VERSION = 1;
+
     /**
      * Creates a new instance of Cache.
      */
@@ -23,9 +27,15 @@ final readonly class Cache
      */
     public static function default(): self
     {
-        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+        $basePath = __DIR__.'/../../';
 
-        return new self("{$basePath}/.peck.cache");
+        $cache = new self("{$basePath}/.peck.cache");
+
+        $cache->get('__internal_version') === self::VERSION ?: $cache->flush();
+
+        $cache->set('__internal_version', self::VERSION);
+
+        return $cache;
     }
 
     /**
@@ -90,6 +100,18 @@ final readonly class Cache
     public function getCacheKey(string $key): string
     {
         return md5($key);
+    }
+
+    /**
+     * Flushes the cache.
+     */
+    public function flush(): void
+    {
+        if (is_array($files = glob("{$this->cacheDirectory}/*"))) {
+            foreach ($files as $file) {
+                @unlink($file);
+            }
+        }
     }
 
     /**

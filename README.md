@@ -34,10 +34,10 @@ sudo apt-get install aspell aspell-en
 brew install aspell
 ```
 
-- If you are using **Windows:**:
-> Move to the WSL (Windows Subsystem for Linux) and install GNU Aspell using the following command:
+- If you are using **Windows**:
+> We recommend moving to the **Windows Subsystem for Linux (WSL)** and following the Debian/Ubuntu steps. Alternatively, if you prefer not to use WSL, you can install Aspell using **[Scoop](https://scoop.sh/)**, a package manager for Windows:
 ```bash
-sudo apt-get install aspell aspell-en
+scoop install main/aspell
 ```
 
 ### Installing Peck
@@ -58,6 +58,12 @@ To check your project for spelling mistakes, run:
 
 ```bash
 ./vendor/bin/peck
+```
+
+On the very first run, Peck may detect a large number of spelling mistakes. You may use the `ignore-all` option to ignore all the mistakes at once:
+
+```bash
+./vendor/bin/peck --ignore-all
 ```
 
 ## Configuration
@@ -112,6 +118,10 @@ By default `peck` will check for a `peck.json` file in your project root. If one
 #### `--path`
 
 The path to check can be overwritten with the `--path` option. If the path is one you always need checking you can place it in your `peck.json` file.
+
+#### `--ignore-all`
+
+This option will ignore all spelling mistakes in the current run. This is useful when you have a large number of mistakes and want to ignore them all at once.
 
 ## CI / GitHub Actions
 

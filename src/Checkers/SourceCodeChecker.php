@@ -36,12 +36,12 @@ final readonly class SourceCodeChecker implements Checker
     /**
      * Checks for issues in the given directory.
      *
-     * @param  array{directory: string, onProgress: callable}  $parameters
+     * @param  array{directory: string, onSuccess: callable(): void, onFailure: callable(): void}  $parameters
      * @return array<int, Issue>
      */
     public function check(array $parameters): array
     {
-        $sourceFiles = Finder::create()
+        $sourceFiles = iterator_to_array(Finder::create()
             ->files()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
@@ -50,20 +50,22 @@ final readonly class SourceCodeChecker implements Checker
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
             ->name('*.php')
-            ->getIterator();
+            ->getIterator());
+
+        usort($sourceFiles, fn (SplFileInfo $a, SplFileInfo $b): int => $a->getRealPath() <=> $b->getRealPath());
 
         $issues = [];
 
         foreach ($sourceFiles as $sourceFile) {
+            $newIssues = $this->getIssuesFromSourceFile($sourceFile);
+
             $issues = [
                 ...$issues,
-                ...$this->getIssuesFromSourceFile($sourceFile),
+                ...$newIssues,
             ];
 
-            $parameters['onProgress']();
+            $newIssues !== [] ? $parameters['onFailure']() : $parameters['onSuccess']();
         }
-
-        usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
         return $issues;
     }
@@ -260,7 +262,7 @@ final readonly class SourceCodeChecker implements Checker
     private function getFullyQualifiedDefinitionName(SplFileInfo $file): ?string
     {
         if (preg_match('/namespace (.*);/', $file->getContents(), $matches)) {
-            /** @var class-string */
+            /** @var class-string $fullyQualifiedName */
             $fullyQualifiedName = $matches[1].'\\'.$file->getFilenameWithoutExtension();
 
             return $fullyQualifiedName;

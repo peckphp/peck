@@ -27,7 +27,7 @@ final class CheckCommand extends Command
     /**
      * @var array<string, array<int, array<string, int>>>
      */
-    private array $lastColumn = []; // 1MB, 2MB, 4
+    private array $lastColumn = [];
 
     /**
      * Executes the command.
@@ -51,7 +51,8 @@ final class CheckCommand extends Command
 
         $issues = $kernel->handle([
             'directory' => $this->findPathToScan($input),
-            'onProgress' => fn () => $output->write('<fg=gray>.</>'),
+            'onSuccess' => fn () => $output->write('<fg=gray>.</>'),
+            'onFailure' => fn () => $output->write('<fg=red;options=bold>⨯</>'),
         ]);
 
         $output->writeln('');
@@ -84,9 +85,29 @@ final class CheckCommand extends Command
         render(<<<HTML
             <div class="mx-2 mb-1">
                 <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
+                <span class="mt-1">Hint:</span>
+                <span class="ml-1">You may correct the misspellings individually, ignore them one by one, or ignore all of them using the</span>
+                <span class="ml-1 font-bold">peck --ignore-all</span>
+                <span class="ml-1 ">option.</span>
             </div>
             HTML
         );
+
+        if ($input->getOption('ignore-all')) {
+            $this->addMisspellingsToConfig($issues);
+
+            $misspellingsAdded = count($issues);
+
+            render(<<<HTML
+                <div class="mx-2 mb-1">
+                    <div class="space-x-1">
+                        <span class="bg-blue text-white px-1 font-bold">INFO</span>
+                        <span>{$misspellingsAdded} misspellings have been added to the configuration file.</span>
+                    </div>
+                </div>
+                HTML
+            );
+        }
 
         return Command::FAILURE;
     }
@@ -104,6 +125,11 @@ final class CheckCommand extends Command
                 'p',
                 InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
                 'The path to check for misspellings.'
+            )->addOption(
+                'ignore-all',
+                'a',
+                InputOption::VALUE_NONE,
+                'Ignore all words that are not considered misspellings.',
             );
     }
 
@@ -278,5 +304,20 @@ final class CheckCommand extends Command
     private function getDuration(float $startTime): string
     {
         return number_format(microtime(true) - $startTime, 2);
+    }
+
+    /**
+     * Add misspellings to the configuration file.
+     *
+     * @param  array<int, Issue>  $issues
+     */
+    private function addMisspellingsToConfig(array $issues): void
+    {
+        $misspellings = array_map(
+            fn (Issue $issue): string => $issue->misspelling->word,
+            $issues,
+        );
+
+        Config::instance()->ignoreWords(array_unique($misspellings));
     }
 }

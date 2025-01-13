@@ -11,6 +11,7 @@ use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @internal
@@ -28,38 +29,41 @@ final readonly class FileSystemChecker implements Checker
     /**
      * Checks for issues in the given directory.
      *
-     * @param  array{directory: string, onProgress: callable}  $parameters
+     * @param  array{directory: string, onSuccess: callable(): void, onFailure: callable(): void}  $parameters
      * @return array<int, Issue>
      */
     public function check(array $parameters): array
     {
-        $filesOrDirectories = Finder::create()
+        $filesOrDirectories = iterator_to_array(Finder::create()
             ->notPath($this->config->whitelistedDirectories)
             ->ignoreDotFiles(true)
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
-            ->getIterator();
+            ->getIterator());
+
+        usort($filesOrDirectories, fn (SplFileInfo $a, SplFileInfo $b): int => $a->getRealPath() <=> $b->getRealPath());
 
         $issues = [];
 
         foreach ($filesOrDirectories as $fileOrDirectory) {
             $name = SpellcheckFormatter::format($fileOrDirectory->getFilenameWithoutExtension());
 
+            $newIssues = array_map(
+                fn (Misspelling $misspelling): Issue => new Issue(
+                    $misspelling,
+                    $fileOrDirectory->getRealPath(),
+                    0,
+                ), $this->spellchecker->check($name),
+            );
+
             $issues = [
                 ...$issues,
-                ...array_map(
-                    fn (Misspelling $misspelling): Issue => new Issue(
-                        $misspelling,
-                        $fileOrDirectory->getRealPath(),
-                        0,
-                    ), $this->spellchecker->check($name)),
+                ...$newIssues,
             ];
 
-            $parameters['onProgress']();
+            $newIssues !== [] ? $parameters['onFailure']() : $parameters['onSuccess']();
         }
-
-        usort($issues, fn (Issue $a, Issue $b): int => $a->file <=> $b->file);
 
         return $issues;
     }

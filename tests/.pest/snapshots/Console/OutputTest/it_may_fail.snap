@@ -1,4 +1,4 @@
-  .....................................
+  .............⨯⨯⨯.⨯....⨯⨯.⨯⨯⨯⨯⨯⨯....⨯⨯
 
    Misspelling  [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
   ./tests/Fixtures/FolderWithTypoos     
@@ -205,5 +205,6 @@
         --------------------------------------------^     
   Did you mean: constantly, constantine, constants, constant  
 
-  Duration: 0.00s  
+  Duration: 0.00s   
+  Hint: You may correct the misspellings individually, ignore them one by one, or ignore all of them using the peck --ignore-all option.  
 

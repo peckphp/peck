@@ -23,7 +23,7 @@ $application = new Application(
 );
 
 $application->add(
-    new CheckCommand(),
+    new CheckCommand,
 );
 
 $application->setDefaultCommand('check');

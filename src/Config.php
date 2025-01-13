@@ -38,7 +38,7 @@ final class Config
     ) {
         $this->whitelistedWords = [
             ...PresetProvider::whitelistedWords($preset),
-            ...array_map(fn (string $word): string => strtolower($word), $whitelistedWords),
+            ...array_map(strtolower(...), $whitelistedWords),
         ];
     }
 
@@ -72,8 +72,8 @@ final class Config
 
         $basePath = ProjectPath::get();
         $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
-            ? (self::$resolveConfigFilePathUsing)()
-            : self::JSON_CONFIGURATION_NAME);
+                ? (self::$resolveConfigFilePathUsing)()
+                : self::JSON_CONFIGURATION_NAME);
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
@@ -110,6 +110,33 @@ final class Config
                     'php',
                 ],
                 'directories' => [],
+            ],
+        ], JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Adds a word to the ignore list.
+     *
+     * @param  array<int, string>  $words
+     */
+    public function ignoreWords(array $words): void
+    {
+        $this->whitelistedWords = array_merge($this->whitelistedWords, array_map(strtolower(...), $words));
+
+        $this->persist();
+    }
+
+    /**
+     * Save the configuration to the file.
+     */
+    private function persist(): void
+    {
+        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
+
+        file_put_contents($filePath, json_encode([
+            'ignore' => [
+                'words' => $this->whitelistedWords,
+                'directories' => $this->whitelistedDirectories,
             ],
         ], JSON_PRETTY_PRINT));
     }

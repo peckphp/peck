@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Peck\Config;
 
-pest()->beforeEach(function (): void {
+uses()->beforeEach(function (): void {
     // REMOVE EVEN IF IT IS NOT EMPTY
     $dir = __DIR__.'/../.peck.cache';
 
@@ -23,4 +23,4 @@ pest()->beforeEach(function (): void {
     }
 
     Config::flush();
-});
+})->in(__DIR__);
