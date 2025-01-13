@@ -1,21 +1,9 @@
 {
+    "preset": "base",
     "ignore": {
         "words": [
-            "config",
-            "aspell",
-            "args",
-            "namespace",
-            "doc",
-            "bool",
-            "init",
-            "json",
-            "php",
-            "api",
-            "formatter",
-            "enum",
-            "enums",
-            "backend"
+            "php"
         ],
-        "directories": []
+        "paths": []
     }
 }

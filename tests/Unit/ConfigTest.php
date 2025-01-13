@@ -8,20 +8,7 @@ it('should have a default configuration', function (): void {
     $config = Config::instance();
 
     expect($config->whitelistedWords)->toBe([
-        'config',
-        'aspell',
-        'args',
-        'namespace',
-        'doc',
-        'bool',
-        'init',
-        'json',
         'php',
-        'api',
-        'formatter',
-        'enum',
-        'enums',
-        'backend',
     ])->and($config->whitelistedPaths)->toBe([]);
 });
 
@@ -64,20 +51,7 @@ it('should not recreate a file that already exists', function (): void {
 
     expect($created)->toBeFalse()
         ->and($config->whitelistedWords)->toBe([
-            'config',
-            'aspell',
-            'args',
-            'namespace',
-            'doc',
-            'bool',
-            'init',
-            'json',
             'php',
-            'api',
-            'formatter',
-            'enum',
-            'enums',
-            'backend',
         ])
         ->and($config->whitelistedPaths)->toBe([]);
 });

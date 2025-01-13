@@ -38,7 +38,7 @@ final class CheckCommand extends Command
 
         renderUsing($output);
 
-        if ($input->getOption('init')) {
+        if ($input->getOption('init') || ! Config::exists()) {
             return $this->initConfiguration();
         }
 
@@ -85,10 +85,12 @@ final class CheckCommand extends Command
         render(<<<HTML
             <div class="mx-2 mb-1">
                 <span class="font-bold">Duration:</span> {$this->getDuration($start)}s
-                <span class="mt-1">Hint:</span>
+                <span class="mt-2">Hint:</span>
                 <span class="ml-1">You may correct the misspellings individually, ignore them one by one, or ignore all of them using the</span>
                 <span class="ml-1 font-bold">peck --ignore-all</span>
                 <span class="ml-1 ">option.</span>
+                <span class="mt-1">Contribute:</span>
+                <span class="ml-1">See a common technical term that should be ignored on all projects? Add it here: <a href="https://github.com/peckphp/peck/tree/main/stubs/presets">github.com/peckphp/peck/tree/main/stubs/presets</a>.</span>
             </div>
             HTML
         );
@@ -96,7 +98,10 @@ final class CheckCommand extends Command
         if ($input->getOption('ignore-all')) {
             $this->addMisspellingsToConfig($issues);
 
-            $misspellingsAdded = count($issues);
+            $misspellingsAdded = count(array_unique(array_map(
+                fn (Issue $issue): string => $issue->misspelling->word,
+                $issues,
+            )));
 
             render(<<<HTML
                 <div class="mx-2 mb-1">

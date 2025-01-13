@@ -4,6 +4,10 @@ propable
 dns
 verifier
 laravel
+enum
+backend
+formatter
+init
 enums
 env
 misconfigured

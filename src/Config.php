@@ -59,6 +59,14 @@ final class Config
     }
 
     /**
+     * Checks if the configuration file exists.
+     */
+    public static function exists(): bool
+    {
+        return file_exists(ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME);
+    }
+
+    /**
      * Fetches the instance of the configuration.
      */
     public static function instance(): self
@@ -101,12 +109,18 @@ final class Config
     {
         $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
 
-        return ! file_exists($filePath) && file_put_contents($filePath, json_encode([
+        if (file_exists($filePath)) {
+            return false;
+        }
+
+        return (bool) file_put_contents($filePath, json_encode([
             ...match (true) {
                 class_exists('\Illuminate\Support\Str') => [
                     'preset' => 'laravel',
                 ],
-                default => [],
+                default => [
+                    'preset' => 'base',
+                ],
             },
             'ignore' => [
                 'words' => [
