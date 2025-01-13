@@ -1,5 +1,10 @@
+<p align="center"><img src="/art/logo.svg" width="50%" alt="Logo Peck PHP"></p>
+
 <p align="center">
-    <img src="https://raw.githubusercontent.com/peckphp/peck/main/docs/logo.png" alt="Peck example" height="300">
+    <img src="/art/overview.png" alt="Overview Peck PHP" style="width:70%;">
+</p>
+
+<p align="center">
     <p align="center">
         <a href="https://github.com/peckphp/peck/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/actions/workflow/status/peckphp/peck/tests.yml"></a>
         <a href="https://packagist.org/packages/peckphp/peck"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/peckphp/peck"></a>
