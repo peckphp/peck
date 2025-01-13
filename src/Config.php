@@ -151,6 +151,7 @@ final class Config
         return in_array(strtolower($word), [
             ...$this->whitelistedWords,
             ...PresetProvider::whitelistedWords($this->preset),
+            ...$this->ignoreWordsFromProjectPath(),
         ]);
     }
 
@@ -168,5 +169,15 @@ final class Config
                 'paths' => $this->whitelistedPaths,
             ],
         ], JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Ignore words from the project path including $HOME directory. Prevents spell check errors for cache constant
+     *
+     * @return list<string>
+     */
+    private function ignoreWordsFromProjectPath(): array
+    {
+        return explode(DIRECTORY_SEPARATOR, ProjectPath::get());
     }
 }
