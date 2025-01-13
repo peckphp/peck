@@ -16,7 +16,7 @@ it('may fail', function (): void {
 
     expect($exitCode)->toBe(1)
         ->and($output)->toMatchSnapshot();
-})->skip();
+});
 
 it('may pass', function (): void {
     $process = Process::fromShellCommandline('./bin/peck');
