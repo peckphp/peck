@@ -762,17 +762,14 @@ it('should not verify the parent class', function (): void {
 
 it('detects issues with a different locale', function (): void {
     $config = new Config(
-        language: 'en_GB',
-    );
-    $cache = new Cache(
-        cacheDirectory: __DIR__.'/../../.peck-test.cache',
+        locale: 'en_GB',
     );
 
     $checker = new SourceCodeChecker(
         $config,
         new Aspell(
             $config,
-            $cache
+            Cache::default()
         ),
     );
 
