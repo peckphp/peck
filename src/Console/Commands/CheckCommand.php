@@ -7,6 +7,7 @@ namespace Peck\Console\Commands;
 use Composer\Autoload\ClassLoader;
 use Peck\Config;
 use Peck\Kernel;
+use Peck\Services\Spellcheckers\Aspell;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -37,6 +38,13 @@ final class CheckCommand extends Command
         $start = microtime(true);
 
         renderUsing($output);
+
+        if ($input->getOption('text')) {
+            /** @var string $textToCheck */
+            $textToCheck = $input->getOption('text');
+
+            return $this->checkStaticText($textToCheck, $start);
+        }
 
         if ($input->getOption('init') || ! Config::exists()) {
             return $this->initConfiguration();
@@ -142,6 +150,11 @@ final class CheckCommand extends Command
                 'a',
                 InputOption::VALUE_NONE,
                 'Ignore all words that are not considered misspellings.',
+            )->addOption(
+                'text',
+                't',
+                InputArgument::OPTIONAL | InputOption::VALUE_REQUIRED,
+                'The text to check for misspellings.',
             );
     }
 
@@ -331,5 +344,75 @@ final class CheckCommand extends Command
         );
 
         Config::instance()->ignoreWords(array_unique($misspellings));
+    }
+
+    private function checkStaticText(string $text, float $startTime): int
+    {
+        $aspell = Aspell::default();
+
+        $misspellings = $aspell->check($text);
+
+        if ($misspellings === []) {
+            render(<<<HTML
+                <div class="mx-2 my-1">
+                    <div class="space-x-1 mb-1">
+                        <span class="bg-green text-white px-1 font-bold">PASS</span>
+                        <span>No misspellings found in the given text.</span>
+                    </div>
+
+                    <div class="space-x-1 text-gray-700">
+                        <span>Duration:</span>
+                        <span class="font-bold">{$this->getDuration($startTime)}s</span>
+                    </div>
+                </div>
+                HTML
+            );
+
+            return Command::SUCCESS;
+        }
+
+        foreach ($misspellings as $misspelling) {
+            $suggestions = $this->formatIssueSuggestionsForDisplay(
+                new Issue(
+                    file: '',
+                    line: 0,
+                    misspelling: $misspelling,
+                ),
+            );
+
+            render(<<<HTML
+                <div class="mx-2 mt-1 space-y-1">
+                    <div class="space-x-1">
+                        <span class="bg-red text-white px-1 font-bold">Misspelling</span>
+                        <span>'<strong>{$misspelling->word}</strong>'</span>
+                    </div>
+
+                    <div class="space-x-1 text-gray-700">
+                        <span>Did you mean:</span>
+                        <span class="font-bold">{$suggestions}</span>
+                    </div>
+                </div>
+                HTML
+            );
+        }
+
+        $issuesCount = count($misspellings);
+
+        render(<<<HTML
+            <div class="mx-2 my-1 space-y-1">
+                <div class="space-x-1">
+                    <span class="bg-red text-white px-1 font-bold">FAIL</span>
+                    <span>{$issuesCount} misspelling(s) found in your project.</span>
+                </div>
+
+                <div class="space-x-1 text-gray-700">
+                    <span>Duration:</span>
+                    <span class="font-bold">{$this->getDuration($startTime)}s</span>
+                </div>
+            </div>
+            HTML
+        );
+
+        return Command::FAILURE;
     }
 }
