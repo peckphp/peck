@@ -22,7 +22,7 @@ it('should have a default configuration', function (): void {
         'enum',
         'enums',
         'backend',
-    ])->and($config->whitelistedDirectories)->toBe([]);
+    ])->and($config->whitelistedPaths)->toBe([]);
 });
 
 it('should to be a singleton', function (): void {
@@ -40,7 +40,7 @@ it('should behave correctly even if the peck.json file does not exist', function
     $config = Config::instance();
 
     expect($config->whitelistedWords)->toBe([])
-        ->and($config->whitelistedDirectories)->toBe([]);
+        ->and($config->whitelistedPaths)->toBe([]);
 });
 
 it('should be able to create a peck.json config file', function (): void {
@@ -53,7 +53,7 @@ it('should be able to create a peck.json config file', function (): void {
 
     expect($created)->toBeTrue()
         ->and($config->whitelistedWords)->toBe(['php'])
-        ->and($config->whitelistedDirectories)->toBe([]);
+        ->and($config->whitelistedPaths)->toBe([]);
 
     rename($backup, $configFilePath);
 })->skip('rewrite this test a little bit differently without modifying the root level peck.json file');
@@ -79,5 +79,5 @@ it('should not recreate a file that already exists', function (): void {
             'enums',
             'backend',
         ])
-        ->and($config->whitelistedDirectories)->toBe([]);
+        ->and($config->whitelistedPaths)->toBe([]);
 });

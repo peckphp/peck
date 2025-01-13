@@ -35,7 +35,7 @@ final readonly class FileSystemChecker implements Checker
     public function check(array $parameters): array
     {
         $filesOrDirectories = iterator_to_array(Finder::create()
-            ->notPath($this->config->whitelistedDirectories)
+            ->notPath($this->config->whitelistedPaths)
             ->ignoreDotFiles(true)
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)

@@ -29,11 +29,11 @@ final class Config
      * Creates a new instance of Config.
      *
      * @param  array<int, string>  $whitelistedWords
-     * @param  array<int, string>  $whitelistedDirectories
+     * @param  array<int, string>  $whitelistedPaths
      */
     public function __construct(
         public array $whitelistedWords = [],
-        public array $whitelistedDirectories = [],
+        public array $whitelistedPaths = [],
         public ?string $preset = null,
     ) {
         $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
@@ -81,7 +81,7 @@ final class Config
          *     preset?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
-         *         directories?: array<int, string>
+         *         paths?: array<int, string>
          *     }
          *  } $jsonAsArray
          */
@@ -89,7 +89,7 @@ final class Config
 
         return self::$instance = new self(
             $jsonAsArray['ignore']['words'] ?? [],
-            $jsonAsArray['ignore']['directories'] ?? [],
+            $jsonAsArray['ignore']['paths'] ?? [],
             $jsonAsArray['preset'] ?? null,
         );
     }
@@ -112,7 +112,7 @@ final class Config
                 'words' => [
                     'php',
                 ],
-                'directories' => [],
+                'paths' => [],
             ],
         ], JSON_PRETTY_PRINT));
     }
@@ -150,7 +150,7 @@ final class Config
         file_put_contents($filePath, json_encode([
             'ignore' => [
                 'words' => $this->whitelistedWords,
-                'directories' => $this->whitelistedDirectories,
+                'paths' => $this->whitelistedPaths,
             ],
         ], JSON_PRETTY_PRINT));
     }

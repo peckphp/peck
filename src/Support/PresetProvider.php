@@ -22,7 +22,7 @@ final readonly class PresetProvider
      */
     public static function whitelistedWords(?string $preset): array
     {
-        if ($preset === null) {
+        if ($preset === null || ! self::stubExists($preset)) {
             return [];
         }
 
@@ -38,10 +38,14 @@ final readonly class PresetProvider
     {
         $path = sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset);
 
-        if (! file_exists($path)) {
-            return [];
-        }
-
         return array_values(array_filter(array_map('trim', explode("\n", (string) file_get_contents($path)))));
+    }
+
+    /**
+     * Checks if the given preset exists.
+     */
+    private static function stubExists(string $preset): bool
+    {
+        return file_exists(sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset));
     }
 }

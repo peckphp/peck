@@ -85,8 +85,9 @@ Here's an example configuration:
             "config",
             "namespace"
         ],
-        "directories": [
-            "app/MyNamespace"
+        "paths": [
+            "app/MyFolder",
+            "app/MyFile.php"
         ]
     }
 }

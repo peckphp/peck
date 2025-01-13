@@ -43,7 +43,7 @@ final readonly class SourceCodeChecker implements Checker
     {
         $sourceFiles = iterator_to_array(Finder::create()
             ->files()
-            ->notPath($this->config->whitelistedDirectories)
+            ->notPath($this->config->whitelistedPaths)
             ->ignoreDotFiles(true)
             ->ignoreVCS(true)
             ->ignoreUnreadableDirs()
