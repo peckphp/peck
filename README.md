@@ -145,3 +145,4 @@ When running Peck on GitHub Actions, you can use the following workflow before r
 ---
 
 Peck is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
+

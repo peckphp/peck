@@ -15,7 +15,7 @@ final readonly class NotPaths
     public static function get(string $in, array $paths): array
     {
         $paths = array_map(
-            fn (string $path): string => ((string) realpath(ProjectPath::get())).'/'.ltrim(ltrim($path, '/'), './'),
+            fn (string $path): string => (realpath(ProjectPath::get())).'/'.ltrim(ltrim($path, '/'), './'),
             $paths,
         );
 
