@@ -51,9 +51,8 @@ final readonly class SourceCodeChecker implements Checker
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
             ->name('*.php')
+            ->sortByName()
             ->getIterator());
-
-        usort($sourceFiles, fn (SplFileInfo $a, SplFileInfo $b): int => $a->getRealPath() <=> $b->getRealPath());
 
         $issues = [];
 
