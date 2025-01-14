@@ -12,7 +12,6 @@ use Peck\Support\SpellcheckFormatter;
 use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @internal
@@ -41,9 +40,8 @@ final readonly class FileSystemChecker implements Checker
             ->ignoreUnreadableDirs()
             ->ignoreVCSIgnored(true)
             ->in($parameters['directory'])
+            ->sortByName()
             ->getIterator());
-
-        usort($filesOrDirectories, fn (SplFileInfo $a, SplFileInfo $b): int => $a->getRealPath() <=> $b->getRealPath());
 
         $issues = [];
 
