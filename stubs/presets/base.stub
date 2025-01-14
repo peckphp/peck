@@ -37,6 +37,7 @@ backoff
 bool
 schemas
 pre
+psr
 accessors
 unsuspend
 frontend
