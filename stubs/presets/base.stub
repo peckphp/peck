@@ -38,6 +38,8 @@ bool
 schemas
 pre
 psr
+csrf
+throwable
 accessors
 unsuspend
 frontend
