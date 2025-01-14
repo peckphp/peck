@@ -16,7 +16,7 @@ final readonly class SpellcheckFormatter
         $input = ltrim($input, '_');
 
         // Replace special characters with spaces
-        $input = (string) preg_replace('/[!@#$%^&<>():.,\/\\\\_\-*]/', ' ', $input);
+        $input = (string) preg_replace('/[!@#$%^&<>():.|,\/\\\\_\-*]/', ' ', $input);
 
         // Insert spaces between lowercase and uppercase letters (camelCase or PascalCase)
         $input = (string) preg_replace('/([a-z])([A-Z])/', '$1 $2', $input);

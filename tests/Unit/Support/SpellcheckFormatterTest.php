@@ -74,14 +74,14 @@ it('can handle special characters in phpdoc', function (string $input, $expected
          * @param string $text The text to fetch.
          * @param list<string> $options The options list.
          * @param int<-1, max> $timeout The timeout value.
-         * @return string The fetched content.
+         * @return string|null The fetched content.
          * @link https://example.com
          * @deprecated Use thatFunction() instead.
          */
         PHP,
         'this docblock includes a description tags link and a deprecated notice param string text '
         .'the text to fetch param list string options the options list param int 1 max timeout the '
-        .'timeout value return string the fetched content link https example com deprecated use '
-        .'that function instead',
+        .'timeout value return string null the fetched content link https example com deprecated '
+        .'use that function instead',
     ],
 ]);
