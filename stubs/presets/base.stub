@@ -60,6 +60,7 @@ vite
 tls
 acl
 http
+https
 laravel
 parsable
 confirmable
