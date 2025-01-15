@@ -140,6 +140,13 @@ When running Peck on GitHub Actions, you can use the following workflow before r
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
             brew install aspell
           fi
+
+    - name: Check Typos
+      shell: bash
+      run: |
+          if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+            composer test:typos
+          fi
 ```
 
 ---
