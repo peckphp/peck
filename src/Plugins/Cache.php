@@ -27,9 +27,15 @@ final readonly class Cache
      */
     public static function default(): self
     {
-        $basePath = __DIR__.'/../../';
+        return self::create(__DIR__.'/../../.peck.cache');
+    }
 
-        $cache = new self("{$basePath}/.peck.cache");
+    /**
+     * Creates a new instance of Cache.
+     */
+    public static function create(string $cacheDirectory): self
+    {
+        $cache = new self($cacheDirectory);
 
         $cache->get('__internal_version') === self::VERSION ?: $cache->flush();
 
@@ -99,7 +105,7 @@ final readonly class Cache
      */
     public function getCacheKey(string $key): string
     {
-        return md5($key);
+        return 'peck_'.md5($key);
     }
 
     /**
@@ -107,7 +113,7 @@ final readonly class Cache
      */
     public function flush(): void
     {
-        if (is_array($files = glob("{$this->cacheDirectory}/*"))) {
+        if (is_array($files = glob("{$this->cacheDirectory}/peck_*"))) {
             foreach ($files as $file) {
                 @unlink($file);
             }
