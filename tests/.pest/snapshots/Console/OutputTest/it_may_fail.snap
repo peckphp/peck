@@ -1,4 +1,4 @@
-  .............⨯⨯⨯.⨯....⨯⨯.⨯⨯⨯⨯⨯⨯....⨯⨯
+  ...............⨯⨯⨯.⨯....⨯⨯.⨯⨯⨯⨯⨯⨯⨯....⨯⨯
 
    Misspelling  [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
   ./tests/Fixtures/FolderWithTypoos     
@@ -64,6 +64,11 @@
      9▕ [1m    public int $properytWithTypoError = 1;[0m  
         ----------------^     
   Did you mean: property, propriety, properer, properest  
+
+   Misspelling  [1m./tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/DirectoryWithNoSuggestions/ClassWithNoSuggestions.php:9:20[0m: '[1msupercalifragilisticexpialidociouss[0m'  
+     9▕ [1m    public function supercalifragilisticexpialidociouss()[0m  
+        --------------------^     
+  There are no suggestions for this misspelling.  
 
    Misspelling  [1m./tests/Fixtures/ClassesToTest/InterfaceWithSpellingMistake.php:12:34[0m: '[1merorr[0m'  
     12▕ [1m    public function methodWithTypoErorr(): string;[0m  
@@ -205,7 +210,7 @@
         --------------------------------------------^     
   Did you mean: constantly, constantine, constants, constant  
 
-   FAIL  41 misspelling(s) found in your project.  
+   FAIL  42 misspelling(s) found in your project.  
     
   Duration: 0.00s   
   Hint: You may correct the misspellings individually, ignore them one by one, or ignore all of them using the peck --ignore-all option.  

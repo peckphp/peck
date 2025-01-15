@@ -207,10 +207,7 @@ final class CheckCommand extends Command
                     <pre class="text-red-500 font-bold">{$alignSpacer}{$spacer}^</pre>
                 </div>
 
-                <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
-                </div>
+                {$suggestions}
             </div>
         HTML
         );
@@ -281,10 +278,7 @@ final class CheckCommand extends Command
                     <pre class="text-red-500 font-bold">{$spacer}^</pre>
                 </div>
 
-                <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
-                </div>
+                {$suggestions}
             </div>
         HTML);
     }
@@ -299,7 +293,25 @@ final class CheckCommand extends Command
             $issue->misspelling->suggestions,
         );
 
-        return implode(', ', $suggestions);
+        if ($suggestions === []) {
+            return <<<'HTML'
+                <div class="space-x-1 text-gray-700">
+                    <span class="font-bold">There are no suggestions for this misspelling.</span>
+                </div>
+            HTML;
+        }
+
+        $suggestionString = match (true) {
+            count($suggestions) > 1 => implode(', ', $suggestions),
+            default => $suggestions[0]
+        };
+
+        return <<<HTML
+            <div class="space-x-1 text-gray-700">
+                <span>Did you mean:</span>
+                <span class="font-bold">{$suggestionString}</span>
+            </div>
+        HTML;
     }
 
     /**
