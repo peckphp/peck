@@ -68,3 +68,26 @@ it('detects issues that always don\'t have cache', function (): void {
             'veers',
         ]);
 });
+
+it('gets correct issues with corrupted cache', function (): void {
+    $dir = __DIR__.'/../../.peck-test.cache';
+
+    if (! is_dir($dir)) {
+        mkdir($dir);
+    }
+
+    $cache = new Cache($dir);
+    $spellchecker = new Aspell(
+        Config::instance(),
+        $cache,
+    );
+
+    // Let's corrupt the cache
+    $cacheKey = 'Hello my viwers';
+    $cacheFile = $cache->getCacheFile($cache->getCacheKey($cacheKey));
+    file_put_contents($cacheFile, 'corrupted');
+
+    $issues = $spellchecker->check($cacheKey);
+
+    expect($issues)->not->toBeEmpty();
+});
