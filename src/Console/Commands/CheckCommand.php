@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Peck\Console\Commands;
 
-use Composer\Autoload\ClassLoader;
 use Peck\Config;
 use Peck\Kernel;
+use Peck\Support\ProjectPath;
 use Peck\ValueObjects\Issue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -164,7 +164,7 @@ final class CheckCommand extends Command
      */
     private function inferProjectPath(): string
     {
-        $basePath = dirname(array_keys(ClassLoader::getRegisteredLoaders())[0]);
+        $basePath = ProjectPath::get();
 
         return match (true) {
             isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
