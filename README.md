@@ -1,7 +1,7 @@
-<p align="center"><img src="/art/logo.png" width="50%" alt="Logo Peck PHP"></p>
-
 <p align="center">
-    <img src="/art/overview.png" alt="Overview Peck PHP" style="width:70%;">
+    <a href="https://youtu.be/C1-2I_Y8ih8" target="_blank">
+        <img src="/art/video.png" alt="Overview Peck PHP" style="width:70%;">
+    </a>
 </p>
     
 <p align="center">
@@ -139,6 +139,13 @@ When running Peck on GitHub Actions, you can use the following workflow before r
             sudo apt-get update && sudo apt-get install -y aspell aspell-en
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
             brew install aspell
+          fi
+
+    - name: Check Typos
+      shell: bash
+      run: |
+          if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+            composer test:typos
           fi
 ```
 

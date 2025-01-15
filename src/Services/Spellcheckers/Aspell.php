@@ -45,8 +45,12 @@ final class Aspell implements Spellchecker
      */
     public function check(string $text): array
     {
-        /** @var array<int, Misspelling> $misspellings */
+        /** @var array<int, Misspelling>|null $misspellings */
         $misspellings = $this->cache->has($text) ? $this->cache->get($text) : $this->getMisspellings($text);
+
+        if (! is_array($misspellings)) {
+            $misspellings = $this->getMisspellings($text);
+        }
 
         return array_filter($misspellings,
             fn (Misspelling $misspelling): bool => ! $this->config->isWordIgnored($misspelling->word),
