@@ -81,6 +81,7 @@ otp
 params
 parsable
 parsable
+pax
 pinkary
 pinnable
 postgres
@@ -104,6 +105,7 @@ slugify
 slugify
 sponsorship
 sponsorships
+sms
 src
 src
 ssl
