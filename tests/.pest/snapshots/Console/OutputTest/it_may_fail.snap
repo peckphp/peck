@@ -55,11 +55,6 @@
         -------------------------------^     
   Did you mean: typo, typos, type, topi  
 
-   Misspelling  [1m./tests/Fixtures/ClassesToTest/ClassWithTypoOnConstants.php:11:54[0m: '[1mtypoo[0m'  
-    11▕ [1m    public const CONSTANT_WITH_TYPOO = 'constant_with_typoo';[0m  
-        ------------------------------------------------------^     
-  Did you mean: typo, typos, type, topi  
-
    Misspelling  [1m./tests/Fixtures/ClassesToTest/FolderThatShouldBeIgnored/ClassWithTypoErrors.php:9:16[0m: '[1mproperyt[0m'  
      9▕ [1m    public int $properytWithTypoError = 1;[0m  
         ----------------^     
@@ -125,11 +120,6 @@
         ---------^     
   Did you mean: spelling, spilling, spieling, spellings  
 
-   Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:14:43[0m: '[1mspellling[0m'  
-    14▕ [1m    case SPELLING_MISTAKE_IN_CASE_VALUE = 'Spellling mistake in case value';[0m  
-        -------------------------------------------^     
-  Did you mean: spelling, spilling, spieling, spellings  
-
    Misspelling  [1m./tests/Fixtures/EnumsToTest/BackendEnumWithTypoErrors.php:8:30[0m: '[1mspellling[0m'  
      8▕ [1m * Even the documentation has spellling mistakes.[0m  
         ------------------------------^     
@@ -180,11 +170,6 @@
         ----------------------^     
   Did you mean: constant, constants, consonant, consent  
 
-   Misspelling  [1m./tests/Fixtures/ParentAndTraits/ParentClass.php:9:46[0m: '[1mconstantvaleu[0m'  
-     9▕ [1m    const PARENT_WITH_CONSTNAT_TYPE = 'parent_constantvaleu_typo';[0m  
-        ----------------------------------------------^     
-  Did you mean: constantly, constantine, constants, constant  
-
    Misspelling  [1m./tests/Fixtures/ParentAndTraits/UsedTrait.php:13:25[0m: '[1mmetod[0m'  
     13▕ [1m    public function traitMetodWithTypo(): void[0m  
         -------------------------^     
@@ -200,12 +185,7 @@
         ---------------------^     
   Did you mean: constant, constants, consonant, consent  
 
-   Misspelling  [1m./tests/Fixtures/ParentAndTraits/UsedTrait.php:9:44[0m: '[1mconstantvaleu[0m'  
-     9▕ [1m    const TRAIT_WITH_CONSTNAT_TYPE = 'trait_constantvaleu_typo';[0m  
-        --------------------------------------------^     
-  Did you mean: constantly, constantine, constants, constant  
-
-   FAIL  41 misspelling(s) found in your project.  
+   FAIL  37 misspelling(s) found in your project.  
     
   Duration: 0.00s   
   Hint: You may correct the misspellings individually, ignore them one by one, or ignore all of them using the peck --ignore-all option.  

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Peck\Checkers;
 
-use BackedEnum;
 use Peck\Config;
 use Peck\Contracts\Checker;
 use Peck\Contracts\Services\Spellchecker;
@@ -200,17 +199,8 @@ final readonly class SourceCodeChecker implements Checker
                 if ($constant->class !== $reflection->name) {
                     return [];
                 }
-                $value = $constant->getValue();
 
-                if ($value instanceof BackedEnum) {
-                    return is_string($value->value)
-                        ? [$value->name, $value->value]
-                        : [$value->name];
-                }
-
-                return is_string($value)
-                    ? [$constant->name, $value]
-                    : [$constant->name];
+                return [$constant->name];
             },
             $reflection->getReflectionConstants()
         ))));
