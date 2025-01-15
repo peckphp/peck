@@ -303,6 +303,31 @@ final class CheckCommand extends Command
     }
 
     /**
+     * Render the issue from --text option.
+     */
+    private function renderStaticTextLineIssue(Issue $issue): void
+    {
+        $suggestions = $this->formatIssueSuggestionsForDisplay(
+            $issue,
+        );
+
+        render(<<<HTML
+            <div class="mx-2 mt-1 space-y-1">
+                <div class="space-x-1">
+                    <span class="bg-red text-white px-1 font-bold">Misspelling</span>
+                    <span>'<strong>{$issue->misspelling->word}</strong>'</span>
+                </div>
+
+                <div class="space-x-1 text-gray-700">
+                    <span>Did you mean:</span>
+                    <span class="font-bold">{$suggestions}</span>
+                </div>
+            </div>
+            HTML
+        );
+    }
+
+    /**
      * Format the issue suggestions.
      */
     private function formatIssueSuggestionsForDisplay(Issue $issue): string
@@ -346,6 +371,9 @@ final class CheckCommand extends Command
         Config::instance()->ignoreWords(array_unique($misspellings));
     }
 
+    /**
+     * Check the given text from --text option for misspellings.
+     */
     private function checkStaticText(string $text, float $startTime): int
     {
         $aspell = Aspell::default();
@@ -371,29 +399,13 @@ final class CheckCommand extends Command
             return Command::SUCCESS;
         }
 
-        foreach ($misspellings as $misspelling) {
-            $suggestions = $this->formatIssueSuggestionsForDisplay(
-                new Issue(
-                    file: '',
-                    line: 0,
-                    misspelling: $misspelling,
-                ),
-            );
+        $issues = array_map(
+            fn ($misspelling): Issue => new Issue($misspelling, '', 0),
+            $misspellings,
+        );
 
-            render(<<<HTML
-                <div class="mx-2 mt-1 space-y-1">
-                    <div class="space-x-1">
-                        <span class="bg-red text-white px-1 font-bold">Misspelling</span>
-                        <span>'<strong>{$misspelling->word}</strong>'</span>
-                    </div>
-
-                    <div class="space-x-1 text-gray-700">
-                        <span>Did you mean:</span>
-                        <span class="font-bold">{$suggestions}</span>
-                    </div>
-                </div>
-                HTML
-            );
+        foreach ($issues as $issue) {
+            $this->renderStaticTextLineIssue($issue);
         }
 
         $issuesCount = count($misspellings);
