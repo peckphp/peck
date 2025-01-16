@@ -38,7 +38,7 @@ it('clears custom cache directory', function (): void {
     }
 
     $commandTester->execute([
-        'directory' => '/tmp/.peck.cache',
+        '--directory' => '/tmp/.peck.cache',
     ]);
 
     $output = $commandTester->getDisplay();
@@ -59,7 +59,7 @@ it('throws an exception when the specified directory does not exist', function (
     $commandTester = new CommandTester($command);
 
     $commandTester->execute([
-        'directory' => '/tmp/peck.cache',
+        '--directory' => '/tmp/peck.cache',
     ]);
 
     $output = $commandTester->getDisplay();
@@ -76,19 +76,47 @@ it('only deletes cached files from custom cache directory', function (): void {
 
     $commandTester = new CommandTester($command);
 
-    if (! is_dir('/tmp/custom')) {
-        @mkdir('/tmp/custom');
+    if (! is_dir('/tmp/peck_custom')) {
+        @mkdir('/tmp/peck_custom');
     }
 
-    file_put_contents('/tmp/custom/peck_1', 'test');
-    file_put_contents('/tmp/custom/peck_2', 'test');
-    file_put_contents('/tmp/custom/not_a_cached_file', 'test');
+    file_put_contents('/tmp/peck_custom/peck_1', 'test');
+    file_put_contents('/tmp/peck_custom/peck_2', 'test');
+    file_put_contents('/tmp/peck_custom/not_a_cached_file', 'test');
 
     $commandTester->execute([
-        'directory' => '/tmp/custom',
+        '--directory' => '/tmp/peck_custom',
     ]);
 
-    expect(count(glob('/tmp/custom/*')))->toBe(1);
+    expect(count(glob('/tmp/peck_custom/*')))->toBe(1);
 
-    @unlink('/tmp/custom');
+    array_map('unlink', array_filter((array) glob('/tmp/peck_custom/*')));
+});
+
+it('deletes all files from cache directory based on custom prefix', function (): void {
+    $application = new Application;
+
+    $application->add(new ClearCommand);
+
+    $command = $application->find('cache:clear');
+
+    $commandTester = new CommandTester($command);
+
+    if (! is_dir('/tmp/peck_custom')) {
+        @mkdir('/tmp/peck_custom');
+    }
+
+    file_put_contents('/tmp/peck_custom/peck_1', 'test');
+    file_put_contents('/tmp/peck_custom/peck_2', 'test');
+    file_put_contents('/tmp/peck_custom/pecker_1', 'test');
+    file_put_contents('/tmp/peck_custom/pecker_2', 'test');
+
+    $commandTester->execute([
+        '--directory' => '/tmp/peck_custom',
+        '--prefix' => 'pecker_',
+    ]);
+
+    expect(count(glob('/tmp/peck_custom/*')))->toBe(2);
+
+    array_map('unlink', array_filter((array) glob('/tmp/peck_custom/*')));
 });

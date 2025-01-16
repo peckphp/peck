@@ -8,13 +8,11 @@ use Exception;
 use Peck\Plugins\Cache;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @codeCoverageIgnore
- *
  * @internal
  */
 #[AsCommand(name: 'cache:clear', description: 'Clears cached data.')]
@@ -25,7 +23,8 @@ final class ClearCommand extends Command
      */
     protected function configure(): void
     {
-        $this->addArgument('directory', InputArgument::OPTIONAL, 'Cache directory', null);
+        $this->addOption('directory', 'd', InputOption::VALUE_OPTIONAL, 'Cache directory');
+        $this->addOption('prefix', 'p', InputOption::VALUE_OPTIONAL, 'Cache file prefix');
     }
 
     /**
@@ -35,16 +34,21 @@ final class ClearCommand extends Command
     {
         $output->writeln('<info>Clearing cache...</info>');
 
-        $directory = $input->getArgument('directory');
+        $directory = $input->getOption('directory');
+        $prefix = $input->getOption('prefix');
+
+        $prefix = match (is_string($prefix)) {
+            true => $prefix,
+            default => Cache::CACHE_PREFIX,
+        };
 
         try {
-
             if (is_string($directory) && ! is_dir($directory)) {
                 throw new Exception('The specified cache directory does not exist.');
             }
 
             match (is_string($directory)) {
-                true => Cache::create($directory)->flush(),
+                true => Cache::create($directory, $prefix)->flush(),
                 default => Cache::default()->flush(),
             };
 
