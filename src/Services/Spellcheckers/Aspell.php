@@ -73,6 +73,21 @@ final readonly class Aspell implements Spellchecker
     }
 
     /**
+     * Take the relevant suggestions from the given misspelling.
+     *
+     * @param  array<int, string>  $suggestions
+     * @return array<int, string>
+     */
+    private function takeSuggestions(array $suggestions): array
+    {
+        $suggestions = array_filter($suggestions,
+            fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
+        );
+
+        return array_slice(array_values(array_unique($suggestions)), 0, 4);
+    }
+
+    /**
      * Runs the given processes in parallel.
      *
      * @param  array<int, Process>  $processes
@@ -87,6 +102,22 @@ final readonly class Aspell implements Spellchecker
 
             return array_merge($misspellings, $this->parseOutput($process->getOutput()));
         }, []);
+    }
+
+    private function createProcessForChunk(string $chunk): Process
+    {
+        $process = new Process([
+            'aspell',
+            '--encoding',
+            'utf-8',
+            '-a',
+            '--ignore-case',
+            '--lang=en_US',
+        ]);
+
+        $process->setInput($chunk);
+
+        return $process;
     }
 
     /**
@@ -109,36 +140,5 @@ final readonly class Aspell implements Spellchecker
                 fn (string $line): bool => str_starts_with($line, '&')
             )
         ));
-    }
-
-    /**
-     * Take the relevant suggestions from the given misspelling.
-     *
-     * @param  array<int, string>  $suggestions
-     * @return array<int, string>
-     */
-    private function takeSuggestions(array $suggestions): array
-    {
-        $suggestions = array_filter($suggestions,
-            fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
-        );
-
-        return array_slice(array_values(array_unique($suggestions)), 0, 4);
-    }
-
-    private function createProcessForChunk(string $chunk): Process
-    {
-        $process = new Process([
-            'aspell',
-            '--encoding',
-            'utf-8',
-            '-a',
-            '--ignore-case',
-            '--lang=en_US',
-        ]);
-
-        $process->setInput($chunk);
-
-        return $process;
     }
 }
