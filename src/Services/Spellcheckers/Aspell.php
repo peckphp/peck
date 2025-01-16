@@ -75,6 +75,21 @@ final readonly class Aspell implements Spellchecker
     }
 
     /**
+     * Take the relevant suggestions from the given misspelling.
+     *
+     * @param  array<int, string>  $suggestions
+     * @return array<int, string>
+     */
+    private function takeSuggestions(array $suggestions): array
+    {
+        $suggestions = array_filter($suggestions,
+            fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
+        );
+
+        return array_slice(array_values(array_unique($suggestions)), 0, 4);
+    }
+
+    /**
      * Gets the misspellings from the given text.
      *
      * @return array<int, Misspelling>
@@ -125,20 +140,5 @@ final readonly class Aspell implements Spellchecker
 
             return array_merge($misspellings, $this->parseOutput($process->getOutput()));
         }, []);
-    }
-
-    /**
-     * Take the relevant suggestions from the given misspelling.
-     *
-     * @param  array<int, string>  $suggestions
-     * @return array<int, string>
-     */
-    private function takeSuggestions(array $suggestions): array
-    {
-        $suggestions = array_filter($suggestions,
-            fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
-        );
-
-        return array_slice(array_values(array_unique($suggestions)), 0, 4);
     }
 }
