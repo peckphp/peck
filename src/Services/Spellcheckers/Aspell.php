@@ -53,6 +53,43 @@ final readonly class Aspell implements Spellchecker
     }
 
     /**
+     * Gets the misspellings from the given text.
+     *
+     * @return array<int, Misspelling>
+     */
+    private function getMisspellings(string $text): array
+    {
+        $chunks = array_filter(explode("\n", $text));
+
+        $processes = array_map(
+            fn (string $chunk): Process => $this->createProcessForChunk($chunk), $chunks
+        );
+
+        $misspellings = $this->runProcessesInParallel($processes);
+
+        $this->cache->set($text, $misspellings);
+
+        return $misspellings;
+    }
+
+    /**
+     * Runs the given processes in parallel.
+     *
+     * @param  array<int, Process>  $processes
+     * @return array<int, Misspelling>
+     */
+    private function runProcessesInParallel(array $processes): array
+    {
+        array_walk($processes, fn (Process $process) => $process->start());
+
+        return array_reduce($processes, function (array $misspellings, Process $process): array {
+            $process->wait();
+
+            return array_merge($misspellings, $this->parseOutput($process->getOutput()));
+        }, []);
+    }
+
+    /**
      * Parses the output from the Aspell command.
      *
      * @return array<int, Misspelling>
@@ -89,26 +126,6 @@ final readonly class Aspell implements Spellchecker
         return array_slice(array_values(array_unique($suggestions)), 0, 4);
     }
 
-    /**
-     * Gets the misspellings from the given text.
-     *
-     * @return array<int, Misspelling>
-     */
-    private function getMisspellings(string $text): array
-    {
-        $chunks = array_filter(explode("\n", $text));
-
-        $processes = array_map(
-            fn (string $chunk): Process => $this->createProcessForChunk($chunk), $chunks
-        );
-
-        $misspellings = $this->runProcessesInParallel($processes);
-
-        $this->cache->set($text, $misspellings);
-
-        return $misspellings;
-    }
-
     private function createProcessForChunk(string $chunk): Process
     {
         $process = new Process([
@@ -123,22 +140,5 @@ final readonly class Aspell implements Spellchecker
         $process->setInput($chunk);
 
         return $process;
-    }
-
-    /**
-     * Runs the given processes in parallel.
-     *
-     * @param  array<int, Process>  $processes
-     * @return array<int, Misspelling>
-     */
-    private function runProcessesInParallel(array $processes): array
-    {
-        array_walk($processes, fn (Process $process) => $process->start());
-
-        return array_reduce($processes, function (array $misspellings, Process $process): array {
-            $process->wait();
-
-            return array_merge($misspellings, $this->parseOutput($process->getOutput()));
-        }, []);
     }
 }
