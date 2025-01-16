@@ -10,19 +10,14 @@ use Peck\Plugins\Cache;
 use Peck\ValueObjects\Misspelling;
 use Symfony\Component\Process\Process;
 
-final class Aspell implements Spellchecker
+final readonly class Aspell implements Spellchecker
 {
-    /**
-     * The process instance, if any.
-     */
-    private static ?Process $process = null;
-
     /**
      * Creates a new instance of Spellchecker.
      */
     public function __construct(
-        private readonly Config $config,
-        private readonly Cache $cache,
+        private Config $config,
+        private Cache $cache,
     ) {
         //
     }
@@ -58,17 +53,78 @@ final class Aspell implements Spellchecker
     }
 
     /**
+     * Parses the output from the Aspell command.
+     *
+     * @return array<int, Misspelling>
+     */
+    private function parseOutput(string $output): array
+    {
+        return array_values(array_map(
+            function (string $line): Misspelling {
+                [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line));
+                $word = explode(' ', $wordMetadataAsString)[1];
+                $suggestions = explode(', ', trim($suggestionsAsString));
+
+                return new Misspelling($word, $this->takeSuggestions($suggestions));
+            },
+            array_filter(
+                explode(PHP_EOL, $output),
+                fn (string $line): bool => str_starts_with($line, '&')
+            )
+        ));
+    }
+
+    /**
      * Gets the misspellings from the given text.
      *
      * @return array<int, Misspelling>
      */
     private function getMisspellings(string $text): array
     {
-        $misspellings = iterator_to_array($this->run($text));
+        $chunks = array_filter(explode("\n", $text));
+
+        $processes = array_map(
+            fn (string $chunk): Process => $this->createProcessForChunk($chunk), $chunks
+        );
+
+        $misspellings = $this->runProcessesInParallel($processes);
 
         $this->cache->set($text, $misspellings);
 
         return $misspellings;
+    }
+
+    private function createProcessForChunk(string $chunk): Process
+    {
+        $process = new Process([
+            'aspell',
+            '--encoding',
+            'utf-8',
+            '-a',
+            '--ignore-case',
+            '--lang=en_US',
+        ]);
+
+        $process->setInput($chunk);
+
+        return $process;
+    }
+
+    /**
+     * Runs the given processes in parallel.
+     *
+     * @param  array<int, Process>  $processes
+     * @return array<int, Misspelling>
+     */
+    private function runProcessesInParallel(array $processes): array
+    {
+        array_walk($processes, fn (Process $process) => $process->start());
+
+        return array_reduce($processes, function (array $misspellings, Process $process): array {
+            $process->wait();
+
+            return array_merge($misspellings, $this->parseOutput($process->getOutput()));
+        }, []);
     }
 
     /**
@@ -84,49 +140,5 @@ final class Aspell implements Spellchecker
         );
 
         return array_slice(array_values(array_unique($suggestions)), 0, 4);
-    }
-
-    /**
-     * Runs the Aspell command with the given text and returns the suggestions, if any.
-     *
-     * @return array<int, Misspelling>
-     */
-    private function run(string $text): array
-    {
-        $process = self::$process ??= $this->createProcess();
-
-        $process->setInput($text);
-
-        $process->mustRun();
-
-        $output = $process->getOutput();
-
-        return array_values(array_map(function (string $line): Misspelling {
-            [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line));
-
-            $word = explode(' ', $wordMetadataAsString)[1];
-            $suggestions = explode(', ', trim($suggestionsAsString));
-
-            return new Misspelling($word, $this->takeSuggestions($suggestions));
-        }, array_filter(explode(PHP_EOL, $output), fn (string $line): bool => str_starts_with($line, '&'))));
-    }
-
-    /**
-     * Creates a new instance of Process.
-     */
-    private function createProcess(): Process
-    {
-        $process = new Process([
-            'aspell',
-            '--encoding',
-            'utf-8',
-            '-a',
-            '--ignore-case',
-            '--lang=en_US',
-        ]);
-
-        $process->setTimeout(0);
-
-        return $process;
     }
 }
