@@ -120,3 +120,31 @@ it('deletes all files from cache directory based on custom prefix', function ():
 
     array_map('unlink', array_filter((array) glob('/tmp/peck_custom/*')));
 });
+
+it('deletes all cache if prefix is empty', function (): void {
+    $application = new Application;
+
+    $application->add(new ClearCommand);
+
+    $command = $application->find('cache:clear');
+
+    $commandTester = new CommandTester($command);
+
+    if (! is_dir('/tmp/peck_custom')) {
+        @mkdir('/tmp/peck_custom');
+    }
+
+    file_put_contents('/tmp/peck_custom/peck_1', 'test');
+    file_put_contents('/tmp/peck_custom/peck_2', 'test');
+    file_put_contents('/tmp/peck_custom/pecker_1', 'test');
+    file_put_contents('/tmp/peck_custom/pecker_2', 'test');
+
+    $commandTester->execute([
+        '--directory' => '/tmp/peck_custom',
+        '--prefix' => '',
+    ]);
+
+    expect(glob('/tmp/peck_custom/*'))->toBeEmpty();
+
+    array_map('unlink', array_filter((array) glob('/tmp/peck_custom/*')));
+});
