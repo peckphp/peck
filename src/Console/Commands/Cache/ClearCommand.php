@@ -42,23 +42,19 @@ final class ClearCommand extends Command
             default => Cache::CACHE_PREFIX,
         };
 
-        try {
-            if (is_string($directory) && ! is_dir($directory)) {
-                throw new Exception('The specified cache directory does not exist.');
-            }
-
-            match (is_string($directory)) {
-                true => Cache::create($directory, $prefix)->flush(),
-                default => Cache::default()->flush(),
-            };
-
-            $output->writeln('<info>Cache successfully cleared!</info>');
-
-            return Command::SUCCESS;
-        } catch (Exception $e) {
-            $output->writeln('<error>Failed to clear cache: '.$e->getMessage().'</error>');
+        if (is_string($directory) && ! is_dir($directory)) {
+            $output->writeln('<error>The specified cache directory does not exist.</error>');
 
             return Command::FAILURE;
         }
+
+        match (is_string($directory)) {
+            true => Cache::create($directory, $prefix)->flush(),
+            default => Cache::default()->flush(),
+        };
+
+        $output->writeln('<info>Cache successfully cleared!</info>');
+
+        return Command::SUCCESS;
     }
 }
