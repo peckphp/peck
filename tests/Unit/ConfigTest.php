@@ -31,9 +31,13 @@ it('should behave correctly even if the peck.json file does not exist', function
 });
 
 it('should be able to create a peck.json config file', function (): void {
-    $configFilePath = __DIR__.'/../../peck.json';
-    $backup = $configFilePath.'.backup';
-    rename($configFilePath, $backup);
+    if (file_exists($filePath = dirname(__DIR__).'/peck-new.json')) {
+        unlink($filePath);
+    }
+    Config::flush();
+    Config::resolveConfigFilePathUsing(
+        fn (): string => $filePath,
+    );
 
     $created = Config::init();
     $config = Config::instance();
@@ -42,8 +46,8 @@ it('should be able to create a peck.json config file', function (): void {
         ->and($config->whitelistedWords)->toBe(['php'])
         ->and($config->whitelistedPaths)->toBe([]);
 
-    rename($backup, $configFilePath);
-})->skip('rewrite this test a little bit differently without modifying the root level peck.json file');
+    unlink($filePath);
+});
 
 it('should not recreate a file that already exists', function (): void {
     $created = Config::init();
@@ -57,7 +61,9 @@ it('should not recreate a file that already exists', function (): void {
 });
 
 it('can set ignore words', function (): void {
-    unlink($filePath = dirname(__DIR__).'/peck-testing.json');
+    if (file_exists($filePath = dirname(__DIR__).'/peck-testing.json')) {
+        unlink($filePath);
+    }
     Config::flush();
     Config::resolveConfigFilePathUsing(
         fn (): string => $filePath,
