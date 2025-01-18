@@ -38,7 +38,7 @@ final class ClearCommand extends Command
         $prefix = $input->getOption('prefix');
 
         $prefix = match (is_string($prefix)) {
-            true => $prefix,
+            true => trim($prefix),
             default => Cache::CACHE_PREFIX,
         };
 
