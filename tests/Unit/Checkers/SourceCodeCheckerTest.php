@@ -24,6 +24,26 @@ it('does not detect issues in the given directory', function (): void {
     expect($issues)->toBeEmpty();
 });
 
+it('detects issue and returns as fail when there are no suggestions', function (): void {
+    $checker = new SourceCodeChecker(
+        Config::instance(),
+        Aspell::default(),
+    );
+
+    $issues = $checker->check([
+        'directory' => __DIR__.'/../../Fixtures/TypoNoSuggestions',
+        'onSuccess' => fn (): null => null,
+        'onFailure' => fn (): null => null,
+    ]);
+
+    expect($issues)->toHaveCount(1)
+        ->and($issues[0]->file)->toEndWith('tests/Fixtures/TypoNoSuggestions/ClassWithTypoErrors.php')
+        ->and($issues[0]->line)->toBe(16)
+        ->and($issues[0]->misspelling->word)->toBe('xxxxxxxxxxxxxxxxxxxx')
+        ->and($issues[0]->misspelling->suggestions)->toBe([]);
+
+});
+
 it('detects issues in the given directory of classes', function (): void {
     $checker = new SourceCodeChecker(
         Config::instance(),
