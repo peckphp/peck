@@ -13,6 +13,7 @@ use Peck\ValueObjects\Issue;
 use Peck\ValueObjects\Misspelling;
 use ReflectionClass;
 use ReflectionClassConstant;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
@@ -81,7 +82,11 @@ final readonly class SourceCodeChecker implements Checker
             return [];
         }
 
-        $reflection = new ReflectionClass($definition);
+        try {
+            $reflection = new ReflectionClass($definition);
+        } catch (ReflectionException) { // @phpstan-ignore-line
+            return [];
+        }
 
         $namesToCheck = [
             ...$this->getMethodNames($reflection),
