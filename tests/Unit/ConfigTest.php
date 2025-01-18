@@ -57,8 +57,8 @@ it('should not recreate a file that already exists', function (): void {
 });
 
 it('can set ignore words', function (): void {
+    unlink($filePath = dirname(__DIR__).'/peck-testing.json');
     Config::flush();
-    $filePath = __DIR__.'/../Fixtures/peck.json';
     Config::resolveConfigFilePathUsing(
         fn (): string => $filePath,
     );
@@ -66,10 +66,11 @@ it('can set ignore words', function (): void {
     Config::init();
     $config = Config::instance();
 
-    expect($config->whitelistedWords)->toBe([]);
+    expect($config->whitelistedWords)->toBe(['php']);
 
     $config->ignoreWords(['laravel', 'paravel']);
     Config::flush();
+    unlink($filePath);
 
-    expect($config->whitelistedWords)->toBe(['laravel', 'paravel']);
+    expect($config->whitelistedWords)->toBe(['php', 'laravel', 'paravel']);
 });

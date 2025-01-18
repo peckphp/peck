@@ -75,10 +75,7 @@ final class Config
             return self::$instance;
         }
 
-        $basePath = ProjectPath::get();
-        $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
-                ? (self::$resolveConfigFilePathUsing)()
-                : self::JSON_CONFIGURATION_NAME);
+        $filePath = self::getResolvedFilePath();
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
@@ -167,13 +164,23 @@ final class Config
      */
     private static function writeConfigFile(array $config): bool
     {
-        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
+        $filePath = self::getResolvedFilePath();
 
         if (file_exists($filePath)) {
             return false;
         }
 
         return (bool) file_put_contents($filePath, json_encode($config, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * returns the resolved config file path when a closure is available, or returns the default file in the project path
+     */
+    private static function getResolvedFilePath(): string
+    {
+        return self::$resolveConfigFilePathUsing instanceof Closure
+            ? (self::$resolveConfigFilePathUsing)()
+            : sprintf('%s/%s', ProjectPath::get(), self::JSON_CONFIGURATION_NAME);
     }
 
     /**
