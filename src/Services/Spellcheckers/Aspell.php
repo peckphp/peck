@@ -61,11 +61,9 @@ final readonly class Aspell implements Spellchecker
     {
         $chunks = array_filter(explode("\n", $text));
 
-        $processes = array_map(
-            fn (string $chunk): Process => $this->createProcessForChunk($chunk), $chunks
-        );
+        $processes = array_map(fn (string $chunk): Process => $this->createProcess($chunk), $chunks);
 
-        $misspellings = $this->runProcessesInParallel($processes);
+        $misspellings = $this->runProcesses($processes);
 
         $this->cache->set($text, $misspellings);
 
@@ -93,7 +91,7 @@ final readonly class Aspell implements Spellchecker
      * @param  array<int, Process>  $processes
      * @return array<int, Misspelling>
      */
-    private function runProcessesInParallel(array $processes): array
+    private function runProcesses(array $processes): array
     {
         array_walk($processes, fn (Process $process) => $process->start());
 
@@ -102,22 +100,6 @@ final readonly class Aspell implements Spellchecker
 
             return array_merge($misspellings, $this->parseOutput($process->getOutput()));
         }, []);
-    }
-
-    private function createProcessForChunk(string $chunk): Process
-    {
-        $process = new Process([
-            'aspell',
-            '--encoding',
-            'utf-8',
-            '-a',
-            '--ignore-case',
-            '--lang=en_US',
-        ]);
-
-        $process->setInput($chunk);
-
-        return $process;
     }
 
     /**
@@ -140,5 +122,24 @@ final readonly class Aspell implements Spellchecker
                 fn (string $line): bool => str_starts_with($line, '&')
             )
         ));
+    }
+
+    /**
+     * Creates a new instance of Process.
+     */
+    private function createProcess(string $input): Process
+    {
+        return new Process(
+            command: [
+                'aspell',
+                '--encoding',
+                'utf-8',
+                '-a',
+                '--ignore-case',
+                '--lang=en_US',
+            ],
+            input: $input,
+            timeout: 0
+        );
     }
 }
