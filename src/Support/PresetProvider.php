@@ -13,7 +13,7 @@ final readonly class PresetProvider
     /**
      * The directory where the preset stubs are stored.
      */
-    private const string PRESET_STUBS_DIRECTORY = __DIR__.'/../../stubs/presets';
+    private const string PRESET_STUBS_DIRECTORY = '/stubs/presets';
 
     /**
      * Returns the whitelisted words for the given preset.
@@ -36,7 +36,7 @@ final readonly class PresetProvider
      */
     private static function getWordsFromStub(string $preset): array
     {
-        $path = sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset);
+        $path = sprintf('%s/%s.stub', self::getStubsPath(), $preset);
 
         return array_values(array_filter(array_map('trim', explode("\n", (string) file_get_contents($path)))));
     }
@@ -46,6 +46,14 @@ final readonly class PresetProvider
      */
     private static function stubExists(string $preset): bool
     {
-        return file_exists(sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset));
+        return file_exists(sprintf('%s/%s.stub', self::getStubsPath(), $preset));
+    }
+
+    /**
+     * Returns the real path from the relative path in the PRESET_STUBS_DIRECTORY constant
+     */
+    private static function getStubsPath(): string
+    {
+        return __DIR__.'/../../'.self::PRESET_STUBS_DIRECTORY;
     }
 }
