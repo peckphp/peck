@@ -53,6 +53,7 @@ misconfigured
 namespace
 nano
 nullable
+oauth
 otp
 params
 parsable
@@ -81,6 +82,7 @@ timezones
 tls
 tokenize
 truncatable
+ttl
 txt
 ui
 unbookmark
@@ -93,7 +95,6 @@ validator
 verifier
 verifiers
 viewables
-vite
 vite
 webhook
 webhooks
