@@ -189,21 +189,24 @@ final readonly class SourceCodeChecker implements Checker
      */
     private function getConstantNames(ReflectionClass $reflection): array
     {
-        return array_merge(...array_values((array_map(
-            function (ReflectionClassConstant $constant) use ($reflection): array {
-                foreach ($reflection->getTraits() as $trait) {
-                    if ($trait->hasConstant($constant->getName())) {
-                        return [];
+        return array_map(
+            fn (ReflectionClassConstant $constant): string => $constant->name,
+            array_filter(
+                $reflection->getReflectionConstants(),
+                function (ReflectionClassConstant $constant) use ($reflection): bool {
+                    if ($constant->class !== $reflection->name) {
+                        return false;
                     }
-                }
-                if ($constant->class !== $reflection->name) {
-                    return [];
-                }
+                    foreach ($reflection->getTraits() as $trait) {
+                        if ($trait->hasConstant($constant->getName())) {
+                            return false;
+                        }
+                    }
 
-                return [$constant->name];
-            },
-            $reflection->getReflectionConstants()
-        ))));
+                    return true;
+                }
+            )
+        );
     }
 
     /**
