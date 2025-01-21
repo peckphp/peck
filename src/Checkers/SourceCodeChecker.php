@@ -191,12 +191,13 @@ final readonly class SourceCodeChecker implements Checker
     {
         return array_map(
             fn (ReflectionClassConstant $constant): string => $constant->name,
-            array_filter(
+            array_values(array_filter(
                 $reflection->getReflectionConstants(),
                 function (ReflectionClassConstant $constant) use ($reflection): bool {
                     if ($constant->class !== $reflection->name) {
                         return false;
                     }
+
                     foreach ($reflection->getTraits() as $trait) {
                         if ($trait->hasConstant($constant->getName())) {
                             return false;
@@ -205,7 +206,7 @@ final readonly class SourceCodeChecker implements Checker
 
                     return true;
                 }
-            )
+            ))
         );
     }
 
