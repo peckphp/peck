@@ -414,7 +414,7 @@ final class CheckCommand extends Command
             <div class="mx-2 my-1 space-y-1">
                 <div class="space-x-1">
                     <span class="bg-red text-white px-1 font-bold">FAIL</span>
-                    <span>{$issuesCount} misspelling(s) found in your project.</span>
+                    <span>{$issuesCount} misspelling(s) found in the given text.</span>
                 </div>
 
                 <div class="space-x-1 text-gray-700">
