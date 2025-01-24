@@ -9,6 +9,11 @@ use RuntimeException;
 final readonly class Cache
 {
     /**
+     * The cache prefix.
+     */
+    public const string CACHE_PREFIX = 'peck_';
+
+    /**
      * The version of the cache.
      */
     private const int VERSION = 1;
@@ -18,6 +23,7 @@ final readonly class Cache
      */
     public function __construct(
         private string $cacheDirectory,
+        private string $cachePrefix = self::CACHE_PREFIX,
     ) {
         //
     }
@@ -27,9 +33,15 @@ final readonly class Cache
      */
     public static function default(): self
     {
-        $basePath = __DIR__.'/../../';
+        return self::create(__DIR__.'/../../.peck.cache');
+    }
 
-        $cache = new self("{$basePath}/.peck.cache");
+    /**
+     * Creates a new instance of Cache.
+     */
+    public static function create(string $cacheDirectory, string $cachePrefix = self::CACHE_PREFIX): self
+    {
+        $cache = new self($cacheDirectory, $cachePrefix);
 
         $cache->get('__internal_version') === self::VERSION ?: $cache->flush();
 
@@ -99,7 +111,7 @@ final readonly class Cache
      */
     public function getCacheKey(string $key): string
     {
-        return md5($key);
+        return $this->cachePrefix.md5($key);
     }
 
     /**
@@ -107,7 +119,7 @@ final readonly class Cache
      */
     public function flush(): void
     {
-        if (is_array($files = glob("{$this->cacheDirectory}/*"))) {
+        if (is_array($files = glob("{$this->cacheDirectory}/{$this->cachePrefix}*"))) {
             foreach ($files as $file) {
                 @unlink($file);
             }
