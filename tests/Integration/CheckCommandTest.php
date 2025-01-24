@@ -91,7 +91,8 @@ it('may fail with text option', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Did you mean: typo, typos, type, topi');
+    expect(trim($output))->toContain('Did you mean: typo, typos, type, topi')
+        ->and($commandTester->getStatusCode())->toBe(1);
 });
 
 it('may pass with text option', function (): void {
@@ -109,5 +110,6 @@ it('may pass with text option', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('PASS  No misspellings found in the given text.');
+    expect(trim($output))->toContain('PASS  No misspellings found in the given text.')
+        ->and($commandTester->getStatusCode())->toBe(0);
 });
