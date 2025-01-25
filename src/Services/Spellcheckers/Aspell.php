@@ -64,7 +64,7 @@ final class Aspell implements Spellchecker
      */
     private function getMisspellings(string $text): array
     {
-        $misspellings = iterator_to_array($this->run($text));
+        $misspellings = $this->run($text);
 
         $this->cache->set($text, $misspellings);
 
@@ -101,14 +101,45 @@ final class Aspell implements Spellchecker
 
         $output = $process->getOutput();
 
-        return array_values(array_map(function (string $line): Misspelling {
-            [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line));
+        $lines = $this->getAspellLinesFromOutput($output);
 
-            $word = explode(' ', $wordMetadataAsString)[1];
-            $suggestions = explode(', ', trim($suggestionsAsString));
+        return $this->getMisspellingsFromOutputLines($lines);
+    }
+
+    /**
+     * Gets Aspell output lines as an array
+     *
+     * @return array<int, string>
+     */
+    private function getAspellLinesFromOutput(string $output): array
+    {
+        return array_values(
+            array_filter(
+                explode(PHP_EOL, trim($output)), fn (string $line): bool => ! str_starts_with($line, '@(#)') && $line !== '*'
+            )
+        );
+    }
+
+    /**
+     * Maps output lines to an array of Misspellings if suggestions exist, null if no suggestions or an empty array if spelling is correct
+     *
+     * @param  array<int, string>  $lines
+     * @return array <int, Misspelling>
+     */
+    private function getMisspellingsFromOutputLines(array $lines): array
+    {
+        return array_values(array_map(function (string $line): Misspelling {
+            if (preg_match('/#\\s(\\w*)\\sd*/', $line, $matches)) {
+                $word = $matches[1];
+                $suggestions = [];
+            } else {
+                [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line));
+                $word = explode(' ', $wordMetadataAsString)[1];
+                $suggestions = explode(', ', trim($suggestionsAsString));
+            }
 
             return new Misspelling($word, $this->takeSuggestions($suggestions));
-        }, array_filter(explode(PHP_EOL, $output), fn (string $line): bool => str_starts_with($line, '&'))));
+        }, $lines));
     }
 
     /**

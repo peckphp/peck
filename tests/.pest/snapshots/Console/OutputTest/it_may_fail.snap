@@ -1,4 +1,4 @@
-  .............⨯⨯⨯.⨯....⨯⨯.⨯⨯⨯⨯⨯⨯....⨯⨯
+  .............⨯⨯⨯.⨯......⨯⨯.⨯⨯⨯⨯⨯⨯....⨯⨯⨯
 
    Misspelling  [1m./tests/Fixtures/FolderWithTypoos[0m: '[1mtypoos[0m'  
   ./tests/Fixtures/FolderWithTypoos     
@@ -185,7 +185,12 @@
         ---------------------^     
   Did you mean: constant, constants, consonant, consent  
 
-   FAIL  37 misspelling(s) found in your project.  
+   Misspelling  [1m./tests/Fixtures/TypoNoSuggestions/ClassWithTypoErrors.php:16:48[0m: '[1mxxxxxxxxxxxxxxxxxxxx[0m'  
+    16▕ [1m    public int $propertyWithTypoAndNoSuggestionsXxxxxxxxxxxxxxxxxxxx = 1;[0m  
+        ------------------------------------------------^     
+  No suggestions found.   
+
+   FAIL  38 misspelling(s) found in your project.  
     
   Duration: 0.00s   
   Hint: You may correct the misspellings individually, ignore them one by one, or ignore all of them using the peck --ignore-all option.  

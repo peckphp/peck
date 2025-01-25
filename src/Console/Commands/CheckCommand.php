@@ -198,6 +198,8 @@ final class CheckCommand extends Command
             $issue,
         );
 
+        $suggestionsHelperText = ($suggestions > '') ? 'Did you mean:' : 'No suggestions found.';
+
         render(<<<HTML
             <div class="mx-2 mb-1">
                 <div class="space-x-1">
@@ -208,7 +210,7 @@ final class CheckCommand extends Command
                 </div>
 
                 <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
+                    <span>{$suggestionsHelperText}</span>
                     <span class="font-bold">{$suggestions}</span>
                 </div>
             </div>
@@ -272,6 +274,8 @@ final class CheckCommand extends Command
             $issue,
         );
 
+        $suggestionsHelperText = ($suggestions > '') ? 'Did you mean:' : 'No suggestions found.';
+
         render(<<<HTML
             <div class="mx-2 mb-1">
                 <div class="space-x-1">
@@ -282,7 +286,7 @@ final class CheckCommand extends Command
                 </div>
 
                 <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
+                    <span>{$suggestionsHelperText}</span>
                     <span class="font-bold">{$suggestions}</span>
                 </div>
             </div>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Peck\Config;
 use Peck\Plugins\Cache;
 use Peck\Services\Spellcheckers\Aspell;
+use Peck\ValueObjects\Misspelling;
 
 it('does not detect issues', function (): void {
     $spellchecker = Aspell::default();
@@ -90,4 +91,17 @@ it('gets correct issues with corrupted cache', function (): void {
     $issues = $spellchecker->check($cacheKey);
 
     expect($issues)->not->toBeEmpty();
+});
+
+it('reports a bad spelling even when there are no suggestions', function (): void {
+    Cache::default()->flush();
+    $spellchecker = Aspell::default();
+
+    $issues = $spellchecker->check('ppppppppppppppooihihihihih');
+
+    expect($issues)->toBeArray()
+        ->and($issues[0]->word)->toBe('ppppppppppppppooihihihihih')
+        ->and($issues[0]->suggestions)->toBe([])
+        ->and($issues[0])->toBeInstanceOf(Misspelling::class);
+
 });
