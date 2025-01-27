@@ -99,3 +99,41 @@ it('may pass with ignore-all option', function (): void {
         ->and($commandTester->getStatusCode())->toBe(0);
 
 });
+
+it('may fail with text option', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--text' => 'This is a test with a typoo.',
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('Did you mean: typo, typos, type, topi')
+        ->and($commandTester->getStatusCode())->toBe(1);
+});
+
+it('may pass with text option', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--text' => 'This is a test without any typos.',
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('PASS  No misspellings found in the given text.')
+        ->and($commandTester->getStatusCode())->toBe(0);
+});
