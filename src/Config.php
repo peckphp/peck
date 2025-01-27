@@ -75,10 +75,7 @@ final class Config
             return self::$instance;
         }
 
-        $basePath = ProjectPath::get();
-        $filePath = $basePath.'/'.(self::$resolveConfigFilePathUsing instanceof Closure
-                ? (self::$resolveConfigFilePathUsing)()
-                : self::JSON_CONFIGURATION_NAME);
+        $filePath = self::getResolvedFilePath();
 
         $contents = file_exists($filePath)
             ? (string) file_get_contents($filePath)
@@ -107,28 +104,9 @@ final class Config
      */
     public static function init(): bool
     {
-        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
-
-        if (file_exists($filePath)) {
-            return false;
-        }
-
-        return (bool) file_put_contents($filePath, json_encode([
-            ...match (true) {
-                class_exists('\Illuminate\Support\Str') => [
-                    'preset' => 'laravel',
-                ],
-                default => [
-                    'preset' => 'base',
-                ],
-            },
-            'ignore' => [
-                'words' => [
-                    'php',
-                ],
-                'paths' => [],
-            ],
-        ], JSON_PRETTY_PRINT));
+        return self::writeConfigFile(
+            self::defaultConfigStructure()
+        );
     }
 
     /**
@@ -155,18 +133,70 @@ final class Config
     }
 
     /**
+     * Returns the default structure for the array to be output within peck.json.
+     *
+     * @return non-empty-array<'ignore'|'preset', 'base'|'laravel'|array{words: array{'php'}, paths: array{}}>
+     */
+    private static function defaultConfigStructure(): array
+    {
+        return [
+            ...match (true) {
+                class_exists('\Illuminate\Support\Str') => [
+                    'preset' => 'laravel',
+                ],
+                default => [
+                    'preset' => 'base',
+                ],
+            },
+            'ignore' => [
+                'words' => [
+                    'php',
+                ],
+                'paths' => [],
+            ],
+        ];
+    }
+
+    /**
+     * Writes the json config structure to the config file (usually peck.json).
+     *
+     * @param  non-empty-array<'ignore'|'preset', array{words: array<int, string>, paths: array<int, string>}|string>  $config
+     */
+    private static function writeConfigFile(array $config): bool
+    {
+        $filePath = self::getResolvedFilePath();
+
+        if (file_exists($filePath)) {
+            return false;
+        }
+
+        return (bool) file_put_contents($filePath, json_encode($config, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * returns the resolved config file path when a closure is available, or returns the default file in the project path
+     */
+    private static function getResolvedFilePath(): string
+    {
+        return self::$resolveConfigFilePathUsing instanceof Closure
+            ? (self::$resolveConfigFilePathUsing)()
+            : sprintf('%s/%s', ProjectPath::get(), self::JSON_CONFIGURATION_NAME);
+    }
+
+    /**
      * Save the configuration to the file.
      */
     private function persist(): void
     {
-        $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
-
-        file_put_contents($filePath, json_encode([
-            ...$this->preset !== null ? ['preset' => $this->preset] : [],
-            'ignore' => [
-                'words' => $this->whitelistedWords,
-                'paths' => $this->whitelistedPaths,
-            ],
-        ], JSON_PRETTY_PRINT));
+        self::writeConfigFile(array_merge(
+            self::defaultConfigStructure(),
+            [
+                ...$this->preset !== null ? ['preset' => $this->preset] : [],
+                'ignore' => [
+                    'words' => $this->whitelistedWords,
+                    'paths' => $this->whitelistedPaths,
+                ],
+            ]
+        ));
     }
 }

@@ -85,7 +85,7 @@ final readonly class Cache
      */
     public function getCacheFile(string $key): string
     {
-        if (! is_dir($this->cacheDirectory) && ! mkdir($this->cacheDirectory, 0755, true)) {
+        if (! is_writable(dirname($this->cacheDirectory)) || (! is_dir($this->cacheDirectory) && ! mkdir($this->cacheDirectory, 0755, true))) {
             throw new RuntimeException("Could not create cache directory: {$this->cacheDirectory}");
         }
 
