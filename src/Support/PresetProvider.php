@@ -26,7 +26,7 @@ final readonly class PresetProvider
             return [];
         }
 
-        return [...self::getWordsFromStub('base'), ...self::getWordsFromStub('currency'), ...self::getWordsFromStub($preset)];
+        return [...self::getWordsFromStub('base'), ...self::getWordsFromStub('iso4217'), ...self::getWordsFromStub($preset)];
     }
 
     /**
