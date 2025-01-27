@@ -7,6 +7,7 @@ namespace Peck;
 use Closure;
 use Peck\Support\PresetProvider;
 use Peck\Support\ProjectPath;
+use Peck\Support\SpellcheckFormatter;
 
 final class Config
 {
@@ -151,6 +152,7 @@ final class Config
         return in_array(strtolower($word), [
             ...$this->whitelistedWords,
             ...PresetProvider::whitelistedWords($this->preset),
+            ...$this->ignoreWordsFromProjectPath(),
         ]);
     }
 
@@ -168,5 +170,17 @@ final class Config
                 'paths' => $this->whitelistedPaths,
             ],
         ], JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Ignore words from the project path including $HOME directory. Prevents spell check errors for cache constant
+     *
+     * @return list<string>
+     */
+    private function ignoreWordsFromProjectPath(): array
+    {
+        $directories = explode(DIRECTORY_SEPARATOR, ProjectPath::get());
+
+        return array_map(fn ($directory): string => SpellcheckFormatter::format($directory), array_filter($directories));
     }
 }

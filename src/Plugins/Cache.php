@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peck\Plugins;
 
+use Peck\Support\ProjectPath;
 use RuntimeException;
 
 final readonly class Cache
@@ -27,7 +28,7 @@ final readonly class Cache
      */
     public static function default(): self
     {
-        $basePath = __DIR__.'/../../';
+        $basePath = ProjectPath::get();
 
         $cache = new self("{$basePath}/.peck.cache");
 
