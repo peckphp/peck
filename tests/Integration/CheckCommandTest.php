@@ -21,7 +21,8 @@ it('may fail', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Did you mean: property, propriety, properer, properest');
+    expect(trim($output))->toContain('Did you mean: property, propriety, properer, properest')
+        ->and($commandTester->getStatusCode())->toBe(1);
 });
 
 it('may pass', function (): void {
@@ -37,7 +38,8 @@ it('may pass', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('PASS  No misspellings found in your project.');
+    expect(trim($output))->toContain('PASS  No misspellings found in your project.')
+        ->and($commandTester->getStatusCode())->toBe(0);
 });
 
 it('may pass with lineless issues', function (): void {
@@ -55,7 +57,8 @@ it('may pass with lineless issues', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('Misspelling');
+    expect(trim($output))->toContain('Misspelling')
+        ->and($commandTester->getStatusCode())->toBe(1);
 });
 
 it('may pass with init option', function (): void {
@@ -73,5 +76,26 @@ it('may pass with init option', function (): void {
 
     $output = $commandTester->getDisplay();
 
-    expect(trim($output))->toContain('INFO  Configuration file already exists.');
+    expect(trim($output))->toContain('INFO  Configuration file already exists.')
+        ->and($commandTester->getStatusCode())->toBe(1);
+});
+
+it('may pass with ignore-all option', function (): void {
+    $application = new Application;
+
+    $application->add(new CheckCommand);
+
+    $command = $application->find('check');
+
+    $commandTester = new CommandTester($command);
+
+    $commandTester->execute([
+        '--ignore-all' => true,
+    ]);
+
+    $output = $commandTester->getDisplay();
+
+    expect(trim($output))->toContain('PASS  No misspellings found in your project.')
+        ->and($commandTester->getStatusCode())->toBe(0);
+
 });
