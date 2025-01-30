@@ -62,7 +62,7 @@ final class CheckCommand extends Command
             render(<<<HTML
                 <div class="mx-2 mb-1">
                     <div class="space-x-1 mb-1">
-                        <span class="bg-green text-black px-1 font-bold">PASS</span>
+                        <span class="bg-green text-gray px-1 font-bold">PASS</span>
                         <span>No misspellings found in your project.</span>
                     </div>
                     <div>
@@ -113,7 +113,7 @@ final class CheckCommand extends Command
             render(<<<HTML
                 <div class="mx-2 mb-1">
                     <div class="space-x-1">
-                        <span class="bg-blue text-black px-1 font-bold">INFO</span>
+                        <span class="bg-blue text-gray px-1 font-bold">INFO</span>
                         <span>{$wordsAddedCount} word(s) added to the ignore list.</span>
                     </div>
                 </div>
@@ -225,7 +225,7 @@ final class CheckCommand extends Command
             render(<<<'HTML'
                 <div class="mx-2 my-1">
                     <div class="space-x-1">
-                        <span class="bg-blue text-black px-1 font-bold">INFO</span>
+                        <span class="bg-blue text-gray px-1 font-bold">INFO</span>
                         <span>Configuration file already exists.</span>
                     </div>
                 </div>
@@ -239,7 +239,7 @@ final class CheckCommand extends Command
             <div class="mt-1">
                 <div class="mx-2 mb-1">
                     <div class="space-x-1">
-                        <span class="bg-green text-black px-1 font-bold">SUCCESS</span>
+                        <span class="bg-green text-gray px-1 font-bold">SUCCESS</span>
                         <span>Configuration file has been created.</span>
                     </div>
                 </div>
