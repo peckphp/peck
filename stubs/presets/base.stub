@@ -65,12 +65,15 @@ oauth
 otp
 params
 parsable
+phpstan
+phpunit
 pinkary
 pinnable
 postgres
 pre
 propable
 psr
+readme
 recaptcha
 repo
 resizer

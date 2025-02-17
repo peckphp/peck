@@ -181,11 +181,7 @@ final class CheckCommand extends Command
 
         return match (true) {
             isset($_ENV['APP_BASE_PATH']) => $_ENV['APP_BASE_PATH'],
-            default => match (true) {
-                is_dir($basePath.'/app') => ($basePath.'/app'),
-                is_dir($basePath.'/src') => ($basePath.'/src'),
-                default => $basePath,
-            },
+            default => $basePath,
         };
     }
 

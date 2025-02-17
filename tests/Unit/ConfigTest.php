@@ -9,7 +9,9 @@ it('should have a default configuration', function (): void {
 
     expect($config->whitelistedWords)->toBe([
         'php',
-    ])->and($config->whitelistedPaths)->toBe([]);
+    ])->and($config->whitelistedPaths)->toBe([
+        'tests',
+    ]);
 });
 
 it('should to be a singleton', function (): void {
@@ -53,5 +55,7 @@ it('should not recreate a file that already exists', function (): void {
         ->and($config->whitelistedWords)->toBe([
             'php',
         ])
-        ->and($config->whitelistedPaths)->toBe([]);
+        ->and($config->whitelistedPaths)->toBe([
+            'tests',
+        ]);
 });
