@@ -13,7 +13,7 @@ final class Config
     /**
      * The name of the configuration file.
      */
-    private const string JSON_CONFIGURATION_NAME = 'peck.json';
+    private const JSON_CONFIGURATION_NAME = 'peck.json';
 
     /**
      * The instance of the configuration.

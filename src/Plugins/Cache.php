@@ -11,7 +11,7 @@ final readonly class Cache
     /**
      * The version of the cache.
      */
-    private const int VERSION = 1;
+    private const VERSION = 1;
 
     /**
      * Creates a new instance of Cache.
