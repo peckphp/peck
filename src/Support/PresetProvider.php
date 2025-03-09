@@ -13,7 +13,7 @@ final readonly class PresetProvider
     /**
      * The directory where the preset stubs are stored.
      */
-    private const string PRESET_STUBS_DIRECTORY = __DIR__.'/../../stubs/presets';
+    private const PRESET_STUBS_DIRECTORY = __DIR__.'/../../stubs/presets';
 
     /**
      * Returns the whitelisted words for the given preset.
