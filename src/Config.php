@@ -150,7 +150,7 @@ final class Config
     {
         return in_array(strtolower($word), [
             ...$this->whitelistedWords,
-            ...PresetProvider::whitelistedWords($this->preset),
+            ...array_map(strtolower(...), PresetProvider::whitelistedWords($this->preset)),
         ]);
     }
 
