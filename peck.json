@@ -3,6 +3,9 @@
     "ignore": {
         "words": [
             "php"
+        ],
+        "paths": [
+            "tests"
         ]
     }
 }
