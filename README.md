@@ -23,7 +23,7 @@ Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wi
 
 ## Installation
 
-> **Requires [PHP 8.3+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
+> **Requires [PHP 8.2+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
 
 Peck relies on GNU Aspell for its spell-checking functionality. Make sure GNU Aspell is installed on your system before using Peck.
 
