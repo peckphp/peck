@@ -18,20 +18,27 @@ final readonly class PresetProvider
     /**
      * Returns the whitelisted words for the given preset.
      *
+     * @param  array<int, string>|null  $presets
      * @return array<int, string>
      */
-    public static function whitelistedWords(?string $preset): array
+    public static function whitelistedWords(?array $presets = []): array
     {
-        if ($preset === null || ! self::stubExists($preset)) {
-            return [];
-        }
-
-        return [
+        /** @var array<int, string> */
+        $words = [
             ...self::getWordsFromStub('base'),
-            ...self::getWordsFromStub('iso4217'),
-            ...self::getWordsFromStub('iso3166'),
-            ...self::getWordsFromStub($preset),
         ];
+
+        array_map(
+            static function (string $preset) use (&$words): void {
+                $words = [
+                    ...$words,
+                    ...self::getWordsFromStub($preset),
+                ];
+            },
+            $presets ?? [],
+        );
+
+        return $words;
     }
 
     /**
@@ -39,8 +46,12 @@ final readonly class PresetProvider
      *
      * @return array<int, string>
      */
-    private static function getWordsFromStub(string $preset): array
+    public static function getWordsFromStub(string $preset): array
     {
+        if (! self::stubExists($preset)) {
+            return [];
+        }
+
         $path = sprintf('%s/%s.stub', self::PRESET_STUBS_DIRECTORY, $preset);
 
         return array_values(array_filter(array_map('trim', explode("\n", (string) file_get_contents($path)))));

@@ -7,6 +7,7 @@ namespace Peck;
 use Closure;
 use Peck\Support\PresetProvider;
 use Peck\Support\ProjectPath;
+use RuntimeException;
 
 final class Config
 {
@@ -30,11 +31,12 @@ final class Config
      *
      * @param  array<int, string>  $whitelistedWords
      * @param  array<int, string>  $whitelistedPaths
+     * @param  array<int, string>  $presets
      */
     public function __construct(
         public array $whitelistedWords = [],
         public array $whitelistedPaths = [],
-        public ?string $preset = null,
+        public array $presets = [],
     ) {
         $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
     }
@@ -86,7 +88,7 @@ final class Config
 
         /**
          * @var array{
-         *     preset?: string,
+         *     presets?: string[],
          *     ignore?: array{
          *         words?: array<int, string>,
          *         paths?: array<int, string>
@@ -95,10 +97,14 @@ final class Config
          */
         $jsonAsArray = json_decode($contents, true) ?: [];
 
+        if (! is_array($jsonAsArray['presets'] ?? [])) {
+            throw new RuntimeException('The presets must be an array with all the presets you want to use.');
+        }
+
         return self::$instance = new self(
             $jsonAsArray['ignore']['words'] ?? [],
             $jsonAsArray['ignore']['paths'] ?? [],
-            $jsonAsArray['preset'] ?? null,
+            $jsonAsArray['presets'] ?? [],
         );
     }
 
@@ -116,10 +122,10 @@ final class Config
         return (bool) file_put_contents($filePath, json_encode([
             ...match (true) {
                 class_exists('\Illuminate\Support\Str') => [
-                    'preset' => 'laravel',
+                    'presets' => ['laravel'],
                 ],
                 default => [
-                    'preset' => 'base',
+                    'presets' => ['base'],
                 ],
             },
             'ignore' => [
@@ -150,7 +156,7 @@ final class Config
     {
         return in_array(strtolower($word), [
             ...$this->whitelistedWords,
-            ...array_map(strtolower(...), PresetProvider::whitelistedWords($this->preset)),
+            ...array_map(strtolower(...), PresetProvider::whitelistedWords($this->presets)),
         ]);
     }
 
@@ -162,7 +168,7 @@ final class Config
         $filePath = ProjectPath::get().'/'.self::JSON_CONFIGURATION_NAME;
 
         file_put_contents($filePath, json_encode([
-            ...$this->preset !== null ? ['preset' => $this->preset] : [],
+            'presets' => $this->presets,
             'ignore' => [
                 'words' => $this->whitelistedWords,
                 'paths' => $this->whitelistedPaths,

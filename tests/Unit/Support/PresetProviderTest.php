@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 use Peck\Support\PresetProvider;
 
-it('returns an empty array when the preset is null', function (): void {
-    expect(PresetProvider::whitelistedWords(null))->toBe([]);
+it('returns only words from base preset when presets are not given', function (): void {
+    expect(PresetProvider::whitelistedWords())->toBe(PresetProvider::getWordsFromStub('base'));
 });
 
-it('returns an empty array when the preset is invalid', function (): void {
-    expect(PresetProvider::whitelistedWords('invalid'))->toBe([]);
+it('returns only words from base preset when all given presets are invalids', function (): void {
+    expect(PresetProvider::whitelistedWords(['invalid-one', 'invalid-two']))->toBe(PresetProvider::getWordsFromStub('base'));
 });
 
-it('returns the whitelisted words for the given preset', function (): void {
-    expect(PresetProvider::whitelistedWords('laravel'))->toContain(
-        'http',
-        'laravel',
-        'fillable',
+it('returns the whitelisted words for the given and base presets', function (): void {
+    expect(PresetProvider::whitelistedWords(['laravel', 'iso3166', 'iso4217']))->toContain(
+        'apa',
+        'USD',
+        'USA',
+        'https'
     );
 });

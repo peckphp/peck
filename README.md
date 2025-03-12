@@ -82,7 +82,7 @@ Here's an example configuration:
 
 ```json
 {
-    "preset": "laravel",
+    "preset": ["laravel"],
     "ignore": {
         "words": [
             "config",
@@ -105,7 +105,9 @@ You can also specify the path to the configuration file using the `--config` opt
 
 In order to make it easier to get started with Peck, we've included a few presets that you can use to ignore common words in your project. The following presets are available:
 
-- `laravel` 
+- `laravel` - Ignores common Laravel words such as `inertia`, `jetstream`, etc. 
+- `iso3166` - Ignores all ISO 3166 country codes in alpha-2 and alpha-3 format (e.g., `US`, `USA`, `GB`, `GBR`, etc.)
+- `iso4217` - Ignores all ISO 4217 currency codes (e.g., `USD`, `EUR`, `GBP`, etc.)
 
 ## Command Options
 
