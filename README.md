@@ -82,7 +82,7 @@ Here's an example configuration:
 
 ```json
 {
-    "preset": ["laravel"],
+    "presets": ["laravel"],
     "ignore": {
         "words": [
             "config",
