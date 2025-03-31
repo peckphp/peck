@@ -19,7 +19,7 @@ foreach ([
 
 $application = new Application(
     'Peck',
-    '0.1.2',
+    '0.1.3',
 );
 
 $application->add(
