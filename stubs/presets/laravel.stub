@@ -7,3 +7,8 @@ inertiajs
 jetstream
 typesense
 ulid
+enumable
+laratrust
+readonly
+favicon
+debugbar
