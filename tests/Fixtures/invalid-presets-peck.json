@@ -1,8 +1,5 @@
 {
-    "presets": [
-        "iso3166",
-        "iso4217"
-    ],
+    "presets": "base",
     "ignore": {
         "words": [
             "php"
