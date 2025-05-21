@@ -93,6 +93,7 @@ final class Config
         /**
          * @var array{
          *     preset?: string,
+         *     language?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
          *         paths?: array<int, string>
