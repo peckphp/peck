@@ -60,7 +60,7 @@ it('should not recreate a file that already exists', function (): void {
         ]);
 });
 
-it('should throw an runtime exception if the presets are not an array', function (): void {
+it('throws a runtime exception if the presets value is not an array', function (): void {
     Config::resolveConfigFilePathUsing(
         fn (): string => 'tests/Fixtures/invalid-presets-peck.json',
     );
