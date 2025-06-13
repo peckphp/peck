@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-test('stub files', function () {
+test('stub files', function (): void {
     expect('stubs/presets/base.stub')
         ->toReturnUnique()
         ->toReturnLowercase()
