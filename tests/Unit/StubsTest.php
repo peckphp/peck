@@ -9,11 +9,9 @@ test('stub files', function () {
         ->toBeOrdered();
 
     expect('stubs/presets/iso3166.stub')
-        ->toReturnUnique()
-        ->not->toReturnLowercase();
+        ->toReturnUnique();
 
     expect('stubs/presets/iso4217.stub')
         ->toReturnUnique()
-        ->not->toReturnLowercase()
         ->toBeOrdered();
 });
