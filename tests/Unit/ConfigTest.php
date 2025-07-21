@@ -76,17 +76,20 @@ describe('language', function (): void {
             ],
         ];
     });
+
     it('should default to `en_US` when the language flag is not set in the json file', function (): void {
         file_put_contents($this->jsonPath, json_encode($this->exampleConfig));
         $config = Config::instance();
         expect($config->getLanguage())->toBe('en_US');
     });
+
     it('should read the language flag from the json file', function (): void {
         $this->exampleConfig['language'] = 'en_GB';
         file_put_contents($this->jsonPath, json_encode($this->exampleConfig));
         $config = Config::instance();
         expect($config->getLanguage())->toBe('en_GB');
     });
+
     afterEach(function (): void {
         unlink($this->jsonPath);
     });
