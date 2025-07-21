@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 it('presets are sorted alphabetically', function (): void {
     $presetPath = __DIR__.'/../../stubs/presets';
 
