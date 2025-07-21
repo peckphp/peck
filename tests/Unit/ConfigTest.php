@@ -62,19 +62,19 @@ it('should not recreate a file that already exists', function (): void {
 });
 
 describe('language', function (): void {
-    beforeEach(function (): void{
-        $configPath = "/temp.json";
+    beforeEach(function (): void {
+        $configPath = '/temp.json';
         $this->jsonPath = ProjectPath::get().$configPath;
         Config::flush();
-        Config::resolveConfigFilePathUsing(fn() => $configPath);
+        Config::resolveConfigFilePathUsing(fn (): string => $configPath);
         $this->exampleConfig = [
             'preset' => 'laravel',
             'ignore' => [
                 'words' => [
                     'config',
                 ],
-            ]
-       ];
+            ],
+        ];
     });
     it('should default to `en_US` when the language flag is not set in the json file', function (): void {
         file_put_contents($this->jsonPath, json_encode($this->exampleConfig));
