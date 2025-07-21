@@ -91,3 +91,27 @@ it('gets correct issues with corrupted cache', function (): void {
 
     expect($issues)->not->toBeEmpty();
 });
+
+it('ignores currency codes', function (): void {
+    $spellchecker = Aspell::default();
+
+    $issues = $spellchecker->check('USD is the currency code for United States Dollar, while EUR is for Euro, and BRL is for Brazilian Real.');
+
+    expect($issues)->toBeEmpty();
+});
+
+it('ignores alpha-2 country codes', function (): void {
+    $spellchecker = Aspell::default();
+
+    $issues = $spellchecker->check('US is the country code for United States, while DE is for Germany, and BR is for Brazil.');
+
+    expect($issues)->toBeEmpty();
+});
+
+it('ignores alpha-3 country codes', function (): void {
+    $spellchecker = Aspell::default();
+
+    $issues = $spellchecker->check('USA is the country code for United States, while DEU is for Germany, and BRA is for Brazil.');
+
+    expect($issues)->toBeEmpty();
+});

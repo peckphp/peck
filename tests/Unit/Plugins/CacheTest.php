@@ -105,3 +105,27 @@ it('should return null if serializedContents is false', function (): void {
 
     expect($cache->get($key))->toBeNull();
 });
+
+it('can flush the cache', function (): void {
+    $dir = __DIR__.'/../../.peck-test-flush.cache';
+
+    if (is_dir($dir)) {
+        foreach (array_diff(scandir($dir), ['.', '..']) as $file) {
+            unlink("{$dir}/{$file}");
+        }
+
+        rmdir($dir);
+    }
+
+    $cache = new Cache($dir);
+
+    $cache->set('key', 'value');
+
+    expect($cache->get('key'))->toBe('value')
+        ->and($cache->has('key'))->toBeTrue();
+
+    $cache->flush();
+
+    expect($cache->get('key'))->toBeNull();
+
+});

@@ -23,7 +23,7 @@ Leveraging the robust capabilities of **[GNU Aspell](https://en.wikipedia.org/wi
 
 ## Installation
 
-> **Requires [PHP 8.3+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
+> **Requires [PHP 8.2+](https://php.net/releases/) and [GNU Aspell](https://en.wikipedia.org/wiki/GNU_Aspell)**
 
 Peck relies on GNU Aspell for its spell-checking functionality. Make sure GNU Aspell is installed on your system before using Peck.
 
@@ -122,6 +122,10 @@ By default `peck` will check for a `peck.json` file in your project root. If one
 #### `--path`
 
 The path to check can be overwritten with the `--path` option. If the path is one you always need checking you can place it in your `peck.json` file.
+
+#### `--text`
+
+The `--text` option allows you to check a string of text for spelling mistakes. This is useful when you want to check a specific string, such as commit messages.
 
 #### `--ignore-all`
 
