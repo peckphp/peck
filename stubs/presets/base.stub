@@ -33,6 +33,7 @@ decrypt
 dev
 dns
 dockerfile
+dsn
 dto
 ecr
 enrolment
@@ -111,6 +112,7 @@ spatie
 spelt
 sponsorship
 sponsorships
+symfony
 sms
 sns
 sqs
