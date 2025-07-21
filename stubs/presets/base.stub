@@ -25,6 +25,7 @@ cloudflare
 conf
 config
 confirmable
+cors
 cron
 csrf
 csv
