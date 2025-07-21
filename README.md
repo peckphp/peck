@@ -107,6 +107,25 @@ In order to make it easier to get started with Peck, we've included a few preset
 
 - `laravel` 
 
+### Languages
+
+While by default `peck` verfies the spelling by using GNU Aspell's `en_US` language dictionary, you can optionally specify a different language to be passed using the "language" key in the configuration;
+
+```json
+{
+    "preset": "laravel",
+    "language": "en_GB-ise",
+    "ignore": {
+        "words": [
+            "config",
+            "namespace"
+        ]
+    }
+}
+```
+
+You can see a full list of available dictionaries using the command `aspell dump dicts`.
+
 ## Command Options
 
 The behaviour of `peck` can be modified with the following command options:
