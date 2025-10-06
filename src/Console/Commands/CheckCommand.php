@@ -207,6 +207,10 @@ final class CheckCommand extends Command
             $issue,
         );
 
+        $suggestionText = $suggestions === '' || $suggestions === '0'
+            ? '<span>No suggestions available.</span>'
+            : "<span>Did you mean: <span class=\"font-bold\">{$suggestions}</span></span>";
+
         render(<<<HTML
             <div class="mx-2 mb-1">
                 <div class="space-x-1">
@@ -217,8 +221,7 @@ final class CheckCommand extends Command
                 </div>
 
                 <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
+                    {$suggestionText}
                 </div>
             </div>
         HTML
@@ -281,6 +284,10 @@ final class CheckCommand extends Command
             $issue,
         );
 
+        $suggestionText = $suggestions === '' || $suggestions === '0'
+            ? '<span>No suggestions available.</span>'
+            : "<span>Did you mean: <span class=\"font-bold\">{$suggestions}</span></span>";
+
         render(<<<HTML
             <div class="mx-2 mb-1">
                 <div class="space-x-1">
@@ -291,8 +298,7 @@ final class CheckCommand extends Command
                 </div>
 
                 <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
+                    {$suggestionText}
                 </div>
             </div>
         HTML);
@@ -307,6 +313,10 @@ final class CheckCommand extends Command
             $issue,
         );
 
+        $suggestionText = $suggestions === '' || $suggestions === '0'
+            ? '<span>No suggestions available.</span>'
+            : "<span>Did you mean: <span class=\"font-bold\">{$suggestions}</span></span>";
+
         render(<<<HTML
             <div class="mx-2 mt-1 space-y-1">
                 <div class="space-x-1">
@@ -315,8 +325,7 @@ final class CheckCommand extends Command
                 </div>
 
                 <div class="space-x-1 text-gray-700">
-                    <span>Did you mean:</span>
-                    <span class="font-bold">{$suggestions}</span>
+                    {$suggestionText}
                 </div>
             </div>
             HTML
