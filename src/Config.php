@@ -30,13 +30,19 @@ final class Config
      *
      * @param  array<int, string>  $whitelistedWords
      * @param  array<int, string>  $whitelistedPaths
+     * @param  array<string,  array<int, string>>  $fileSpecificIgnores
      */
     public function __construct(
         public array $whitelistedWords = [],
         public array $whitelistedPaths = [],
+        public array $fileSpecificIgnores = [],
         public ?string $preset = null,
     ) {
         $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
+        $this->fileSpecificIgnores = array_map(
+            fn (array $words): array => array_map(strtolower(...), $words),
+            $fileSpecificIgnores
+        );
     }
 
     /**
@@ -89,7 +95,8 @@ final class Config
          *     preset?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
-         *         paths?: array<int, string>
+         *         paths?: array<int, string>,
+         *         files?: array<string, array<int, string>>
          *     }
          *  } $jsonAsArray
          */
@@ -98,6 +105,7 @@ final class Config
         return self::$instance = new self(
             $jsonAsArray['ignore']['words'] ?? [],
             $jsonAsArray['ignore']['paths'] ?? [],
+            $jsonAsArray['ignore']['files'] ?? [],
             $jsonAsArray['preset'] ?? null,
         );
     }
@@ -144,14 +152,40 @@ final class Config
     }
 
     /**
-     * Checks if the word is ignored.
+     * Checks if the word is ignored globally or for a specific file.
      */
-    public function isWordIgnored(string $word): bool
+    public function isWordIgnored(string $word, ?string $filePath = null): bool
     {
-        return in_array(strtolower($word), [
+        $word = strtolower($word);
+
+        // Check global ignores
+        $globalIgnores = [
             ...$this->whitelistedWords,
             ...array_map(strtolower(...), PresetProvider::whitelistedWords($this->preset)),
-        ]);
+        ];
+
+        if (in_array($word, $globalIgnores)) {
+            return true;
+        }
+
+        // Check file-specific ignores
+        if ($filePath !== null) {
+            $projectPath = ProjectPath::get();
+
+            // Normalize the file path to be relative to project root
+            $normalizedFilePath = $filePath;
+            if (str_starts_with($filePath, $projectPath.'/')) {
+                $normalizedFilePath = substr($filePath, strlen($projectPath) + 1);
+            }
+
+            foreach ($this->fileSpecificIgnores as $path => $words) {
+                if ($normalizedFilePath === $path && in_array($word, $words)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -166,6 +200,7 @@ final class Config
             'ignore' => [
                 'words' => $this->whitelistedWords,
                 'paths' => $this->whitelistedPaths,
+                'files' => $this->fileSpecificIgnores,
             ],
         ], JSON_PRETTY_PRINT));
     }

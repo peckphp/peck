@@ -115,3 +115,53 @@ it('ignores alpha-3 country codes', function (): void {
 
     expect($issues)->toBeEmpty();
 });
+
+it('ignores words for specific files', function (): void {
+    $config = new Config([], [], [
+        'src/Test.php' => ['testword'],
+        'tests/SomeTest.php' => ['unittest'],
+    ]);
+    $cache = new Cache(__DIR__.'/../../.peck-test.cache');
+    $spellchecker = new Aspell($config, $cache);
+
+    // Should ignore 'testword' in src/Test.php
+    $issues = $spellchecker->check('testword', 'src/Test.php');
+    expect($issues)->toBeEmpty();
+
+    // Should not ignore 'testword' in other files
+    $issues = $spellchecker->check('testword', 'src/Other.php');
+    expect($issues)->toHaveCount(1)
+        ->and($issues[0]->word)->toBe('testword');
+
+    // Should ignore 'unittest' in the specific test file
+    $issues = $spellchecker->check('unittest', 'tests/SomeTest.php');
+    expect($issues)->toBeEmpty();
+
+    // Should not ignore 'unittest' in non-test files
+    $issues = $spellchecker->check('unittest', 'src/Service.php');
+    expect($issues)->toHaveCount(1)
+        ->and($issues[0]->word)->toBe('unittest');
+});
+
+it('combines global and file-specific ignores', function (): void {
+    $config = new Config(['globalword'], [], [
+        'src/Test.php' => ['specificword'],
+    ]);
+    $cache = new Cache(__DIR__.'/../../.peck-test.cache');
+    $spellchecker = new Aspell($config, $cache);
+
+    // Global word should be ignored everywhere
+    $issues = $spellchecker->check('globalword', 'src/Test.php');
+    expect($issues)->toBeEmpty();
+
+    $issues = $spellchecker->check('globalword', 'src/Other.php');
+    expect($issues)->toBeEmpty();
+
+    // File-specific word should only be ignored in that file
+    $issues = $spellchecker->check('specificword', 'src/Test.php');
+    expect($issues)->toBeEmpty();
+
+    $issues = $spellchecker->check('specificword', 'src/Other.php');
+    expect($issues)->toHaveCount(1)
+        ->and($issues[0]->word)->toBe('specificword');
+});

@@ -11,7 +11,7 @@ it('should have a default configuration', function (): void {
         'php',
     ])->and($config->whitelistedPaths)->toBe([
         'tests',
-    ]);
+    ])->and($config->fileSpecificIgnores)->toBe([]);
 });
 
 it('should to be a singleton', function (): void {
@@ -29,7 +29,8 @@ it('should behave correctly even if the peck.json file does not exist', function
     $config = Config::instance();
 
     expect($config->whitelistedWords)->toBe([])
-        ->and($config->whitelistedPaths)->toBe([]);
+        ->and($config->whitelistedPaths)->toBe([])
+        ->and($config->fileSpecificIgnores)->toBe([]);
 });
 
 it('should be able to create a peck.json config file', function (): void {
@@ -57,5 +58,5 @@ it('should not recreate a file that already exists', function (): void {
         ])
         ->and($config->whitelistedPaths)->toBe([
             'tests',
-        ]);
+        ])->and($config->fileSpecificIgnores)->toBe([]);
 });
