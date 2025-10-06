@@ -53,7 +53,7 @@ final readonly class FileSystemChecker implements Checker
                     $misspelling,
                     $fileOrDirectory->getRealPath(),
                     0,
-                ), $this->spellchecker->check($name),
+                ), $this->spellchecker->check($name, $fileOrDirectory->getRealPath()),
             );
 
             $issues = [
