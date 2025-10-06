@@ -151,7 +151,7 @@ final class Aspell implements Spellchecker
             'utf-8',
             '-a',
             '--ignore-case',
-            '--lang=en_US',
+            '--lang='.$this->config->getLanguage(),
         ]);
 
         $process->setTimeout(0);
