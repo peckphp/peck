@@ -16,6 +16,11 @@ final class Config
     private const JSON_CONFIGURATION_NAME = 'peck.json';
 
     /**
+     * The default language passed to Aspell.
+     */
+    private const DEFAULT_LANGUAGE = 'en_US';
+
+    /**
      * The instance of the configuration.
      */
     private static ?self $instance = null;
@@ -37,6 +42,7 @@ final class Config
         public array $whitelistedPaths = [],
         public array $fileSpecificIgnores = [],
         public ?string $preset = null,
+        public ?string $language = null,
     ) {
         $this->whitelistedWords = array_map(strtolower(...), $whitelistedWords);
         $this->fileSpecificIgnores = array_map(
@@ -93,6 +99,7 @@ final class Config
         /**
          * @var array{
          *     preset?: string,
+         *     language?: string,
          *     ignore?: array{
          *         words?: array<int, string>,
          *         paths?: array<int, string>,
@@ -107,6 +114,7 @@ final class Config
             $jsonAsArray['ignore']['paths'] ?? [],
             $jsonAsArray['ignore']['files'] ?? [],
             $jsonAsArray['preset'] ?? null,
+            $jsonAsArray['language'] ?? null,
         );
     }
 
@@ -189,6 +197,14 @@ final class Config
     }
 
     /**
+     * Retrieves the configured language or the default
+     */
+    public function getLanguage(): string
+    {
+        return $this->language ?? self::DEFAULT_LANGUAGE;
+    }
+
+    /**
      * Save the configuration to the file.
      */
     private function persist(): void
@@ -197,6 +213,7 @@ final class Config
 
         file_put_contents($filePath, json_encode([
             ...$this->preset !== null ? ['preset' => $this->preset] : [],
+            ...$this->language !== null ? ['language' => $this->language] : [],
             'ignore' => [
                 'words' => $this->whitelistedWords,
                 'paths' => $this->whitelistedPaths,

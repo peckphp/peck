@@ -59,3 +59,13 @@ it('may pass with static text option', function (): void {
     expect($exitCode)->toBe(0)
         ->and($output)->toMatchSnapshot();
 });
+
+it('handles misspellings without suggestions', function (): void {
+    $process = Process::fromShellCommandline('./bin/peck --text="Xxxxxxxxxxxxxxxxxx"');
+
+    $exitCode = $process->run();
+    $output = $process->getOutput();
+
+    expect($exitCode)->toBe(1);
+    expect($output)->toContain('No suggestions available.');
+});

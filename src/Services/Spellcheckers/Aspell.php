@@ -52,7 +52,8 @@ final class Aspell implements Spellchecker
             $misspellings = $this->getMisspellings($text);
         }
 
-        return array_filter($misspellings,
+        return array_filter(
+            $misspellings,
             fn (Misspelling $misspelling): bool => ! $this->config->isWordIgnored($misspelling->word, $filePath),
         );
     }
@@ -64,7 +65,7 @@ final class Aspell implements Spellchecker
      */
     private function getMisspellings(string $text): array
     {
-        $misspellings = iterator_to_array($this->run($text));
+        $misspellings = $this->run($text);
 
         $this->cache->set($text, $misspellings);
 
@@ -79,7 +80,8 @@ final class Aspell implements Spellchecker
      */
     private function takeSuggestions(array $suggestions): array
     {
-        $suggestions = array_filter($suggestions,
+        $suggestions = array_filter(
+            $suggestions,
             fn (string $suggestion): bool => in_array(preg_match('/[^a-zA-Z]/', $suggestion), [0, false], true)
         );
 
@@ -101,14 +103,41 @@ final class Aspell implements Spellchecker
 
         $output = $process->getOutput();
 
-        return array_values(array_map(function (string $line): Misspelling {
-            [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line));
+        return array_values(array_map(fn (string $line): Misspelling => $this->createMisspellingFromLine($line), $this->getLinesFromOutput($output)));
+    }
 
-            $word = explode(' ', $wordMetadataAsString)[1];
-            $suggestions = explode(', ', trim($suggestionsAsString));
+    /**
+     * Returns the lines from the output of the Aspell command.
+     * Lines with suggestions start with '&' and lines without suggestions start with '#'.
+     *
+     * @return array<int,string>
+     */
+    private function getLinesFromOutput(string $output): array
+    {
+        return array_filter(
+            explode(PHP_EOL, $output),
+            fn (string $line): bool => str_starts_with($line, '&') || str_starts_with($line, '#')
+        );
+    }
 
-            return new Misspelling($word, $this->takeSuggestions($suggestions));
-        }, array_filter(explode(PHP_EOL, $output), fn (string $line): bool => str_starts_with($line, '&'))));
+    /**
+     * Creates a new instance of Misspelling from the given line.
+     * The suggestions are empty if there are no suggestions.
+     */
+    private function createMisspellingFromLine(string $line): Misspelling
+    {
+        [$wordMetadataAsString, $suggestionsAsString] = explode(':', trim($line)) + [1 => null];
+
+        $word = explode(' ', (string) $wordMetadataAsString)[1];
+
+        // If there are no suggestions, return an empty array
+        if ($suggestionsAsString === null || ($suggestionsAsString === '' || $suggestionsAsString === '0')) {
+            return new Misspelling($word, []);
+        }
+
+        $suggestions = explode(', ', trim($suggestionsAsString));
+
+        return new Misspelling($word, $this->takeSuggestions($suggestions));
     }
 
     /**
@@ -122,7 +151,7 @@ final class Aspell implements Spellchecker
             'utf-8',
             '-a',
             '--ignore-case',
-            '--lang=en_US',
+            '--lang='.$this->config->getLanguage(),
         ]);
 
         $process->setTimeout(0);

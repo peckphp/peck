@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.0] - 2025-06-10
+- Included symfony/process as dependency (resolves issues for some installations)
+- Added `language` option to configuration file (defaults to `en_US`)
+- Handle misspellings with no suggestions as misspellings
+
 ## [v0.1.3] - 2025-03-31
 - Changed default path to the projects root directory
 - Support for PHP 8.2+ (previously only 8.3+)

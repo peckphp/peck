@@ -116,6 +116,19 @@ it('ignores alpha-3 country codes', function (): void {
     expect($issues)->toBeEmpty();
 });
 
+it('detects misspellings without suggestions', function (): void {
+    $aspell = new Aspell(
+        Config::instance(),
+        Cache::default(),
+    );
+
+    $misspellings = $aspell->check('Xxxxxxxxxxxxxxxxxx');
+
+    expect($misspellings)->not->toBeEmpty()
+        ->and($misspellings[0]->word)->toBe('Xxxxxxxxxxxxxxxxxx')
+        ->and($misspellings[0]->suggestions)->toBeEmpty();
+});
+
 it('ignores words for specific files', function (): void {
     $config = new Config([], [], [
         'src/Test.php' => ['testword'],
