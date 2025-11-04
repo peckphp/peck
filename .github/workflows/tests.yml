@@ -10,13 +10,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         php: ['8.2', '8.3', '8.4']
-        include:
-          - symfony: '^6.4'
-            stability: stable
-          - symfony: '^7.2'
-            stability: stable
-          - symfony: '^8.0'
-            stability: beta
+        symfony: ['^6.4', '^7.2', '^8.0']
         dependency-version: [prefer-lowest, prefer-stable]
         exclude:
           - php: '8.2'
@@ -61,7 +55,7 @@ jobs:
 
     - name: Install Composer dependencies
       run: |
-        composer config minimum-stability ${{ matrix.stability }}
+        [[ "${{ matrix.symfony }}" == "^8.0" ]] && composer config minimum-stability beta || composer config minimum-stability stable
         composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist && \
         composer update --no-interaction --prefer-dist --with symfony/console:${{ matrix.symfony }} && \
         composer update --no-interaction --prefer-dist --with \
