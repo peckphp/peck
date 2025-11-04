@@ -55,9 +55,6 @@ jobs:
 
     - name: Install Composer dependencies
       run: |
-        if [[ '${{ matrix.symfony }}' == *'^8.0'* ]]; then
-          composer config minimum-stability beta
-        fi
         composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist && \
         composer update --no-interaction --prefer-dist --with symfony/console:${{ matrix.symfony }} && \
         composer update --no-interaction --prefer-dist --with \
