@@ -61,6 +61,7 @@ iframe
 imageable
 inheritdoc
 init
+js
 json
 jwks
 jwt
@@ -75,6 +76,7 @@ misconfigured
 mixins
 namespace
 nano
+nginx
 nullable
 oauth
 onboarding
