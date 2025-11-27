@@ -10,8 +10,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         php: ['8.2', '8.3', '8.4']
-        symfony: ['^6.4', '^7.2']
+        symfony: ['^6.4', '^7.2', '^8.0']
         dependency-version: [prefer-lowest, prefer-stable]
+        exclude:
+          - php: '8.2'
+            symfony: '^8.0'
+          - php: '8.3'
+            symfony: '^8.0'
 
     name: Tests P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }} (Symfony ${{ matrix.symfony }})
 
