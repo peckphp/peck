@@ -121,6 +121,7 @@ sqs
 src
 ssl
 sso
+str
 stringable
 symfony
 throwable
@@ -141,6 +142,7 @@ unformatted
 unsuspend
 upsert
 uri
+utf
 uuid
 validator
 verifier
