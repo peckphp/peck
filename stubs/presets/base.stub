@@ -124,6 +124,7 @@ ssl
 sso
 stringable
 symfony
+textarea
 throwable
 timezones
 tls
