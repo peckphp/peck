@@ -36,6 +36,7 @@ dockerfile
 dsn
 dto
 ecr
+enrol
 enrolment
 enum
 enums
@@ -73,6 +74,7 @@ livewire
 mailables
 middleware
 misconfigured
+mixin
 mixins
 namespace
 nano
@@ -123,6 +125,7 @@ src
 ssl
 sso
 stringable
+subclasses
 symfony
 textarea
 throwable
