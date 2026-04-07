@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Added support for Symfony 8
+
 ## [v0.2.0] - 2025-06-10
 - Included symfony/process as dependency (resolves issues for some installations)
 - Added `language` option to configuration file (defaults to `en_US`)
