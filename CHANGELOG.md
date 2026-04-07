@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+## [v0.3.0] - 2026-04-07
+
+- Update base and laravel presets
 - Added support for Symfony 8
 
 ## [v0.2.0] - 2025-06-10
