@@ -2,7 +2,9 @@
     "preset": "base",
     "ignore": {
         "words": [
-            "php"
+            "php",
+            "strtolower",
+            "fg"
         ],
         "paths": [
             "tests"

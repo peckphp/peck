@@ -124,6 +124,7 @@ sqs
 src
 ssl
 sso
+str
 stringable
 subclasses
 symfony
@@ -146,6 +147,7 @@ unformatted
 unsuspend
 upsert
 uri
+utf
 uuid
 validator
 verifier

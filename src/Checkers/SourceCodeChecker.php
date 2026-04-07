@@ -19,6 +19,7 @@ use ReflectionParameter;
 use ReflectionProperty;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Throwable;
 
 /**
  * @internal
@@ -92,6 +93,7 @@ final readonly class SourceCodeChecker implements Checker
             ...$this->getMethodNames($reflection),
             ...$this->getPropertyNames($reflection),
             ...$this->getConstantNames($reflection),
+            ...$this->getStringValues($file),
         ];
 
         if ($docComment = $reflection->getDocComment()) {
@@ -123,6 +125,36 @@ final readonly class SourceCodeChecker implements Checker
         }
 
         return $issues;
+    }
+
+    /**
+     * Get the string values contained in the given file.
+     *
+     * @return array<int, string>
+     */
+    private function getStringValues(SplFileInfo $file): array
+    {
+        try {
+            $tokens = token_get_all($file->getContents());
+        } catch (Throwable) {
+            return [];
+        }
+
+        foreach ($tokens as $token) {
+            if (is_array($token) && $token[0] === T_CONSTANT_ENCAPSED_STRING) {
+                // Remove the surrounding quotes from the string
+                $string = substr($token[1], 1, -1);
+
+                // Handle escaped quotes depending on string type
+                if ($token[1][0] === '"') {
+                    $string = stripcslashes($string);
+                }
+
+                $stringsToCheck[] = $string;
+            }
+        }
+
+        return $stringsToCheck ?? [];
     }
 
     /**
