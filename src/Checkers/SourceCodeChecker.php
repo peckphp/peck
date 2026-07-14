@@ -118,7 +118,7 @@ final readonly class SourceCodeChecker implements Checker
                         $misspelling,
                         $file->getRealPath(),
                         $this->getErrorLine($file, $name),
-                    ), $this->spellchecker->check(SpellcheckFormatter::format($name))),
+                    ), $this->spellchecker->check(SpellcheckFormatter::format($name), $file->getRealPath())),
             ];
         }
 

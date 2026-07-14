@@ -16,5 +16,5 @@ interface Spellchecker
      *
      * @return array<int, Misspelling>
      */
-    public function check(string $text): array;
+    public function check(string $text, ?string $filePath = null): array;
 }
