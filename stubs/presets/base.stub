@@ -19,6 +19,7 @@ bootcamp
 callables
 cancelled
 changelog
+chatgpt
 cli
 cloudflare
 conf
@@ -83,6 +84,8 @@ nginx
 nullable
 oauth
 onboarding
+opcache
+opencode
 otp
 owasp
 params
@@ -129,6 +132,7 @@ ssl
 sso
 stringable
 subclasses
+supervisord
 symfony
 textarea
 throwable
